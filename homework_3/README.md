@@ -22,8 +22,7 @@
     
     
 ## 1. Создание сети и настройка основных параметров устройств
-#### Настроим базовые параметры каждого коммутатора:
-
+### Настроим базовые параметры каждого коммутатора:
 ```
 Switch>enable
 Switch#configure terminal
@@ -102,7 +101,7 @@ Building configuration...
 Compressed configuration from 3204 bytes to 1571 bytes[OK]
 S3#
 ```
-#### Проверим связь
+### Проверим связь:
 Эхо-запрос от коммутатора S1 на коммутатор S2 выполняется успешно:
 ```
 S1#ping 192.168.1.2
@@ -131,7 +130,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
 S2#
 ```
 ## 2. Определение корневого моста
-#### Отключим все порты на коммутаторах:
+### Отключим все порты на коммутаторах:
 ```
 S1# configure terminal 
 S1(config)#interface range Gi0/0-3
@@ -150,7 +149,7 @@ S3(config)#interface range Gi0/0-3
 S3(config-if-range)#shutdown
 S3(config-if-range)#
 ```
-#### Настроим подключенные порты в качестве транковых:
+### Настроим подключенные порты в качестве транковых:
 ```
 S1(config-if-range)#switchport mode trunk 
 S1(config-if-range)#exit
@@ -167,7 +166,7 @@ S3(config-if-range)#exit
 S3(config)#
 ```
 
-#### Включим порты Gi0/1 и Gi0/3 на всех коммутаторах:
+### Включим порты Gi0/1 и Gi0/3 на всех коммутаторах:
 ```
 S1(config)#interface range Gi0/1,Gi0/3
 S1(config-if-range)#no shutdown
@@ -184,5 +183,77 @@ S2#
 S3(config)#interface range Gi0/1,Gi0/3
 S3(config-if-range)#no shutdown
 S3(config-if-range)#end
+S3#
+```
+### Отобразим данные протокола spanning-tree:
+```
+S1#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0004.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Desg FWD 4         128.2    Shr 
+Gi0/3               Desg FWD 4         128.4    Shr 
+
+
+S1#
+```
+```
+S2#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        4 (GigabitEthernet0/3)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Altn BLK 4         128.2    Shr 
+Gi0/3               Root FWD 4         128.4    Shr 
+
+
+S2#
+```
+```	
+S3#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        2 (GigabitEthernet0/1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Root FWD 4         128.2    Shr 
+Gi0/3               Desg FWD 4         128.4    Shr 
+
+
 S3#
 ```

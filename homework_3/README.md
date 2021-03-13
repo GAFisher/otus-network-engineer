@@ -281,6 +281,122 @@ ___
 
 # 3. Наблюдение за процессом выбора протоколом STP порта, исходя из стоимости портов
 ### Определим коммутатор с заблокированным портом:
+```
+S2#show spanning-tree
 
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        4 (GigabitEthernet0/3)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Altn BLK 4         128.2    Shr 
+Gi0/3               Root FWD 4         128.4    Shr 
+
+
+S2#
+```
+### Изменим стоимость порта:
+```
+S2#configure terminal 
+S2(config)#interface Gi0/3
+S2(config-if)#spanning-tree cost 3
+S2(config-if)#end
+S2#
+```
+###Просмотрим изменения протокола spanning-tree:
+```
+S2#show spanning-tree 
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        3
+             Port        4 (GigabitEthernet0/3)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Desg FWD 4         128.2    Shr 
+Gi0/3               Root FWD 3         128.4    Shr 
+
+
+S2#
+```
+
+Ранее заблокированный порт (S2 – Gi0/1) теперь является назначенным портом, и протокол spanning-tree теперь блокирует порт на другом коммутаторе некорневого моста (S3 – Gi0/3):
+
+```
+S3#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        2 (GigabitEthernet0/1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Root FWD 4         128.2    Shr 
+Gi0/3               Altn BLK 4         128.4    Shr 
+
+
+S3#
+```
+Протокол spanning-tree заменяет ранее заблокированный порт на назначенный порт и блокирует порт, который был назначенным портом на другом коммутаторе, потому что 
+
+
+	Удалим изменения стоимости порта:
+```
+S2#configure terminal 
+S2(config)#interface Gi0/3	
+S2(config-if)#no spanning-tree cost 3 
+S2(config-if)#end
+S2#show spanning-tree
+S2#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        4 (GigabitEthernet0/3)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Altn BLK 4         128.2    Shr 
+Gi0/3               Root FWD 4         128.4    Shr 
+
+
+S2#
+```
 
 

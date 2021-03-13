@@ -102,3 +102,33 @@ Building configuration...
 Compressed configuration from 3204 bytes to 1571 bytes[OK]
 S3#
 ```
+#### Проверим связь
+Эхо-запрос от коммутатора S1 на коммутатор S2 выполняется успешно:
+```
+S1#ping 192.168.1.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 2/2/3 ms
+S1#
+```
+Эхо-запрос от коммутатора S1 на коммутатор S3 выполняется успешно:
+```
+S1#ping 192.168.1.3
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 2/2/3 ms
+S1#
+```
+Эхо-запрос от коммутатора S2 на коммутатор S3 выполняется успешно:
+```
+S2#ping 192.168.1.3 
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
+S2#
+```
+
+

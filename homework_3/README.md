@@ -397,5 +397,79 @@ Gi0/3               Root FWD 4         128.4    Shr
 
 S2#
 ```
+# 4. Наблюдение за процессом выбора протоколом STP порта, исходя из приоритета портов
+
+### Включим порты F0/1 и F0/3 на всех коммутаторах:
+```	
+S1#configure terminal 
+S1(config)#interface range Gi0/0, Gi0/2
+S1(config-if-range)#no shutdown 
+
+S2#configure terminal 
+S2(config)#interface range Gi0/0, Gi0/2
+S2(config-if-range)#no shutdown 
+
+S3#configure terminal 
+S3(config)#interface range Gi0/0, Gi0/2
+S3(config-if-range)#no shutdown 
+```
+### Выполним команду show spanning-tree на коммутаторах некорневого моста:
+```
+S2(config-if-range)#end
+S2#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        3 (GigabitEthernet0/2)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/0               Altn BLK 4         128.1    Shr 
+Gi0/1               Altn BLK 4         128.2    Shr 
+Gi0/2               Root FWD 4         128.3    Shr 
+Gi0/3               Altn BLK 4         128.4    Shr 
+
+
+S2#
+```
+```
+S3(config-if-range)#end
+S3#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        1 (GigabitEthernet0/0)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/0               Root FWD 4         128.1    Shr 
+Gi0/1               Altn BLK 4         128.2    Shr 
+Gi0/2               Desg FWD 4         128.3    Shr 
+Gi0/3               Desg FWD 4         128.4    Shr 
+
+
+S3#
+```
+Протоколом STP в качестве порта корневого моста выбрал: на S2 порт Gi0/2, на S3 порты Gi0/2 и Gi0/3.
+протокол STP выбрал эти порты, потому что 
+
 
 

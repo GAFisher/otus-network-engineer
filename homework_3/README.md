@@ -130,5 +130,59 @@ Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:
 Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
 S2#
 ```
+## 2. Определение корневого моста
+#### Отключим все порты на коммутаторах:
+```
+S1# configure terminal 
+S1(config)#interface range Gi0/0-3
+S1(config-if-range)#shutdown
+S1(config-if-range)#
+```
+```
+S2#configure terminal 
+S2(config)#interface range Gi0/0-3
+S2(config-if-range)#shutdown
+S2(config-if-range)#
+```
+```
+S3#configure terminal
+S3(config)#interface range Gi0/0-3
+S3(config-if-range)#shutdown
+S3(config-if-range)#
+```
+#### Настроим подключенные порты в качестве транковых:
+```
+S1(config-if-range)#switchport mode trunk 
+S1(config-if-range)#exit
+S1(config)#
+```
+```
+S2(config-if-range)#switchport mode trunk 
+S2(config-if-range)#exit
+S2(config)#
+```
+```
+S3(config-if-range)#switchport mode trunk 
+S3(config-if-range)#exit
+S3(config)#
+```
 
-
+#### Включим порты Gi0/1 и Gi0/3 на всех коммутаторах:
+```
+S1(config)#interface range Gi0/1,Gi0/3
+S1(config-if-range)#no shutdown
+S1(config-if-range)#end
+S1#
+```
+```
+S2(config)#interface range Gi0/1,Gi0/3
+S2(config-if-range)#no shutdown
+S2(config-if-range)#end
+S2#
+```
+```
+S3(config)#interface range Gi0/1,Gi0/3
+S3(config-if-range)#no shutdown
+S3(config-if-range)#end
+S3#
+```

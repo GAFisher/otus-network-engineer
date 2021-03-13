@@ -375,7 +375,6 @@ S2(config)#interface Gi0/3
 S2(config-if)#no spanning-tree cost 3 
 S2(config-if)#end
 S2#show spanning-tree
-S2#show spanning-tree
 
 VLAN0001
   Spanning tree enabled protocol rstp

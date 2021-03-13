@@ -33,13 +33,6 @@
     * [Выполним команду show spanning-tree на коммутаторах некорневого моста](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_3/README.md#%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D0%BC-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%83-show-spanning-tree-%D0%BD%D0%B0-%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%82%D0%BE%D1%80%D0%B0%D1%85-%D0%BD%D0%B5%D0%BA%D0%BE%D1%80%D0%BD%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE-%D0%BC%D0%BE%D1%81%D1%82%D0%B0)
 5. Вопросы для повторения   
     
-    
-    
-    
-    
-    
-    
-    
 ## 1. Создание сети и настройка основных параметров устройств
 ### Настроим базовые параметры каждого коммутатора:
 ##### Коммутатор S1:
@@ -208,6 +201,7 @@ S3(config-if-range)#end
 S3#
 ```
 ### Отобразим данные протокола spanning-tree:
+##### На коммутаторе S1:
 ```
 S1#show spanning-tree
 
@@ -231,6 +225,7 @@ Gi0/3               Desg FWD 4         128.4    Shr
 
 S1#
 ```
+##### На коммутаторе S2:
 ```
 S2#show spanning-tree
 
@@ -255,6 +250,7 @@ Gi0/3               Root FWD 4         128.4    Shr
 
 S2#
 ```
+##### На коммутаторе S3:
 ```	
 S3#show spanning-tree
 
@@ -291,6 +287,7 @@ S3#
 
 ## 3. Наблюдение за процессом выбора протоколом STP порта, исходя из стоимости портов
 ### Определим коммутатор с заблокированным портом:
+Выполним команду show spanning-tree на обоих коммутаторах некорневого моста. Видим, что протокол spanning-tree блокирует порт Gi0/1 на коммутаторе S2.
 ```
 S2#show spanning-tree
 
@@ -315,7 +312,34 @@ Gi0/3               Root FWD 4         128.4    Shr
 
 S2#
 ```
+```
+S3#show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     5000.0004.0000
+             Cost        4
+             Port        2 (GigabitEthernet0/1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Root FWD 4         128.2    Shr 
+Gi0/3               Desg FWD 4         128.4    Shr 
+
+
+S3#
+```
+
+
 ### Изменим стоимость порта:
+Уменьшим стоимость выделенного порта до 3, выполнив команду spanning-tree cost 3 режима конфигурации интерфейса.
 ```
 S2#configure terminal 
 S2(config)#interface Gi0/3
@@ -348,9 +372,7 @@ Gi0/3               Root FWD 3         128.4    Shr
 
 S2#
 ```
-
 Ранее заблокированный порт (S2 – Gi0/1) теперь является назначенным портом, и протокол spanning-tree теперь блокирует порт на другом коммутаторе некорневого моста (S3 – Gi0/3):
-
 ```
 S3#show spanning-tree
 
@@ -407,6 +429,8 @@ Gi0/3               Root FWD 4         128.4    Shr
 
 S2#
 ```
+Видим, что протокол STP сбросил порт на коммутаторе некорневого моста, вернув исходные настройки порта. 
+
 ## 4. Наблюдение за процессом выбора протоколом STP порта, исходя из приоритета портов
 ### Включим порты F0/1 и F0/3 на всех коммутаторах:
 ```	

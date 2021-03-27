@@ -303,12 +303,196 @@ Et0/0       100,200,1000
 S1#
 ```
 ## 2. Настройка и проверка двух серверов DHCPv4 на R1
+### Настроим R1 с пулами DHCPv4 для двух поддерживаемых подсетей
+```
+R1#configure terminal
+R1(config)#ip dhcp excluded-address 192.168.1.1 192.168.1.5
+R1(config)#ip dhcp pool R1_Client_LAN 
+R1(dhcp-config)# network 192.168.1.0 255.255.255.192
+R1(dhcp-config)#domain-name ccna-lab.com
+R1(dhcp-config)#default-router 192.168.1.1
+R1(dhcp-config)#lease 2 12 30
+R1(config)#ip dhcp excluded-address 192.168.1.97 192.168.1.101
+R1(config)#ip dhcp pool R2_Client_LAN
+R1(dhcp-config)#network 192.168.1.96 255.255.255.240
+R1(dhcp-config)#default-router 192.168.1.97
+R1(dhcp-config)#domain-name ccna-lab.com     
+R1(dhcp-config)#lease 2 12 30
+R1(dhcp-config)#end
+R1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R1#
+```
+### Проверим конфигурацию сервера DHCPv4
+```
+R1# show ip dhcp pool
 
+Pool R1_Client_LAN :
+ Utilization mark (high/low)    : 100 / 0
+ Subnet size (first/next)       : 0 / 0 
+ Total addresses                : 62
+ Leased addresses               : 0
+ Pending event                  : none
+ 1 subnet is currently in the pool :
+ Current index        IP address range                    Leased addresses
+ 192.168.1.1          192.168.1.1      - 192.168.1.62      0
 
+Pool R2_Client_LAN :
+ Utilization mark (high/low)    : 100 / 0
+ Subnet size (first/next)       : 0 / 0 
+ Total addresses                : 14
+ Leased addresses               : 0
+ Pending event                  : none
+ 1 subnet is currently in the pool :
+ Current index        IP address range                    Leased addresses
+ 192.168.1.97         192.168.1.97     - 192.168.1.110     0
 
+R1#show ip dhcp binding 
+Bindings from all pools not associated with VRF:
+IP address          Client-ID/              Lease expiration        Type
+                    Hardware address/
+                    User name
+R1#
+R1#show ip dhcp binding 
+Bindings from all pools not associated with VRF:
+IP address          Client-ID/              Lease expiration        Type
+                    Hardware address/
+                    User name
+192.168.1.6         0100.5079.6668.01       Mar 30 2021 02:21 AM    Automatic
+R1#show ip dhcp server statistics
+Memory usage         41826
+Address pools        2
+Database agents      0
+Automatic bindings   1
+Manual bindings      0
+Expired bindings     0
+Malformed messages   0
+Secure arp entries   0
 
+Message              Received
+BOOTREQUEST          0
+DHCPDISCOVER         2
+DHCPREQUEST          1
+DHCPDECLINE          0
+DHCPRELEASE          0
+DHCPINFORM           0
 
+Message              Sent
+BOOTREPLY            0
+DHCPOFFER            1
+DHCPACK              1
+DHCPNAK              0
+R1#
+R1#
+R1#
+R1#
+```
+### Попытаемся получить IP-адрес от DHCP на PC-A
+```
+PC-A> ip dhcp -r
+DORA IP 192.168.1.6/26 GW 192.168.1.1
 
+PC-A> show ip  
+
+NAME        : PC-A[1]
+IP/MASK     : 192.168.1.6/26
+GATEWAY     : 192.168.1.1
+DNS         : 
+DHCP SERVER : 192.168.1.1
+DHCP LEASE  : 217745, 217800/108900/190575
+DOMAIN NAME : ccna-lab.com
+MAC         : 00:50:79:66:68:01
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+PC-A> ping 192.168.1.1
+
+84 bytes from 192.168.1.1 icmp_seq=1 ttl=255 time=0.820 ms
+84 bytes from 192.168.1.1 icmp_seq=2 ttl=255 time=1.074 ms
+84 bytes from 192.168.1.1 icmp_seq=3 ttl=255 time=0.984 ms
+84 bytes from 192.168.1.1 icmp_seq=4 ttl=255 time=0.967 ms
+84 bytes from 192.168.1.1 icmp_seq=5 ttl=255 time=1.093 ms
+
+PC-A>
+```
+## 3. Настройка и проверка DHCP Relay на R2
+### Настроим R2 в качестве агента DHCP Relay для локальной сети на G0/1
+```
+R2#configure terminal 
+R2(config)#interface GigabitEthernet0/1
+R2(config-if)#ip helper-address 10.0.0.1
+R2(config-if)#end
+R2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R2#
+```
+### Попытаемся получить IP-адрес от DHCP на PC-B
+```
+PC-B> ip dhcp -r
+DORA IP 192.168.1.102/28 GW 192.168.1.97
+
+PC-B> show ip
+
+NAME        : PC-B[1]
+IP/MASK     : 192.168.1.102/28
+GATEWAY     : 192.168.1.97
+DNS         : 
+DHCP SERVER : 10.0.0.1
+DHCP LEASE  : 217795, 217800/108900/190575
+DOMAIN NAME : ccna-lab.com
+MAC         : 00:50:79:66:68:02
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+PC-B> ping 192.168.1.97
+
+84 bytes from 192.168.1.97 icmp_seq=1 ttl=255 time=0.948 ms
+84 bytes from 192.168.1.97 icmp_seq=2 ttl=255 time=1.219 ms
+84 bytes from 192.168.1.97 icmp_seq=3 ttl=255 time=0.963 ms
+84 bytes from 192.168.1.97 icmp_seq=4 ttl=255 time=0.913 ms
+84 bytes from 192.168.1.97 icmp_seq=5 ttl=255 time=1.013 ms
+
+PC-B>
+```
+```
+R1# show ip dhcp binding
+Bindings from all pools not associated with VRF:
+IP address          Client-ID/              Lease expiration        Type
+                    Hardware address/
+                    User name
+192.168.1.6         0100.5079.6668.01       Mar 30 2021 02:33 AM    Automatic
+192.168.1.102       0100.5079.6668.02       Mar 30 2021 02:53 AM    Automatic
+R1#show ip dhcp server statistics
+Memory usage         50285
+Address pools        2
+Database agents      0
+Automatic bindings   2
+Manual bindings      0
+Expired bindings     0
+Malformed messages   0
+Secure arp entries   0
+
+Message              Received
+BOOTREQUEST          0
+DHCPDISCOVER         9
+DHCPREQUEST          7
+DHCPDECLINE          0
+DHCPRELEASE          0
+DHCPINFORM           0
+
+Message              Sent
+BOOTREPLY            0
+DHCPOFFER            7
+DHCPACK              7
+DHCPNAK              0
+R1#
+```
 
 
 

@@ -251,12 +251,58 @@ S2(config-if)#exit
 S2(config)#ip default-gateway 192.168.1.97
 S2(config)#
 ```
+### Назначим сети VLAN соответствующим интерфейсам коммутаторов
+```
+S1(config)#interface Et0/3
+S1(config-if)#switchport mode access 
+S1(config-if)#switchport access vlan 100
+S1(config-if)#end
+S1#show vlan brief 
 
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Et0/0
+100  Clients                          active    Et0/3
+200  Management                       active    
+999  Parking_Lot                      active    Et0/1, Et0/2
+1000 Native                           active    
+1002 fddi-default                     act/unsup 
+1003 token-ring-default               act/unsup 
+1004 fddinet-default                  act/unsup 
+1005 trnet-default                    act/unsup 
+S1#
+```
+Порт Et0/0 находится во VLAN 1, потому что он не был настроен как магистральный. 
 
+#### Вручную настроим интерфейс S1 Et0/0 в качестве транка 802.1Q
+```
+S1#configure terminal
+S1(config)#interface Et0/0
+S1(config-if)#switchport mode trunk 
+S1(config-if)#switchport trunk native vlan 1000
+S1(config-if)#switchport trunk allowed vlan 100,200,1000
+S1(config-if)#end
+S1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+Compressed configuration from 1403 bytes to 942 bytes[OK]
 
+S1#show interfaces trunk 
 
+Port        Mode             Encapsulation  Status        Native vlan
+Et0/0       on               802.1q         trunking      1000
 
+Port        Vlans allowed on trunk
+Et0/0       100,200,1000
 
+Port        Vlans allowed and active in management domain
+Et0/0       100,200,1000
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Et0/0       100,200,1000
+S1#
+```
+## 2. Настройка и проверка двух серверов DHCPv4 на R1
 
 
 

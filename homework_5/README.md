@@ -2,7 +2,7 @@
 ## Задание: 
 1. Создать сеть и настроить основные параметры устройств
 2. Настроить и проверить работу двух серверов DHCPv4 на R1
-3. Настроить и проверить работу DHCP-ретрансляции на R2
+3. Настроить и проверить работу DHCP Relay на R2
 ## Топология
 ![](topology.png)
 ## Таблица адресации
@@ -32,7 +32,7 @@
 	* Создадим схему адресации
 	* Произведем базовую настройку маршрутизаторов
 	* Настроим маршрутизацию между сетями VLAN на маршрутизаторе R1
-	* Настроим G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов
+	* Настроим G0/1 на R2, затем G0/0 и статическую маршрутизацию для обоих маршрутизаторов
 	* Настроим базовые параметры каждого коммутатороа
 	* Создаим сети VLAN на коммутаторе S1
 	* Назначим сети VLAN соответствующим интерфейсам коммутаторов
@@ -44,10 +44,11 @@
 3. Настройка и проверка DHCP Relay на R2
 	* Настроим R2 в качестве агента DHCP Relay для локальной сети на G0/1
 	* Попытаемся получить IP-адрес от DHCP на PC-B
+	* Проверим назначенные адреса в DHCP и сообщения
 
 
 ## 1. Создание сети и настройка основных параметров устройств
-### Создать схему адресации
+### Создадим схему адресации
 Подсеть сети 192.168.1.0/24 разобьем в соответствии со следующими требованиями:
 ##### «Подсеть A» поддерживает 58 хостов: 
 ```
@@ -144,7 +145,7 @@ GigabitEthernet0/2         unassigned      YES unset  administratively down down
 GigabitEthernet0/3         unassigned      YES unset  administratively down down    
 R1#
 ```
-### Настроим G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов
+### Настроим G0/1 на R2, затем G0/0 и статическую маршрутизацию для обоих маршрутизаторов
 ##### Маршрутизатор R1:
 ```
 R1#configure terminal 
@@ -309,7 +310,7 @@ S1#
 ```
 Порт Et0/0 находится во VLAN 1, потому что он не был настроен как магистральный. 
 
-#### Вручную настроим интерфейс S1 Et0/0 в качестве транка 802.1Q
+### Вручную настроим интерфейс Et0/0 на S1 в качестве транка 802.1Q
 ```
 S1#configure terminal
 S1(config)#interface Et0/0
@@ -396,11 +397,11 @@ IP address          Client-ID/              Lease expiration        Type
                     Hardware address/
                     User name
 192.168.1.6         0100.5079.6668.01       Mar 30 2021 02:21 AM    Automatic
-R1#show ip dhcp server statistics
-Memory usage         41826
+R1#show ip dhcp server statistics 
+Memory usage         50285
 Address pools        2
 Database agents      0
-Automatic bindings   1
+Automatic bindings   2
 Manual bindings      0
 Expired bindings     0
 Malformed messages   0
@@ -408,20 +409,17 @@ Secure arp entries   0
 
 Message              Received
 BOOTREQUEST          0
-DHCPDISCOVER         2
-DHCPREQUEST          1
+DHCPDISCOVER         0
+DHCPREQUEST          0
 DHCPDECLINE          0
 DHCPRELEASE          0
 DHCPINFORM           0
 
 Message              Sent
 BOOTREPLY            0
-DHCPOFFER            1
-DHCPACK              1
+DHCPOFFER            0
+DHCPACK              0
 DHCPNAK              0
-R1#
-R1#
-R1#
 R1#
 ```
 ### Попытаемся получить IP-адрес от DHCP на PC-A
@@ -495,6 +493,7 @@ PC-B> ping 192.168.1.97
 
 PC-B>
 ```
+### Проверим назначенные адреса в DHCP и сообщения
 ```
 R1# show ip dhcp binding
 Bindings from all pools not associated with VRF:
@@ -515,16 +514,16 @@ Secure arp entries   0
 
 Message              Received
 BOOTREQUEST          0
-DHCPDISCOVER         9
-DHCPREQUEST          7
+DHCPDISCOVER         2
+DHCPREQUEST          2
 DHCPDECLINE          0
 DHCPRELEASE          0
 DHCPINFORM           0
 
 Message              Sent
 BOOTREPLY            0
-DHCPOFFER            7
-DHCPACK              7
+DHCPOFFER            2
+DHCPACK              2
 DHCPNAK              0
 R1#
 ```

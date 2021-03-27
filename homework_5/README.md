@@ -74,8 +74,55 @@ R2#copy running-config startup-config
 R2#clock set 11:59:00 27 Mar 2021
 R2#
 ```
-
-
-
+### Настроим маршрутизацию между сетями VLAN на маршрутизаторе R1
+```
+R1#configure terminal 
+R1(config-subif)#interface GigabitEthernet0/1    
+R1(config-if)#no shutdown 
+R1(config-if)#exit
+R1(config)#interface GigabitEthernet0/1.100
+R1(config-subif)#description Client
+R1(config-subif)#encapsulation dot1Q 100
+R1(config-subif)#ip address 192.168.1.1 255.255.255.192
+R1(config-subif)#interface GigabitEthernet0/1.200
+R1(config-subif)#description Management                
+R1(config-subif)#encapsulation dot1Q 200
+R1(config-subif)#ip address 192.168.1.65 255.255.255.224
+R1(config-subif)#interface GigabitEthernet0/1.1000      
+R1(config-subif)#description Native                     
+R1(config-subif)#encapsulation dot1Q 1000               
+R1(config-subif)#end
+R1#show ip interface brief 
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         unassigned      YES unset  administratively down down    
+GigabitEthernet0/1         unassigned      YES unset  up                    up      
+GigabitEthernet0/1.100     192.168.1.1     YES manual up                    up      
+GigabitEthernet0/1.200     192.168.1.65    YES manual up                    up      
+GigabitEthernet0/1.1000    unassigned      YES unset  up                    up      
+GigabitEthernet0/2         unassigned      YES unset  administratively down down    
+GigabitEthernet0/3         unassigned      YES unset  administratively down down    
+R1#
+```
+### Настроим G0/1 на R2
+```
+R2#configure terminal 
+R2(config)#interface GigabitEthernet0/1 
+R2(config-if)#ip address 192.168.1.97 255.255.255.240
+R2(config-if)#no shutdown 
+```
+### Настроим G0/0 и статическую маршрутизацию для обоих маршрутизаторов
+```
+R1#configure terminal 
+R1(config)#interface GigabitEthernet0/0 
+R1(config-if)#ip address 10.0.0.1 255.255.255.252
+R1(config-if)#no shutdown
+R1(config-if)#
+```
+```
+R2(config-if)#interface GigabitEthernet0/0           
+R2(config-if)#ip address 10.0.0.2 255.255.255.252
+R2(config-if)#no shutdown 
+R2(config-if)
+```
 
 

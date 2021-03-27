@@ -49,6 +49,9 @@ R1(config)#service password-encryption
 R1(config)#banner motd #Authorized Access Only!#
 R1(config)#end                    
 R1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 R1#clock set 11:57:00 27 Mar 2021
 R1#
 ```
@@ -71,6 +74,9 @@ R2(config)#service password-encryption
 R2(config)#banner motd #Authorized Access Only!#
 R2(config)#end
 R2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 R2#clock set 11:59:00 27 Mar 2021
 R2#
 ```
@@ -113,6 +119,10 @@ R1(config-if)#no shutdown
 R1(config-if)#exit
 R1(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.2 
 R1(config)#end
+R1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 R1#
 ```
 ##### Маршрутизатор R2:
@@ -127,8 +137,125 @@ R2(config-if)#no shutdown
 R2(config-if)exit
 R2(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1
 R2(config)#end
+R2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 R2#
 ```
+##### Убедимся, что статическая маршрутизация работает с помощью пинга до адреса G0/1 R2 от R1:
+```
+R1#ping 192.168.1.97
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.97, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+R1#
+```
+### Настроим базовые параметры каждого коммутатора
+##### Коммутатор S1:
+```
+Switch>enable 
+Switch#configure terminal 
+Switch(config)#hostname S1
+S1(config)#no ip domain lookup
+S1(config)#enable secret class
+S1(config)#line console 0
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#exit
+S1(config)#line vty 0 4
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#exit
+S1(config)#service password-encryption 
+S1(config)#banner motd #Authorized Access Only!#
+S1(config)#end
+S1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+Compressed configuration from 934 bytes to 683 bytes[OK]
+S1#clock set 12:49:00 27 Mar 2021
+S1#
+```
+##### Коммутатор S2:
+```
+Switch>enable
+Switch#configure terminal 
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S2
+S2(config)#no ip domain lookup
+S2(config)#enable secret class
+S2(config)#line console 0
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#line vty 0 4
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#service password-encryption 
+S2(config)#banner motd #Authorized Access Only!#
+S2(config)#end
+S2#
+*Mar 27 09:50:48.559: %SYS-5-CONFIG_I: Configured from console by console
+S2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+Compressed configuration from 934 bytes to 680 bytes[OK]
+S2#clock set 12:51:00 27 Mar 2021
+S2#
+```
+### Создаим сети VLAN на коммутаторе S1 согласно таблицы
+```
+S1#configure terminal 
+S1(config)#vlan 100
+S1(config-vlan)#name Clients
+S1(config-vlan)#vlan 200    
+S1(config-vlan)#name Management
+S1(config-vlan)#vlan 999       
+S1(config-vlan)#name Parking_Lot
+S1(config-vlan)#vlan 1000       
+S1(config-vlan)#name Native
+S1(config-vlan)#
+```
+#### Настроим и активируем интерфейс управления 
+##### На S1:
+```
+S1(config)#interface vlan 200
+S1(config-if)#ip address 192.168.1.66 255.255.255.224
+S1(config-if)#no shutdown 
+S1(config-if)#exit
+S1(config)#ip default-gateway 192.168.1.65
+```
+##### На S2:
+```
+S2#configure terminal 
+S2(config)#interface vlan 1
+S2(config-if)#ip address 192.168.1.98 255.255.255.240
+S2(config-if)#no shutdown 
+S2(config-if)#exit
+S2(config)#ip default-gateway 192.168.1.97
+S2(config)#
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@
 ## Топология
 ![](topology.png)
 ## Таблица адресации
-
+## Таблица VLAN
 ## Решение:
 
 
@@ -206,7 +206,7 @@ Compressed configuration from 934 bytes to 680 bytes[OK]
 S2#clock set 12:51:00 27 Mar 2021
 S2#
 ```
-### Создаим сети VLAN на коммутаторе S1 согласно таблицы
+### Создаим сети VLAN на коммутаторе S1 согласно таблицы VLAN
 ```
 S1#configure terminal 
 S1(config)#vlan 100
@@ -217,7 +217,20 @@ S1(config-vlan)#vlan 999
 S1(config-vlan)#name Parking_Lot
 S1(config-vlan)#vlan 1000       
 S1(config-vlan)#name Native
-S1(config-vlan)#
+S1(config-vlan)#exit
+S1(config)#interface range Et0/1,Et0/2
+S1(config-if-range)#switchport mode access 
+S1(config-if-range)#switchport access vlan 999
+S1(config-if-range)#shutdown 
+S1(config-if-range)#exit
+S1(config)#
+```
+#### На S2 административно деактивируем все неиспользуемые порты:
+```
+S2(config)#interface range Et0/2-3
+S2(config-if-range)#shutdown 
+S2(config-if-range)#exit
+S2(config)#
 ```
 #### Настроим и активируем интерфейс управления 
 ##### На S1:

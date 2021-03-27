@@ -46,8 +46,7 @@ R1(config-line)#login
 R1(config-line)#exit
 R1(config)#service password-encryption 
 R1(config)#banner motd #Authorized Access Only!#
-R1(config)#end
-R1#                          
+R1(config)#end                    
 R1#copy running-config startup-config
 R1#clock set 11:57:00 27 Mar 2021
 R1#
@@ -103,26 +102,32 @@ GigabitEthernet0/2         unassigned      YES unset  administratively down down
 GigabitEthernet0/3         unassigned      YES unset  administratively down down    
 R1#
 ```
-### Настроим G0/1 на R2
-```
-R2#configure terminal 
-R2(config)#interface GigabitEthernet0/1 
-R2(config-if)#ip address 192.168.1.97 255.255.255.240
-R2(config-if)#no shutdown 
-```
-### Настроим G0/0 и статическую маршрутизацию для обоих маршрутизаторов
+### Настроим G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов
+##### Маршрутизатор R1:
 ```
 R1#configure terminal 
 R1(config)#interface GigabitEthernet0/0 
 R1(config-if)#ip address 10.0.0.1 255.255.255.252
 R1(config-if)#no shutdown
-R1(config-if)#
+R1(config-if)#exit
+R1(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.2 
+R1(config)#end
+R1#
 ```
+##### Маршрутизатор R2:
 ```
+R2#configure terminal 
+R2(config)#interface GigabitEthernet0/1 
+R2(config-if)#ip address 192.168.1.97 255.255.255.240
+R2(config-if)#no shutdown 
 R2(config-if)#interface GigabitEthernet0/0           
 R2(config-if)#ip address 10.0.0.2 255.255.255.252
 R2(config-if)#no shutdown 
-R2(config-if)
+R2(config-if)exit
+R2(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1
+R2(config)#end
+R2#
 ```
+
 
 

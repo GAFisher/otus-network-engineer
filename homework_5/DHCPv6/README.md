@@ -216,7 +216,7 @@ MTU:              : 1500
 PC-A>
 ```
 ## 3. Настройка и проверка сервера DHCPv6 на R1
-### Настроим R1 для предоставления DHCPv6 без состояния для PC-A
+### Настроим R1 для предоставления DHCPv6 без сохранения состояния для PC-A
 ```
 R1#configure terminal 
 R1(config)#ipv6 dhcp pool R1-STATELESS

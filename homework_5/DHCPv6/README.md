@@ -197,6 +197,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/9/35 ms
 R1#
 ```
 ## 2. Проверка назначения адреса SLAAC от R1
+##### Настроим сетевой адаптер для автоматической настройки IPv6 и убедимся, что узел PC-A получает адрес IPv6 с помощью метода SLAAC.
 ```
 PC-A> ip auto
 GLOBAL SCOPE      : 2001:db8:acad:1:2050:79ff:fe66:6807/64
@@ -221,6 +222,23 @@ PC-A>
 Маршрутизатор также может быть клиентом DHCPv6.
 ## Топология
 ![](Topology2.PNG)
+### Настроим R1 для предоставления DHCPv6 без сохранения состояния для R-A
+```
+R1#configure terminal 
+R1(config)#ipv6 dhcp pool R1-STATELESS
+R1(config-dhcpv6)#dns-server 2001:db8:acad::254
+R1(config-dhcpv6)#domain-name STATELESS.com
+R1(config-dhcpv6)#exit
+R1(config)#interface Ethernet0/1
+R1(config-if)#ipv6 nd other-config-flag
+R1(config-if)#ipv6 dhcp server R1-STATELESS
+R1(config-if)#end
+R1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R1#
+```
 ### Настроим маршрутизатор R-A в качестве DHCPv6-сервера без отслеживания состояния
 ```
 Router>enable
@@ -250,24 +268,7 @@ Building configuration...
 [OK]
 R-A#
 ```
-### Настроим R1 для предоставления DHCPv6 без сохранения состояния для R-A
-```
-R1#configure terminal 
-R1(config)#ipv6 dhcp pool R1-STATELESS
-R1(config-dhcpv6)#dns-server 2001:db8:acad::254
-R1(config-dhcpv6)#domain-name STATELESS.com
-R1(config-dhcpv6)#exit
-R1(config)#interface Ethernet0/1
-R1(config-if)#ipv6 nd other-config-flag
-R1(config-if)#ipv6 dhcp server R1-STATELESS
-R1(config-if)#end
-R1#copy running-config startup-config
-Destination filename [startup-config]? 
-Building configuration...
-[OK]
-R1#
-```
-####  Убедимся, что маршрутизатору R-A назначен GUA и получена другая необходимая информация DHCPv6
+### Убедимся, что маршрутизатору R-A назначен GUA и получена другая необходимая информация DHCPv6
 ```
 R-A# show ipv6 interface brief          
 Ethernet0/0            [up/up]
@@ -306,6 +307,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/5/24 ms
 R-A#
 ```
 ## 4. Настройка сервера DHCPv6 с сохранением состояния на R1
+#### Настроим R1 для ответа на запросы DHCPv6 от локальной сети на R2
 ```
 R1(config)#ipv6 dhcp pool R2-STATEFUL
 R1(config-dhcpv6)#address prefix 2001:db8:acad:3:aaa::/80
@@ -318,6 +320,19 @@ R1(config-if)#exit
 R1(config)#
 ```
 ## 5. Настройка и проверка ретрансляции DHCPv6 на R2
+### Настроим R2 в качестве агента DHCP relay для локальной сети на Ethernet0/0
+```
+R2#configure terminal 
+R2(config)#interface Ethernet0/1
+R2(config-if)#ipv6 nd managed-config-flag
+R2(config-if)#ipv6 dhcp relay destination 2001:db8:acad:2::1  Ethernet0/0
+R2(config-if)#end
+R2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R2#
+```
 ### Настроим маршрутизатор R-B
 ```
 Router>enable
@@ -345,19 +360,6 @@ Destination filename [startup-config]?
 Building configuration...
 [OK]
 R-B#
-```
-### Настроим R2 в качестве агента DHCP relay для локальной сети на G0/1
-```
-R2#configure terminal 
-R2(config)#interface Ethernet0/1
-R2(config-if)#ipv6 nd managed-config-flag
-R2(config-if)#ipv6 dhcp relay destination 2001:db8:acad:2::1  Ethernet0/0
-R2(config-if)#end
-R2#copy running-config startup-config
-Destination filename [startup-config]? 
-Building configuration...
-[OK]
-R2#
 ```
 ### Убедимся, что маршрутизатору R-B назначен GUA и получена другая необходимая информация DHCPv6
 ```

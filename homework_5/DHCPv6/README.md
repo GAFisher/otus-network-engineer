@@ -306,7 +306,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/5/24 ms
 R-A#
 ```
 ## 4. Настройка сервера DHCPv6 с сохранением состояния на R1
-#### Настроим R1 для ответа на запросы DHCPv6 от локальной сети на R2
+Настроим R1 для ответа на запросы DHCPv6 от локальной сети на R2
 ```
 R1(config)#ipv6 dhcp pool R2-STATEFUL
 R1(config-dhcpv6)#address prefix 2001:db8:acad:3:aaa::/80

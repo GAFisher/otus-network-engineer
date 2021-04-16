@@ -33,7 +33,7 @@
 4. [Настройка сервера DHCPv6 с сохранением состояния на R1](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#4-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-dhcpv6-%D1%81-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F-%D0%BD%D0%B0-r1)
 5. [Настройка и проверка ретрансляции DHCPv6 на R2](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#5-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B8-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D1%80%D0%B5%D1%82%D1%80%D0%B0%D0%BD%D1%81%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-dhcpv6-%D0%BD%D0%B0-r2)
 	* [Настроим R2 в качестве агента DHCP relay для локальной сети на Ethernet0/0](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D0%BC-r2-%D0%B2-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B5-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%B0-dhcp-relay-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9-%D1%81%D0%B5%D1%82%D0%B8-%D0%BD%D0%B0-ethernet00)
-	* [Настроим маршрутизатор R-B в качестве клиента](ttps://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D0%BC-%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%B8%D0%B7%D0%B0%D1%82%D0%BE%D1%80-r-b-%D0%B2-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B5-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%B0)
+	* [Настроим маршрутизатор R-B в качестве клиента](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D0%BC-%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%B8%D0%B7%D0%B0%D1%82%D0%BE%D1%80-r-b-%D0%B2-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B5-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%B0)
 	* [Убедимся, что маршрутизатору R-B назначен GUA и получена другая необходимая информация DHCPv6](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#%D1%83%D0%B1%D0%B5%D0%B4%D0%B8%D0%BC%D1%81%D1%8F-%D1%87%D1%82%D0%BE-%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%B8%D0%B7%D0%B0%D1%82%D0%BE%D1%80%D1%83-r-b-%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD-gua-%D0%B8-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B0-%D0%B4%D1%80%D1%83%D0%B3%D0%B0%D1%8F-%D0%BD%D0%B5%D0%BE%D0%B1%D1%85%D0%BE%D0%B4%D0%B8%D0%BC%D0%B0%D1%8F-%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D1%8F-dhcpv6)
 
 ## 1. Создание сети и настройка основных параметров устройства
@@ -196,7 +196,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/9/35 ms
 R1#
 ```
 ## 2. Проверка назначения адреса SLAAC от R1
-##### Настроим сетевой адаптер для автоматической настройки IPv6 и убедимся, что узел PC-A получает адрес IPv6 с помощью метода SLAAC.
+Настроим сетевой адаптер для автоматической настройки IPv6 и убедимся, что узел PC-A получает адрес IPv6 с помощью метода SLAAC.
 ```
 PC-A> ip auto
 GLOBAL SCOPE      : 2001:db8:acad:1:2050:79ff:fe66:6807/64

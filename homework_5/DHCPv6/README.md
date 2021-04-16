@@ -5,21 +5,21 @@
 3. Настроить и проверить сервера DHCPv6 без сохранения состояния на R1
 4. Настроить и проверка состояния DHCPv6 сервера на R1
 5. Настроить и проверить DHCPv6 Relay на R2
-## Топология
-![](Topology.png)
 ## Таблица адресации
-|  				Device 			 |  				Interface 			 |       				IPv6 Address 			      |
-|:--------:|:-----------:|:------------------------:|
-|  				R1 			     |  				G0/0/0 			    |  				2001:db8:acad:2::1 /64 			 |
-|  				R1 			     |  				G0/0/0 			    |  				fe80::1 			                |
-|  				R1 			     |  				G0/0/1 			    |  				2001:db8:acad:1::1/64 			  |
-|  				R1 			     |  				G0/0/1 			    |  				fe80::1 			                |
-|  				R2 			     |  				G0/0/0 			    |  				2001:db8:acad:2::2/64 			  |
-|  				R2 			     |  				G0/0/0 			    |  				fe80::2 			                |
-|  				R2 			     |  				G0/0/1 			    |  				2001:db8:acad:3::1 /64 			 |
-|  				R2 			     |  				G0/0/1 			    |  				fe80::1 			                |
-|  				PC-A 			   |  				NIC 			       |  				DHCP 			                   |
-|  				PC-B 			   |  				NIC 			       |  				DHCP 			                   |
+| Device | Interface   | IPv6 Address           |
+|--------|-------------|------------------------|
+| R1     | Ethernet0/0 | 2001:db8:acad:2::1 /64 |
+| R1     | Ethernet0/0 | fe80::1                |
+| R1     | Ethernet0/1 | 2001:db8:acad:1::1/64  |
+| R1     | Ethernet0/1 | fe80::1                |
+| R2     | Ethernet0/0 | 2001:db8:acad:2::2/64  |
+| R2     | Ethernet0/0 | fe80::2                |
+| R2     | Ethernet0/1 | 2001:db8:acad:3::1 /64 |
+| R2     | Ethernet0/1 | fe80::1                |
+| PC-A   | NIC         | DHCP                   |
+| PC-B   | NIC         | DHCP                   |
+| R-A    | Ethernet0/0 | DHCP                   |
+| R-B    | Ethernet0/0 | DHCP                   |			                   |
 ## Решение:
 1. [Создание сети и настройка основных параметров устройства](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#1-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%82%D0%B8-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%BD%D1%8B%D1%85-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2-%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2%D0%B0)
 	* [Настроим базовые параметры каждого коммутатора](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_5/DHCPv6/README.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D0%BC-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BA%D0%B0%D0%B6%D0%B4%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%82%D0%BE%D1%80%D0%B0)
@@ -38,6 +38,8 @@
 
  
 ## 1. Создание сети и настройка основных параметров устройства
+## Топология
+![]()
 ### Настроим базовые параметры каждого коммутатора
 ##### Коммутатор S1:
 ```
@@ -217,6 +219,8 @@ PC-A>
 ```
 ## 3. Настройка и проверка сервера DHCPv6 на R1
 Маршрутизатор также может быть клиентом DHCPv6.
+## Топология
+![]()
 ### Настроим маршрутизатор R-A в качестве DHCPv6-сервера без отслеживания состояния
 ```
 Router>enable

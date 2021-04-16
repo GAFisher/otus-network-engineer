@@ -239,7 +239,7 @@ Building configuration...
 [OK]
 R1#
 ```
-### Настроим маршрутизатор R-A в качестве DHCPv6-сервера без отслеживания состояния
+### Настроим маршрутизатор R-A в качестве клиента
 ```
 Router>enable
 Router#configure terminal
@@ -333,7 +333,7 @@ Building configuration...
 [OK]
 R2#
 ```
-### Настроим маршрутизатор R-B
+### Настроим маршрутизатор R-B в качестве клиента
 ```
 Router>enable
 Router#configure terminal

@@ -146,14 +146,14 @@ R2#
 ##### Маршрутизатор R1:
 ```
 R1#configure terminal
-R1(config)#interface GigabitEthernet0/0 
-R1(config-if)#ipv6 address 2001:db8:acad:2::1/64 
+R1(config)#interface Ethernet0/0 
 R1(config-if)#ipv6 address fe80::1 link-local
+R1(config-if)#ipv6 address 2001:db8:acad:2::1/64 
 R1(config-if)#no shutdown
 R1(config-if)#exit
-R1(config)#interface GigabitEthernet0/1
-R1(config-if)#ipv6 address 2001:db8:acad:1::1/64
+R1(config)#interface  Ethernet0/1 
 R1(config-if)#ipv6 address fe80::1 link-local
+R1(config-if)#ipv6 address 2001:db8:acad:1::1/64
 R1(config-if)#no shutdown
 R1(config-if)#exit
 R1(config)#ipv6 route ::/0 2001:DB8:ACAD:2::2
@@ -166,15 +166,15 @@ R1#
 ```
 ##### Маршрутизатор R2:
 ```
-R2#configure terminal
-R2(config)#interface GigabitEthernet0/0
-R2(config-if)#ipv6 address 2001:db8:acad:2::2/64
+R2#configure terminal      
+R2(config)#interface Ethernet0/0
 R2(config-if)#ipv6 address fe80::2 link-local
-R2(config-if)#no shutdown 
+R2(config-if)#ipv6 address 2001:db8:acad:2::2/64
+R2(config-if)#no shutdown
 R2(config-if)#exit
-R2(config)#interface GigabitEthernet0/1
-R2(config-if)#ipv6 address 2001:db8:acad:3::1/64 
+R2(config)#interface Ethernet0/1
 R2(config-if)#ipv6 address fe80::1 link-local
+R2(config-if)#ipv6 address 2001:db8:acad:3::1/64
 R2(config-if)#no shutdown
 R2(config-if)#exit
 R2(config)#ipv6 route ::/0 2001:DB8:ACAD:2::1
@@ -191,15 +191,15 @@ R1#ping 2001:DB8:ACAD:2::2
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:2::2, timeout is 2 seconds:
 !!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/9/35 ms
 R1#
 ```
 
 ## 2. Проверка назначения адреса SLAAC от R1
 ```
-PC-A> ip auto  
+PC-A> ip auto
 GLOBAL SCOPE      : 2001:db8:acad:1:2050:79ff:fe66:6807/64
-ROUTER LINK-LAYER : 50:00:00:0b:00:01
+ROUTER LINK-LAYER : aa:bb:cc:00:b0:10
 
 PC-A> show ipv6
 
@@ -207,23 +207,53 @@ NAME              : PC-A[1]
 LINK-LOCAL SCOPE  : fe80::250:79ff:fe66:6807/64
 GLOBAL SCOPE      : 2001:db8:acad:1:2050:79ff:fe66:6807/64
 DNS               : 
-ROUTER LINK-LAYER : 50:00:00:0b:00:01
+ROUTER LINK-LAYER : aa:bb:cc:00:b0:10
 MAC               : 00:50:79:66:68:07
 LPORT             : 20000
 RHOST:PORT        : 127.0.0.1:30000
 MTU:              : 1500
 
-PC-A>
+PC-A> 
 ```
 ## 3. Настройка и проверка сервера DHCPv6 на R1
-### Настроим R1 для предоставления DHCPv6 без сохранения состояния для PC-A
+Маршрутизатор также может быть клиентом DHCPv6.
+### Настроим маршрутизатор R-A в качестве DHCPv6-сервера без отслеживания состояния
+```
+Router>enable
+Router#configure terminal
+Router(config)#hostname R-A
+R-A(config)#no ip domain lookup
+R-A(config)#enable secret class
+R-A(config)#line console 0
+R-A(config-line)#password cisco
+R-A(config-line)#login
+R-A(config-line)#exit
+R-A(config)#line vty 0 4
+R-A(config-line)#password cisco
+R-A(config-line)#login
+R-A(config-line)#exit
+R-A(config)#service password-encryption 
+R-A(config)#banner motd #Authorized Access Only!#
+R-A(config)#ipv6 unicast-routing
+R-A(config)#interface Ethernet0/0 
+R-A(config)#no shutdown
+R-A(config-if)#ipv6 enable 
+R-A(config-if)#ipv6 address autoconfig
+R-A(config)#end 
+R-A#copy running-config startup-config                              
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R-A#
+```
+### Настроим R1 для предоставления DHCPv6 без сохранения состояния для R-A
 ```
 R1#configure terminal 
 R1(config)#ipv6 dhcp pool R1-STATELESS
 R1(config-dhcpv6)#dns-server 2001:db8:acad::254
 R1(config-dhcpv6)#domain-name STATELESS.com
 R1(config-dhcpv6)#exit
-R1(config)#interface GigabitEthernet0/1
+R1(config)#interface Ethernet0/1
 R1(config-if)#ipv6 nd other-config-flag
 R1(config-if)#ipv6 dhcp server R1-STATELESS
 R1(config-if)#end
@@ -233,10 +263,44 @@ Building configuration...
 [OK]
 R1#
 ```
-#### Перезапустим PC-A и проверим подключение с помощью пинга IP-адреса интерфейса R1 G0/1 
-
-
-
+####  Убедимся, что маршрутизатору R-A назначен GUA и получена другая необходимая информация DHCPv6
+```
+R-A# show ipv6 interface brief          
+Ethernet0/0            [up/up]
+    FE80::A8BB:CCFF:FE00:F000
+    2001:DB8:ACAD:1:A8BB:CCFF:FE00:F000
+Ethernet0/1            [administratively down/down]
+    unassigned
+Ethernet0/2            [administratively down/down]
+    unassigned
+Ethernet0/3            [administratively down/down]
+    unassigned
+R-A#show ipv6 dhcp interface Ethernet0/0
+Ethernet0/0 is in client mode
+  Prefix State is IDLE (0)
+  Information refresh timer expires in 23:57:07
+  Address State is IDLE
+  List of known servers:
+    Reachable via address: FE80::1
+    DUID: 00030001AABBCC00B000
+    Preference: 0
+    Configuration parameters:
+      DNS server: 2001:DB8:ACAD::254
+      Domain name: STATELESS.com
+      Information refresh time: 0
+  Prefix Rapid-Commit: disabled
+  Address Rapid-Commit: disabled
+R-A#
+```
+#### Проверим подключение с помощью пинга IP-адреса интерфейса Ethernet0/1 R2
+```
+R-A#ping 2001:DB8:ACAD:1::1
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:1::1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/5/24 ms
+R-A#
+```
 ## 4. Настройка сервера DHCPv6 с сохранением состояния на R1
 ```
 R1(config)#ipv6 dhcp pool R2-STATEFUL
@@ -244,34 +308,46 @@ R1(config-dhcpv6)#address prefix 2001:db8:acad:3:aaa::/80
 R1(config-dhcpv6)#dns-server 2001:db8:acad::254
 R1(config-dhcpv6)#domain-name STATEFUL.com
 R1(config-dhcpv6)#exit
-R1(config)#interface GigabitEthernet0/0
+R1(config)#interface Ethernet0/0
 R1(config-if)#ipv6 dhcp server R2-STATEFUL
 R1(config-if)#exit
 R1(config)#
 ```
 ## 5. Настройка и проверка ретрансляции DHCPv6 на R2
-### Включим PC-B и проверим адрес SLAAC, который он генерирует
+### Настроим маршрутизатор R-B
 ```
-PC-B> show ipv6
-
-NAME              : PC-B[1]
-LINK-LOCAL SCOPE  : fe80::250:79ff:fe66:6808/64
-GLOBAL SCOPE      : 2001:db8:acad:3:2050:79ff:fe66:6808/64
-DNS               : 
-ROUTER LINK-LAYER : 50:00:00:0c:00:01
-MAC               : 00:50:79:66:68:08
-LPORT             : 20000
-RHOST:PORT        : 127.0.0.1:30000
-MTU:              : 1500
-
-PC-B> 
+Router>enable
+Router#configure terminal
+Router(config)#hostname R-B
+R-B(config)#no ip domain lookup
+R-B(config)#enable secret class
+R-B(config)#line console 0
+R-B(config-line)#password cisco
+R-B(config-line)#login
+R-B(config-line)#exit
+R-B(config)#line vty 0 4
+R-B(config-line)#password cisco
+R-B(config-line)#login
+R-B(config-line)#exit
+R-B(config)#service password-encryption 
+R-B(config)#banner motd #Authorized Access Only!#
+R-B(config)#ipv6 unicast-routing
+R-B(config)#interface Ethernet0/0
+R-B(config-if)#no shutdown 
+R-B(config-if)#ipv6 address dhcp
+R-B(config)#end 
+R-B#copy running-config startup-config                              
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R-B#
 ```
 ### Настроим R2 в качестве агента DHCP relay для локальной сети на G0/1
 ```
 R2#configure terminal 
-R2(config)#interface GigabitEthernet0/1
+R2(config)#interface Ethernet0/1
 R2(config-if)#ipv6 nd managed-config-flag
-R2(config-if)#ipv6 dhcp relay destination 2001:db8:acad:2::1  Gi0/0
+R2(config-if)#ipv6 dhcp relay destination 2001:db8:acad:2::1  Ethernet0/0
 R2(config-if)#end
 R2#copy running-config startup-config
 Destination filename [startup-config]? 
@@ -279,5 +355,37 @@ Building configuration...
 [OK]
 R2#
 ```
-### Попытаемся получить адрес IPv6 из DHCPv6 на PC-B
-#### Перезапустим PC-B и проверим подключение с помощью пинга IP-адреса интерфейса R1 G0/1
+### Убедимся, что маршрутизатору R-B назначен GUA и получена другая необходимая информация DHCPv6
+```
+R-B#show ipv6 interface brief            
+Ethernet0/0            [up/up]
+    FE80::A8BB:CCFF:FE01:1000
+    2001:DB8:ACAD:3:AAA:FB13:D82D:8A6D
+Ethernet0/1            [administratively down/down]
+    unassigned
+Ethernet0/2            [administratively down/down]
+    unassigned
+Ethernet0/3            [administratively down/down]
+    unassigned
+R-B# show ipv6 dhcp interface Ethernet0/0
+Ethernet0/0 is in client mode
+  Prefix State is IDLE
+  Address State is OPEN
+  Renew for address will be sent in 11:59:03
+  List of known servers:
+    Reachable via address: FE80::1
+    DUID: 00030001AABBCC00B000
+    Preference: 0
+    Configuration parameters:
+      IA NA: IA ID 0x00030001, T1 43200, T2 69120
+        Address: 2001:DB8:ACAD:3:AAA:FB13:D82D:8A6D/128
+                preferred lifetime 86400, valid lifetime 172800
+                expires at Apr 18 2021 03:39 PM (172743 seconds)
+      DNS server: 2001:DB8:ACAD::254
+      Domain name: STATEFUL.com
+      Information refresh time: 0
+  Prefix Rapid-Commit: disabled
+  Address Rapid-Commit: disabled
+R-B#
+```
+#### Проверим подключение с помощью пинга IP-адреса интерфейса Ethernet0/1 R2

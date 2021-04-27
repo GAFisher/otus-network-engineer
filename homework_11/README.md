@@ -15,11 +15,11 @@
 
 
 ### 4. Настроим для офиса Лабытнанги маршрут по-умолчанию
-
+```
 R27#configure terminal 
 R27(config)#ip route 0.0.0.0 0.0.0.0 100.27.25.2
 R27(config)#ipv6 route ::/0 2000:FFFF:1000:2725::2
 R27(config)#exit
 R27#
-
+```
 

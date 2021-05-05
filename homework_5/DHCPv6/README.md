@@ -353,7 +353,9 @@ R-B(config)#ipv6 unicast-routing
 R-B(config)#interface Ethernet0/0
 R-B(config-if)#no shutdown 
 R-B(config-if)#ipv6 address dhcp
-R-B(config)#end 
+R-B(config-if)#exit
+R-B(config)#ipv6 route ::/0 Ethernet0/0 
+R-B(config)#exit
 R-B#copy running-config startup-config                              
 Destination filename [startup-config]? 
 Building configuration...
@@ -394,3 +396,11 @@ Ethernet0/0 is in client mode
 R-B#
 ```
 #### Проверим подключение с помощью пинга IP-адреса интерфейса Ethernet0/1 R2
+```
+R-B#ping 2001:db8:acad:3::1
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:3::1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+R-B#
+```

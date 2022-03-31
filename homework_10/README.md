@@ -7,16 +7,18 @@
 5. Использовать ipv4 и ipv6
 ## Решение: 
 1. [Задокументируем используемое адресное пространство с использованием IPv4 и IPv6](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#задокументируем-используемое-адресное-пространство-с-использованием-ipv4-и-ipv6)
-2. Задокументируем выделенные для маршрутизаторов IP-адреса и VLAN'ы
-	* Таблица VLAN
-	* Таблица адресации Management
-	* Офис Лабытнанги
-	* Офис Чокурдах
-	* Офис Санкт-Петербург
-	* Офис Москва
-3. Настроим сетевые устройства с учётом приведённой выше схемы и задокументируем изменения
-	* Конфигурационные файлы
-	* Итоговая графическая схема
+2. [Задокументируем выделенные для маршрутизаторов IP-адреса и VLAN'ы](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#задокументируем-выделенные-для-сетевых-устройств-ip-адреса-и-vlanы
+)
+	* [Таблица VLAN](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#таблица-vlan)
+	* [Таблица адресации Management](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#таблица-адресации-management)
+	* [Офис Лабытнанги](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-лабытнанги)
+	* [Офис Чокурдах](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-чокурдах)
+	* [Офис Санкт-Петербург](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-чокурдах)
+	* [Офис Москва](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
+	* [ISP](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#isp)
+3. [Настроим сетевые устройства с учётом приведённой выше схемы и задокументируем изменения](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
+	* [Конфигурационные файлы]
+	* [Итоговая графическая схема](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#топология)
 
 ## Задокументируем используемое адресное пространство с использованием IPv4 и IPv6
 Выделим на каждый офис свою внутреннюю подсеть формата 10.х.0.0/16, где х - порядковый номер офиса.

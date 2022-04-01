@@ -16,7 +16,7 @@
 	* [Офис Санкт-Петербург](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-чокурдах)
 	* [Офис Москва](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
 	* [ISP](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#isp)
-3. [Настроим сетевые устройства с учётом приведённой выше схемы и задокументируем изменения](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
+3. [Настроим сетевые устройства с учётом приведённой выше схемы и задокументируем изменения](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#настроим-ip-адреса-с-учетом-приведённой-выше-схемы-и-задокументируем-изменения)
 	* [Конфигурационные файлы](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs)
 	* [Итоговая графическая схема](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#топология)
 

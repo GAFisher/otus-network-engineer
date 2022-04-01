@@ -1,0 +1,132 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Moscow-R14
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$nVSd$F7SxC.MfRH..6kk6XlmCG/
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ no shutdown
+ description Management
+ ip address 10.1.99.14 255.255.255.0
+ ipv6 address FE80::14 link-local
+ ipv6 address 2A00:FACE:C001:99::14/64
+!
+interface Ethernet0/0
+ no shutdown
+ description Moscow-R12
+ ip address 10.1.10.9 255.255.255.252
+ ipv6 address FE80::14 link-local
+ ipv6 address 2A00:FACE:C001:800::9/64
+!
+interface Ethernet0/1
+ no shutdown
+ description Moscow-R13
+ ip address 10.1.10.21 255.255.255.252
+ ipv6 address FE80::14 link-local
+ ipv6 address 2A00:FACE:C001:2000::21/64
+!
+interface Ethernet0/2
+ no shutdown
+ description Kirton-R22
+ ip address 84.52.118.226 255.255.255.252
+ ipv6 address FE80::14 link-local
+ ipv6 address 2606:4700:D0:C009::226/64
+!
+interface Ethernet0/3
+ no shutdown
+ description Moscow-R19
+ ip address 10.1.10.2 255.255.255.252
+ ipv6 address FE80::14 link-local
+ ipv6 address 2A00:FACE:C001:100::2/64
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 060506324F41
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 060506324F41
+ login
+ transport input none
+!
+!
+end

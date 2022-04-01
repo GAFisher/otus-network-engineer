@@ -17,7 +17,7 @@
 	* [Офис Москва](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
 	* [ISP](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#isp)
 3. [Настроим сетевые устройства с учётом приведённой выше схемы и задокументируем изменения](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#офис-санкт-петербург)
-	* [Конфигурационные файлы]
+	* [Конфигурационные файлы](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs)
 	* [Итоговая графическая схема](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#топология)
 
 ## Задокументируем используемое адресное пространство с использованием IPv4 и IPv6
@@ -192,6 +192,6 @@
 |               |        e0/3      |      95.165.140.5    |      95.165.140.4/30    |       2001:20DA:EDA:7::5/64      |      2001:20DA:EDA:7::/64     |      FE80::26    |     St.Petersburg-R18    |
 
 ## Настроим IP-адреса с учетом приведённой выше схемы и задокументируем изменения
-Все файлы конфигураций приведены здесь.
+Все файлы конфигураций приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs).
 #### Топология
 ![](topology.png)

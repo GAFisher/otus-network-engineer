@@ -23,7 +23,6 @@
 ## Задокументируем используемое адресное пространство с использованием IPv4 и IPv6
 Выделим на каждый офис свою внутреннюю подсеть формата 10.х.0.0/16, где х - порядковый номер офиса.
 Для Триады для внутренних маршрутизаторов выделим подсеть 35.10.65.0/24, для подключения внешних маршрутизаторов выделим подсеть 95.165.х.0/30, где х – идентификатор маршрутизатора.
-
 ### Общая таблица сетей
 |              Devices            |       Network IPv4      |          Network IPv6         |
 |:-------------------------------:|:-----------------------:|:-----------------------------:|
@@ -43,7 +42,7 @@
 |          Киртон – Ламас         |      128.0.128.0/30     |     64:FF9B:5276:1EB4::/64    |
 |          Киртон - Москва        |     84.52.118.224/30    |     2606:4700:D0:C009::/64    |
 
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ## Задокументируем выделенные для сетевых устройств IP-адреса и VLAN'ы
 Выделим для каждого VPC в каждом офисе свой VLAN. Для управления сетевыми устройствами выделим VLAN 99. Нативным будет VLAN 1000. 
 #### Таблица VLAN
@@ -63,6 +62,8 @@
 |           1000         |       Native      |              N/A            |
 
 Для управления сетевыми устройствами выделим подсеть 10.х.99.0/24. Адреса сетевых устройств в последнем октете будут иметь цифру, совпадающую с номером устройства на схеме. Link-local адреса IPv6 будут в последнем октете иметь цифру, совпадающую с номером устройства на схеме.
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 #### Таблица адресации Management 
 |          Device        |     IPv4   Address    |     Network   IPv4    |          IPv6   Address         |         Network   IPv6        |     IPv6   LL    |
 |:----------------------:|:---------------------:|:---------------------:|:-------------------------------:|:-----------------------------:|:----------------:|
@@ -99,6 +100,7 @@
 |           R25          |       10.7.99.25      |      10.7.99.0/24     |     2A00:FACE:C007:99::25/64    |     2A00:FACE:C007:99::/64    |      FE80::25    |
 |           R26          |       10.7.99.26      |      10.7.99.0/24     |     2A00:FACE:C007:99::26/64    |     2A00:FACE:C007:99::/64    |      FE80::26    |
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ### Офис Лабытнанги
 #### Таблица адресации
 |     Device    |     Interface    |     IPv4   Address    |      Network   IPv4    |         IPv6   Address       |        Network   IPv6       |     IPv6   LL    |     Description    |
@@ -116,6 +118,7 @@
 |      VPC30    |        NIC       |         DHCP        |       10.3.30.0/24     |              SLAAC             |     2A00:FACE:C003:30::/64    |       SLAAC      |         BUH        |
 |      VPC31    |        NIC       |         DHCP        |       10.3.31.0/24     |              SLAAC             |     2A00:FACE:C003:31::/64    |       SLAAC      |          PR        |
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ### Офис Санкт-Петербург
 #### Таблица адресации
 |     Device    |     Interface    |     IPv4 Address    |      Network   IPv4    |            IPv6 Address          |          Network   IPv6        |     IPv6   LL    |        Description       |
@@ -137,6 +140,7 @@
 |      VPC8     |        NIC       |         DHCP        |       10.2.20.0/24     |               SLAAC              |      2A00:FACE:C002:20::/64    |       SLAAC      |            SRE           |
 |       VPC     |        NIC       |         DHCP        |       10.2.21.0/24     |               SLAAC              |      2A00:FACE:C002:21::/64    |       SLAAC      |             QA           |
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ### Офис Москва
 #### Таблица адресации
 
@@ -162,6 +166,8 @@
 |                  |        e0/3      |       10.1.10.22     |       10.1.10.20/30     |     2A00:FACE:C001:2000::22/64    |     2A00:FACE:C001:2000::/64    |      FE80::13    |      Moscow-R14    |
 |        VPC1      |        NIC       |          DHCP        |       10.1.100.0/24     |                SLAAC              |     2A00:FACE:C001:1000::/64    |       SLAAC      |          IT        |
 |        VPC7      |        NIC       |          DHCP        |       10.1.110.0/24     |                SLAAC              |     2A00:FACE:C001:1100::/64    |       SLAAC      |         DIR        |
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ### ISP
 #### Таблица адресации
 |     Device    |     Interface    |      IPv4 Address    |      Network   IPv4     |            IPv6 Address          |         Network   IPv6        |     IPv6   LL    |        Description       |
@@ -191,6 +197,7 @@
 |               |        e0/2      |      35.10.65.50     |      35.10.65.48/28     |      2A00:BEDA:D005:4::50/64     |      2A00:BEDA:D005:4::/64    |      FE80::26    |         Triad-R25        |
 |               |        e0/3      |      95.165.140.5    |      95.165.140.4/30    |       2001:20DA:EDA:7::5/64      |      2001:20DA:EDA:7::/64     |      FE80::26    |     St.Petersburg-R18    |
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)
 ## Настроим IP-адреса с учетом приведённой выше схемы и задокументируем изменения
 Все файлы конфигураций приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs).
 #### Топология

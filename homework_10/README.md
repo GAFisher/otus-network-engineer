@@ -195,3 +195,4 @@
 Все файлы конфигураций приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs).
 #### Топология
 ![](topology.png)
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)

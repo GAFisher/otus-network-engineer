@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 18:44:50 EET Fri Apr 1 2022
+! Last configuration change at 20:13:19 EET Sat Apr 2 2022
 !
 version 15.2
 service timestamps debug datetime msec
@@ -31,8 +31,10 @@ ip cef
 no ipv6 cef
 !
 !
-spanning-tree mode pvst
+!
+spanning-tree mode rapid-pvst
 spanning-tree extend system-id
+spanning-tree vlan 11 priority 4096
 !
 vlan internal allocation policy ascending
 !
@@ -54,6 +56,7 @@ interface Port-channel1
  switchport trunk allowed vlan 10,11,99,1000
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 1000
+ switchport mode trunk
 !
 interface Ethernet0/0
  no shutdown
@@ -76,6 +79,7 @@ interface Ethernet0/2
  switchport trunk allowed vlan 10,11,99,1000
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 1000
+ switchport mode trunk
  channel-group 1 mode active
 !
 interface Ethernet0/3
@@ -83,6 +87,7 @@ interface Ethernet0/3
  switchport trunk allowed vlan 10,11,99,1000
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 1000
+ switchport mode trunk
  channel-group 1 mode active
 !
 interface Ethernet1/0

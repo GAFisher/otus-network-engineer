@@ -202,5 +202,5 @@
 ## Настроим IP-адреса с учетом приведённой выше схемы и задокументируем изменения
 Все файлы конфигураций приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10/configs).
 #### Топология
-![](topology.png)
+![](TOPOLOGY.PNG)
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_10#архитектура-сети)

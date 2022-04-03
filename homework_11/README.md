@@ -20,6 +20,10 @@
 Labytnangi-R27(config)#ip route 0.0.0.0 0.0.0.0 Ethernet0/0
 Labytnangi-R27(config)#ipv6 route ::/0 Ethernet0/0
 Labytnangi-R27(config)#exit
+Labytnangi-R27#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 Labytnangi-R27#show ip route 
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 

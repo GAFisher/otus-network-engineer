@@ -16,7 +16,7 @@
 
 ### 4. Настроим для офиса Лабытнанги маршрут по-умолчанию
 ```
-**R27**#configure terminal 
+Labytnangi-R27#configure terminal 
 Labytnangi-R27(config)#ip route 0.0.0.0 0.0.0.0 Ethernet0/0
 Labytnangi-R27(config)#ipv6 route ::/0 Ethernet0/0
 Labytnangi-R27(config)#exit

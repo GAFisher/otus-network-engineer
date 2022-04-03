@@ -45,5 +45,28 @@ L        10.4.99.1/32 is directly connected, Loopback1
 C        95.165.130.0/30 is directly connected, Ethernet0/0
 L        95.165.130.2/32 is directly connected, Ethernet0/0
 Labytnangi-R27#
+Labytnangi-R27#sh ipv6 route
+IPv6 Routing Table - default - 6 entries
+Codes: C - Connected, L - Local, S - Static, U - Per-user Static route
+       B - BGP, HA - Home Agent, MR - Mobile Router, R - RIP
+       H - NHRP, I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea
+       IS - ISIS summary, D - EIGRP, EX - EIGRP external, NM - NEMO
+       ND - ND Default, NDp - ND Prefix, DCE - Destination, NDr - Redirect
+       O - OSPF Intra, OI - OSPF Inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2
+       ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2, la - LISP alt
+       lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
+S   ::/0 [1/0]
+     via Ethernet0/0, directly connected
+C   2001:20DA:EDA:4::/64 [0/0]
+     via Ethernet0/0, directly connected
+L   2001:20DA:EDA:4::2/128 [0/0]
+     via Ethernet0/0, receive
+C   2A00:FACE:C004:99::/64 [0/0]
+     via Loopback1, directly connected
+L   2A00:FACE:C004:99::1/128 [0/0]
+     via Loopback1, receive
+L   FF00::/8 [0/0]
+     via Null0, receive
+Labytnangi-R27#
 ```
 

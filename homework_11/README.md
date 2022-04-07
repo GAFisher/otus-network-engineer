@@ -6,13 +6,112 @@
 4. Настройть для офиса Лабытнанги маршрут по-умолчанию
 5. План работы и изменения зафиксируем в документации
 ## Решение: 
-1. mm
+1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
 2. mm
 3. mm
 4. Настроим для офиса Лабытнанги маршрут по-умолчанию
 5. 
 
+### 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
+Настроим правила для отбора трафика из каждого VLAN’а:
+```
+Chokurdah-R28#
+Chokurdah-R28#configure terminal 
+Chokurdah-R28(config)#ip access-list extended BUH-VPC30
+Chokurdah-R28(config-ext-nacl)#permit ip 10.3.30.0 0.0.0.255 any
+Chokurdah-R28(config-ext-nacl)#exit
+Chokurdah-R28(config)#ip access-list extended PR-VPC31
+Chokurdah-R28(config-ext-nacl)#permit ip 10.3.31.0 0.0.0.255 any
+Chokurdah-R28(config-ext-nacl)#exit
+Chokurdah-R28(config)#
+```
+Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1, а трафик VLAN31 отправлялся через ISP2:
+```
+Chokurdah-R28(config)#route-map ISP2 permit 10
+Chokurdah-R28(config-route-map)#description Triad-R25 
+Chokurdah-R28(config-route-map)#match ip address PR-VPC31
+Chokurdah-R28(config-route-map)#set ip next-hop 95.165.130.5
+Chokurdah-R28(config-ext-nacl)#exit
+Chokurdah-R28(config)#route-map ISP1 permit 10
+Chokurdah-R28(config-route-map)#description Triad-R26 
+Chokurdah-R28(config-route-map)#match ip address BUH-VPC30
+Chokurdah-R28(config-route-map)#set ip next-hop 95.165.140.1
+Chokurdah-R28(config-route-map)#exit
+Chokurdah-R28(config)#
+```
+Настроим NAT трансляцию:
+```
+Chokurdah-R28(config)#ip nat source list BUH-VPC30 interface Ethernet0/0 overload
+Chokurdah-R28(config)#ip nat source list PR-VPC31 interface Ethernet0/1 overload
+Chokurdah-R28(config)#
+```
+Проверим, что всё работает:
+```
+VPC30> show ip  
 
+NAME        : VPC30[1]
+IP/MASK     : 10.3.30.2/24
+GATEWAY     : 10.3.30.1
+DNS         : 
+DHCP SERVER : 10.3.30.1
+DHCP LEASE  : 86339, 86400/43200/75600
+DOMAIN NAME : otus-lab.ru
+MAC         : 00:50:79:66:68:1e
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+VPC30> ping 95.165.140.1
+
+84 bytes from 95.165.140.1 icmp_seq=1 ttl=254 time=0.947 ms
+84 bytes from 95.165.140.1 icmp_seq=2 ttl=254 time=1.320 ms
+84 bytes from 95.165.140.1 icmp_seq=3 ttl=254 time=0.927 ms
+84 bytes from 95.165.140.1 icmp_seq=4 ttl=254 time=1.076 ms
+84 bytes from 95.165.140.1 icmp_seq=5 ttl=254 time=0.858 ms
+
+VPC30> ping 95.165.130.5
+
+95.165.130.5 icmp_seq=1 timeout
+95.165.130.5 icmp_seq=2 timeout
+95.165.130.5 icmp_seq=3 timeout
+95.165.130.5 icmp_seq=4 timeout
+95.165.130.5 icmp_seq=5 timeout
+```
+```
+VPC30>
+
+VPC31> show ip
+
+NAME        : VPC31[1]
+IP/MASK     : 10.3.31.2/24
+GATEWAY     : 10.3.31.1
+DNS         : 
+DHCP SERVER : 10.3.31.1
+DHCP LEASE  : 86315, 86400/43200/75600
+DOMAIN NAME : otus-lab.ru
+MAC         : 00:50:79:66:68:1f
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+VPC31> ping 95.165.130.5
+
+84 bytes from 95.165.130.5 icmp_seq=1 ttl=254 time=0.915 ms
+84 bytes from 95.165.130.5 icmp_seq=2 ttl=254 time=1.156 ms
+84 bytes from 95.165.130.5 icmp_seq=3 ttl=254 time=0.986 ms
+84 bytes from 95.165.130.5 icmp_seq=4 ttl=254 time=0.988 ms
+84 bytes from 95.165.130.5 icmp_seq=5 ttl=254 time=1.284 ms
+
+VPC31> ping 95.165.140.1
+
+95.165.140.1 icmp_seq=1 timeout
+95.165.140.1 icmp_seq=2 timeout
+95.165.140.1 icmp_seq=3 timeout
+95.165.140.1 icmp_seq=4 timeout
+95.165.140.1 icmp_seq=5 timeout
+
+VPC31>
+```
 
 ### 4. Настроим для офиса Лабытнанги маршрут по-умолчанию
 ```

@@ -8,14 +8,12 @@
 ## Решение: 
 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
 2. mm
-3. mm
-4. Настроим для офиса Лабытнанги маршрут по-умолчанию
+3. Настроим для офиса Лабытнанги маршрут по-умолчанию
 5. 
 
 ### 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
 Настроим правила для отбора трафика из каждого VLAN’а:
 ```
-Chokurdah-R28#
 Chokurdah-R28#configure terminal 
 Chokurdah-R28(config)#ip access-list extended BUH-VPC30
 Chokurdah-R28(config-ext-nacl)#permit ip 10.3.30.0 0.0.0.255 any
@@ -112,8 +110,38 @@ VPC31> ping 95.165.140.1
 
 VPC31>
 ```
+### 2. Настроим отслеживание линков в сторону ISP
+Настроим IP SLA для проверки доступности провайдеров (icmp-echo):
+```
+Chokurdah-R28#configure terminal 
+Chokurdah-R28(config)#ip sla 1
+Chokurdah-R28(config-ip-sla)# icmp-echo 95.165.140.1 source-ip 95.165.140.2
+Chokurdah-R28(config-ip-sla-echo)# frequency 5
+Chokurdah-R28(config-ip-sla-echo)#ip sla schedule 1 life forever start-time now        
+Chokurdah-R28(config)#ip sla 2
+Chokurdah-R28(config-ip-sla)# icmp-echo 95.165.130.5 source-ip 95.165.130.6
+Chokurdah-R28(config-ip-sla-echo)# frequency 5
+Chokurdah-R28(config-ip-sla-echo)#ip sla schedule 2 life forever start-time now        
+Chokurdah-R28(config)#
+```
+Настроим track для отслеживания теста IP SLA:
+```
+Chokurdah-R28(config)#track 10 ip sla 1 reachability
+Chokurdah-R28(config-track)#delay down 10 up 5                     
+Chokurdah-R28(config-track)#exit
+Chokurdah-R28(config)#track 20  ip sla 2 reachability
+Chokurdah-R28(config-track)#delay down 10 up 5                     
+Chokurdah-R28(config-track)#exit
+Chokurdah-R28(config)#
+```
+Добавим статические маршруты на провайдеров:
+```
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 1   
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 2
+Chokurdah-R28(config)#
+```
 
-### 4. Настроим для офиса Лабытнанги маршрут по-умолчанию
+### 3. Настроим для офиса Лабытнанги маршрут по-умолчанию
 ```
 Labytnangi-R27#configure terminal 
 Labytnangi-R27(config)#ip route 0.0.0.0 0.0.0.0 Ethernet0/0

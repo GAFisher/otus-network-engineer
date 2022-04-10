@@ -1,15 +1,14 @@
 # Маршрутизация на основе политик (PBR) 
 ## Задание:
-1. Настроить политику маршрутизации для сетей офиса
+1. Настроить политику маршрутизации для сетей офиса Чокурдах
 2. Распределить трафик между двумя линками с провайдером
 3. Настроить отслеживание линка через технологию IP SLA
 4. Настройть для офиса Лабытнанги маршрут по-умолчанию
 5. План работы и изменения зафиксируем в документации
 ## Решение: 
 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
-2. mm
+2. Настроим отслеживание линков в сторону ISP
 3. Настроим для офиса Лабытнанги маршрут по-умолчанию
-5. 
 
 ### 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
 Настроим правила для отбора трафика из каждого VLAN’а:
@@ -21,7 +20,6 @@ Chokurdah-R28(config-ext-nacl)#exit
 Chokurdah-R28(config)#ip access-list extended PR-VPC31
 Chokurdah-R28(config-ext-nacl)#permit ip 10.3.31.0 0.0.0.255 any
 Chokurdah-R28(config-ext-nacl)#exit
-Chokurdah-R28(config)#
 ```
 Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1, а трафик VLAN31 отправлялся через ISP2:
 ```
@@ -35,13 +33,16 @@ Chokurdah-R28(config-route-map)#description Triad-R26
 Chokurdah-R28(config-route-map)#match ip address BUH-VPC30
 Chokurdah-R28(config-route-map)#set ip next-hop 95.165.140.1
 Chokurdah-R28(config-route-map)#exit
-Chokurdah-R28(config)#
 ```
 Настроим NAT трансляцию:
 ```
 Chokurdah-R28(config)#ip nat source list BUH-VPC30 interface Ethernet0/0 overload
 Chokurdah-R28(config)#ip nat source list PR-VPC31 interface Ethernet0/1 overload
-Chokurdah-R28(config)#
+Chokurdah-R28(config)#interface range  Ethernet0/0-1, Ethernet0/2.30
+Chokurdah-R28(config-if-range)#ip nat enable
+Chokurdah-R28(config-if-range)#interface Ethernet0/2.31
+Chokurdah-R28(config)#interface Ethernet0/2.31
+Chokurdah-R28(config-subif)#ip nat enable
 ```
 Проверим, что всё работает:
 ```
@@ -74,10 +75,10 @@ VPC30> ping 95.165.130.5
 95.165.130.5 icmp_seq=3 timeout
 95.165.130.5 icmp_seq=4 timeout
 95.165.130.5 icmp_seq=5 timeout
-```
-```
-VPC30>
 
+VPC30>
+```
+```
 VPC31> show ip
 
 NAME        : VPC31[1]
@@ -110,7 +111,7 @@ VPC31> ping 95.165.140.1
 
 VPC31>
 ```
-### 2. Настроим отслеживание линков в сторону ISP
+### 2. Настроим отслеживание линков в сторону ISP:
 Настроим IP SLA для проверки доступности провайдеров (icmp-echo):
 ```
 Chokurdah-R28#configure terminal 

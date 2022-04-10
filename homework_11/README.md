@@ -144,8 +144,8 @@ Chokurdah-R28(config)#
 ```
 Добавим статические маршруты на провайдеров:
 ```
-Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 1   
-Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 2
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 10   
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 20
 Chokurdah-R28(config)#
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)

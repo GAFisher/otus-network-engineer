@@ -6,9 +6,9 @@
 4. Настройть для офиса Лабытнанги маршрут по-умолчанию
 5. План работы и изменения зафиксируем в документации
 ## Решение: 
-1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
-2. Настроим отслеживание линков в сторону ISP
-3. Настроим для офиса Лабытнанги маршрут по-умолчанию
+1. [Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#1-настроим-политику-маршрутизации-для-распределения-трафика-между-двумя-линками-с-провайдером)
+2. [Настроим отслеживание линков в сторону ISP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#2-настроим-отслеживание-линков-в-сторону-isp)
+3. [Настроим для офиса Лабытнанги маршрут по-умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#3-настроим-для-офиса-лабытнанги-маршрут-по-умолчанию)
 
 ### 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
 Настроим правила для отбора трафика из каждого VLAN’а:
@@ -117,6 +117,7 @@ VPC31> ping 95.165.140.1
 
 VPC31>
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
 ### 2. Настроим отслеживание линков в сторону ISP:
 Настроим IP SLA для проверки доступности провайдеров (icmp-echo):
 ```
@@ -147,7 +148,7 @@ Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 1
 Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 2
 Chokurdah-R28(config)#
 ```
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
 ### 3. Настроим для офиса Лабытнанги маршрут по-умолчанию
 ```
 Labytnangi-R27#configure terminal 
@@ -158,6 +159,10 @@ Labytnangi-R27#copy running-config startup-config
 Destination filename [startup-config]? 
 Building configuration...
 [OK]
+Labytnangi-R27#
+```
+
+```
 Labytnangi-R27#show ip route 
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
@@ -203,4 +208,4 @@ L   FF00::/8 [0/0]
      via Null0, receive
 Labytnangi-R27#
 ```
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)

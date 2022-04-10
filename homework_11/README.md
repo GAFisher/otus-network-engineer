@@ -28,11 +28,17 @@ Chokurdah-R28(config-route-map)#description Triad-R25
 Chokurdah-R28(config-route-map)#match ip address PR-VPC31
 Chokurdah-R28(config-route-map)#set ip next-hop 95.165.130.5
 Chokurdah-R28(config-ext-nacl)#exit
+Chokurdah-R28(config)#interface Ethernet0/2.31
+Chokurdah-R28(config-subif)#ip policy route-map ISP2
+Chokurdah-R28(config-subif)#exit
 Chokurdah-R28(config)#route-map ISP1 permit 10
 Chokurdah-R28(config-route-map)#description Triad-R26 
 Chokurdah-R28(config-route-map)#match ip address BUH-VPC30
 Chokurdah-R28(config-route-map)#set ip next-hop 95.165.140.1
 Chokurdah-R28(config-route-map)#exit
+Chokurdah-R28(config)#interface Ethernet0/2.30
+Chokurdah-R28(config-subif)#ip policy route-map ISP1
+Chokurdah-R28(config-subif)#exit
 ```
 Настроим NAT трансляцию:
 ```

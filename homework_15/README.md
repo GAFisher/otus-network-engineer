@@ -42,3 +42,23 @@ Moscow-R15(config-if-range)#interface range Ethernet0/0-1
 Moscow-R15(config-if-range)#ip ospf 1 area 0
 Moscow-R15(config-if-range)#ipv6 ospf 1 area 0
 ```
+### Настроим маршрутизаторы R12-R13 в зоне 10
+Дополнительной настройки, кроме включения процесса ospf и включения его на инетерфейсах, т.к. маршрутизаторы являются пограничными (ABR), следовательно они будут передавать всю информацию о маршрутах из граничных областей. 
+#### R12
+```
+Moscow-R12(config)#router ospf 1
+Moscow-R12(config-router)#ro
+Moscow-R12(config-router)#router-id 1.1.1.12
+Moscow-R12(config-router)#exit
+Moscow-R12(config)#interface range Et0/2-3
+Moscow-R12(config-if-range)#ip ospf 1 area 0 
+Moscow-R12(config-if-range)#ipv6 ospf 1 area 0
+Moscow-R12(config)#int Et0/0.10                
+Moscow-R12(config-subif)#ip ospf 1 area 10
+Moscow-R12(config-subif)#ipv6 ospf 1 area 10
+Moscow-R12(config-subif)#exit               
+Moscow-R12(config)#int Et0/0.11       
+Moscow-R12(config-subif)#ip ospf 1 area 10  
+Moscow-R12(config-subif)#ipv6 ospf 1 area 10
+```
+#### Для R13 настройка аналогична

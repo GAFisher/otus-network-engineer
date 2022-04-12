@@ -6,7 +6,7 @@
 ## Решение:
 1. Настроим маршрутизаторы R14-R15 в зоне 0;
 2. Настроим маршрутизаторы R12-R13 в зоне 10;
-3. Настроим маршрутизатор R19 в зоне 101 и получание только маршрут по умолчанию;
+3. Настроим маршрутизатор R19 в зоне 101 и получение только маршрут по умолчанию;
 4. Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101.
 
 
@@ -62,3 +62,25 @@ Moscow-R12(config-subif)#ip ospf 1 area 10
 Moscow-R12(config-subif)#ipv6 ospf 1 area 10
 ```
 #### Для R13 настройка аналогична (```router-id 1.1.1.13```)
+
+### Настроим маршрутизатор R19 в зоне 101 и получение только маршрут по умолчанию
+```
+Moscow-R19#configure terminal
+Moscow-R19(config)#router ospf 1 
+Moscow-R19(config-router)#exit
+Moscow-R19(config)#interface Ethernet0/0
+Moscow-R19(config-if)#ip ospf  1 area 101 
+Moscow-R19(config-if)#ipv6 ospf 1 area 101
+Moscow-R19(config-if)#exit
+Moscow-R19(config)#router ospf 1 
+Moscow-R19(config-router)#area 101 stub 
+```
+Также необходимо произвести настройку со стороны R14
+```
+Moscow-R14(config)#interface Et0/3
+Moscow-R14(config-if)#ip ospf 1 area 101 
+Moscow-R14(config-if)#ipv6 ospf 1 area 101
+Moscow-R14(config-if)#exit
+Moscow-R14(config)#router ospf 1
+Moscow-R14(config-router)#area 101 stub
+```

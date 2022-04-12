@@ -10,3 +10,14 @@
 4. Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101.
 
 
+### Настроим маршрутизаторы R14-R15 в зоне 0
+Маршрутизаторы являются граничными маршрутизатороми автономной системы (ASBR), т.к. подключены к Интернету, поэтому необходимо настроить распространение маршрута по умолчанию на другие маршрутизаторы с помощью команды ```default-information originate```. 
+
+```
+Moscow-R14#configure terminal
+Moscow-R14(config)#router ospf 1 
+Moscow-R14(config-router)#default-information originate 
+Moscow-R14(config-router)#exit
+Moscow-R14(config)#ipv6 router ospf 1
+Moscow-R14(config-rtr)#default-information originate 
+```

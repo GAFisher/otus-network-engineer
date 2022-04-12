@@ -105,4 +105,16 @@ Moscow-R20(config-if)#ipv6 ospf 1 area 102
 Moscow-R15(config)#interface Et0/3
 Moscow-R15(config-if)#ip ospf 1 area 102
 Moscow-R15(config-if)#ipv6 ospf 1 area 102
+Moscow-R15(config-if)#exit
+```
+Исключим маршруты до сетей зоны 101
+```
+Moscow-R15(config)#ip prefix-list AREA101  seq 5 deny  10.1.10.0/30 
+Moscow-R15(config)#ip prefix-list AREA101  seq 10 permit 0.0.0.0/0 le 32
+Moscow-R15(config)#router ospf 1 
+Moscow-R15(config-router)#area 102 filter-list prefix AREA101v6 in
+Moscow-R15(config)#ipv6 prefix-list AREA101v6 seq 5 deny 2A00:FACE:C001:100::/64
+Moscow-R15(config)#ipv6 prefix-list AREA101v6 seq 10 permit ::/0 le 128 
+Moscow-R15(config)#ipv6 router ospf 1
+Moscow-R15(config-rtr)#area 102 filter-list prefix AREA101v6 in
 ```

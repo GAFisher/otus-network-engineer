@@ -12,12 +12,33 @@
 
 ### Настроим маршрутизаторы R14-R15 в зоне 0
 Маршрутизаторы являются граничными маршрутизатороми автономной системы (ASBR), т.к. подключены к Интернету, поэтому необходимо настроить распространение маршрута по умолчанию на другие маршрутизаторы с помощью команды ```default-information originate```. 
-
+#### R14
 ```
 Moscow-R14#configure terminal
+Moscow-R14(config)#ip route 0.0.0.0 0.0.0.0 84.52.118.225
+Moscow-R14(config)#ipv6 route ::/0 2606:4700:D0:C009::225
 Moscow-R14(config)#router ospf 1 
 Moscow-R14(config-router)#default-information originate 
 Moscow-R14(config-router)#exit
 Moscow-R14(config)#ipv6 router ospf 1
 Moscow-R14(config-rtr)#default-information originate 
+Moscow-R14(config-rtr)#exit
+Moscow-R14(config)#interface Ethernet0/0
+Moscow-R14(config-if)#ip ospf 1 area 0
+Moscow-R14(config-if)#ipv6 ospf 1 area 0
+```
+#### R15
+```
+Moscow-R15#configure terminal
+Moscow-R15(config)#ip route 0.0.0.0 0.0.0.0 78.25.80.89
+Moscow-R15(config)#ipv6 route ::/0 1A00:4700:D0:C005::89
+Moscow-R15(config)#router ospf 1 
+Moscow-R15(config-router)#default-information originate 
+Moscow-R15(config-router)#exit
+Moscow-R15(config)#ipv6 router ospf 1
+Moscow-R15(config-rtr)#default-information originate 
+Moscow-R15(config-rtr)#exit
+Moscow-R15(config)#interface Ethernet0/0
+Moscow-R15(config-if)#ip ospf 1 area 0
+Moscow-R15(config-if)#ipv6 ospf 1 area 0
 ```

@@ -61,4 +61,4 @@ Moscow-R12(config)#int Et0/0.11
 Moscow-R12(config-subif)#ip ospf 1 area 10  
 Moscow-R12(config-subif)#ipv6 ospf 1 area 10
 ```
-#### Для R13 настройка аналогична
+#### Для R13 настройка аналогична (```router-id 1.1.1.13```)

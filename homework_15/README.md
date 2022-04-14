@@ -24,7 +24,7 @@ Moscow-R14(config)#ipv6 router ospf 1
 Moscow-R14(config-rtr)# router-id 1.1.1.14
 Moscow-R14(config-rtr)#default-information originate 
 Moscow-R14(config-rtr)#exit
-Moscow-R14(config-if-range)#interface range Ethernet0/0-1
+Moscow-R14(config)#interface range Ethernet0/0-1
 Moscow-R14(config-if-range)#ip ospf 1 area 0
 Moscow-R14(config-if-range)#ipv6 ospf 1 area 0
 ```
@@ -41,7 +41,7 @@ Moscow-R15(config)#ipv6 router ospf 1
 Moscow-R14(config-rtr)# router-id 1.1.1.15
 Moscow-R15(config-rtr)#default-information originate 
 Moscow-R15(config-rtr)#exit
-Moscow-R15(config-if-range)#interface range Ethernet0/0-1
+Moscow-R15(config)#interface range Ethernet0/0-1
 Moscow-R15(config-if-range)#ip ospf 1 area 0
 Moscow-R15(config-if-range)#ipv6 ospf 1 area 0
 ```

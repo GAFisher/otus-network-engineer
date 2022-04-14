@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 21:28:42 EET Tue Apr 12 2022
+! Last configuration change at 14:29:04 EET Thu Apr 14 2022
 !
 version 15.4
 service timestamps debug datetime msec
@@ -121,6 +121,8 @@ ip route 0.0.0.0 0.0.0.0 84.52.118.225
 !
 ipv6 route ::/0 2606:4700:D0:C009::225
 ipv6 router ospf 1
+ router-id 1.1.1.14
+ area 101 stub no-summary
  default-information originate
 !
 !

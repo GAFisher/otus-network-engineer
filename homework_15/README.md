@@ -47,7 +47,6 @@ Moscow-R15(config-if-range)#ipv6 ospf 1 area 0
 #### R12
 ```
 Moscow-R12(config)#router ospf 1
-Moscow-R12(config-router)#ro
 Moscow-R12(config-router)#router-id 1.1.1.12
 Moscow-R12(config-router)#exit
 Moscow-R12(config)#interface range Et0/2-3
@@ -124,4 +123,4 @@ Moscow-R15(config-rtr)#area 102 filter-list prefix AREA101v6 in
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
 
-Все файлы изменений приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_15/configs)
+Все файлы изменений приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_15/configs).

@@ -4,14 +4,13 @@
 2. Разделить сеть на зоны
 3. Настроить фильтрацию между зонами
 ## Решение:
-1. Настроим маршрутизаторы R14-R15 в зоне 0;
-2. Настроим маршрутизаторы R12-R13 в зоне 10;
-3. Настроим маршрутизатор R19 в зоне 101 и получение только маршрут по умолчанию;
-4. Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101.
-
-
+1. [Настроим маршрутизаторы R14-R15 в зоне 0](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#настроим-маршрутизаторы-r14-r15-в-зоне-0)
+2. [Настроим маршрутизаторы R12-R13 в зоне 10](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#настроим-маршрутизаторы-r12-r13-в-зоне-10)
+3. [Настроим маршрутизатор R19 в зоне 101 и получение только маршрут по умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#настроим-маршрутизатор-r19-в-зоне-101-и-получение-только-маршрут-по-умолчанию)
+4. [Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#настроим-маршрутизатор-r20-в-зоне-102-и-получание-всех-маршрутов-кроме-маршрутов-до-сетей-зоны-101)
+5. Итоговая графическая схема
 ### Настроим маршрутизаторы R14-R15 в зоне 0
-Маршрутизаторы являются граничными маршрутизатороми автономной системы (ASBR), т.к. подключены к Интернету, поэтому необходимо настроить распространение маршрута по умолчанию на другие маршрутизаторы с помощью команды ```default-information originate```. 
+Маршрутизаторы R14 и R15 являются граничными маршрутизатороми автономной системы (ASBR), т.к. подключены к Интернету, поэтому необходимо настроить распространение маршрута по умолчанию на другие маршрутизаторы с помощью команды ```default-information originate```. 
 #### R14
 ```
 Moscow-R14#configure terminal
@@ -42,6 +41,7 @@ Moscow-R15(config-if-range)#interface range Ethernet0/0-1
 Moscow-R15(config-if-range)#ip ospf 1 area 0
 Moscow-R15(config-if-range)#ipv6 ospf 1 area 0
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
 ### Настроим маршрутизаторы R12-R13 в зоне 10
 Дополнительной настройки, кроме включения процесса ospf и включения его на инетерфейсах, т.к. маршрутизаторы являются пограничными (ABR), следовательно они будут передавать всю информацию о маршрутах из граничных областей. 
 #### R12
@@ -62,7 +62,7 @@ Moscow-R12(config-subif)#ip ospf 1 area 10
 Moscow-R12(config-subif)#ipv6 ospf 1 area 10
 ```
 #### Для R13 настройка аналогична (```router-id 1.1.1.13```)
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
 ### Настроим маршрутизатор R19 в зоне 101 и получение только маршрут по умолчанию
 #### R19
 ```
@@ -87,6 +87,7 @@ Moscow-R14(config-if)#exit
 Moscow-R14(config)#router ospf 1
 Moscow-R14(config-router)#area 101 stub no-summary
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
 ### Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101
 #### R20
 ```
@@ -118,3 +119,6 @@ Moscow-R15(config)#ipv6 prefix-list AREA101v6 seq 10 permit ::/0 le 128
 Moscow-R15(config)#ipv6 router ospf 1
 Moscow-R15(config-rtr)#area 102 filter-list prefix AREA101v6 in
 ```
+### Итоговая графическая схема
+![](ospf_topology.PNG) 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)

@@ -123,3 +123,5 @@ Moscow-R15(config-rtr)#area 102 filter-list prefix AREA101v6 in
 ![](ospf_topology.PNG) 
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
+
+Все файлы изменений приведены [здесь](https://github.com/GAFisher/otus-network-engineer/tree/main/homework_15/configs)

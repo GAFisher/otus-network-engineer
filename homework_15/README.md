@@ -66,15 +66,21 @@ Moscow-R12(config-subif)#ipv6 ospf 1 area 10
 #### R19
 ```
 Moscow-R19#configure terminal
-Moscow-R19(config)#router ospf 1 
-Moscow-R19(config)#router-id 1.1.1.19
+Moscow-R19(config)#router ospf 1
+Moscow-R19(config-router)#router-id 1.1.1.19
 Moscow-R19(config-router)#exit
+Moscow-R19(config)#ipv6 router ospf 1
+Moscow-R19(config-rtr)#router-id 1.1.1.19
+Moscow-R19(config-rtr)#exit
 Moscow-R19(config)#interface Ethernet0/0
 Moscow-R19(config-if)#ip ospf  1 area 101 
 Moscow-R19(config-if)#ipv6 ospf 1 area 101
 Moscow-R19(config-if)#exit
 Moscow-R19(config)#router ospf 1 
 Moscow-R19(config-router)#area 101 stub 
+Moscow-R19(config-router)#exit
+Moscow-R19(config)#ipv6 router ospf 1
+Moscow-R19(config-rtr)# area 101 stub
 ```
 Также необходимо произвести настройку со стороны R14
 #### R14
@@ -85,6 +91,10 @@ Moscow-R14(config-if)#ipv6 ospf 1 area 101
 Moscow-R14(config-if)#exit
 Moscow-R14(config)#router ospf 1
 Moscow-R14(config-router)#area 101 stub no-summary
+Moscow-R14(config-router)#exit
+Moscow-R14(config)#ipv6 router ospf 1
+Moscow-R14(config-rtr)# router-id 1.1.1.14
+Moscow-R14(config-rtr)# area 101 stub no-summary
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
 ### Настроим маршрутизатор R20 в зоне 102 и получение всех маршрутов, кроме маршрутов до сетей зоны 101

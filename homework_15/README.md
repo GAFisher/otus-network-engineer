@@ -87,7 +87,7 @@ Moscow-R14(config)#router ospf 1
 Moscow-R14(config-router)#area 101 stub no-summary
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_15/README.md#многозонный-ospf)
-### Настроим маршрутизатор R20 в зоне 102 и получание всех маршрутов, кроме маршрутов до сетей зоны 101
+### Настроим маршрутизатор R20 в зоне 102 и получение всех маршрутов, кроме маршрутов до сетей зоны 101
 #### R20
 ```
 Moscow-R20#configure terminal

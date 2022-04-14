@@ -1,0 +1,136 @@
+
+!
+! Last configuration change at 19:00:13 EET Tue Apr 12 2022
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Moscow-R19
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$YkQp$dMCZ23J8KKQCLrBmXoaZl1
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ no shutdown
+ description Management 
+ ip address 10.1.99.19 255.255.255.0
+ ipv6 address FE80::19 link-local
+ ipv6 address 2A00:FACE:C001:99::19/64
+!
+interface Ethernet0/0
+ no shutdown
+ description Moscow-R14
+ ip address 10.1.10.1 255.255.255.252
+ ip ospf 1 area 101
+ ipv6 address FE80::19 link-local
+ ipv6 address 2A00:FACE:C001:100::1/64
+ ipv6 ospf 1 area 101
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 1.1.1.19
+ area 101 stub
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router ospf 1
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 121A0C041104
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 0822455D0A16
+ login
+ transport input none
+!
+!
+end

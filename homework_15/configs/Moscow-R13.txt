@@ -1,0 +1,200 @@
+
+!
+! Last configuration change at 20:39:32 EET Tue Apr 12 2022
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Moscow-R13
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$ITdL$QgbcFLDqalcx4kfMA5ds7/
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+ip dhcp pool IT-VPC1
+ network 10.1.100.0 255.255.255.0
+ domain-name otus-lab.ru
+ default-router 10.1.100.1 
+!
+ip dhcp pool DIR-VPC7
+ network 10.1.110.0 255.255.255.0
+ domain-name otus-lab.ru
+ default-router 10.1.110.1 
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ description Moscow-SW5
+ no ip address
+!
+interface Ethernet0/0.10
+ no shutdown
+ description VPC1
+ encapsulation dot1Q 10
+ ip address 10.1.100.3 255.255.255.0
+ standby version 2
+ standby 1 ip 10.1.100.1
+ standby 2 ipv6 2A00:FACE:C001:1000::1/64
+ ip ospf 1 area 10
+ ipv6 address FE80::13 link-local
+ ipv6 address 2A00:FACE:C001:1000::3/64
+ ipv6 ospf 1 area 10
+!
+interface Ethernet0/0.11
+ no shutdown
+ description VPC7
+ encapsulation dot1Q 11
+ ip address 10.1.110.2 255.255.255.0
+ standby version 2
+ standby 1 ip 10.1.110.1
+ standby 1 priority 150
+ standby 1 preempt
+ standby 2 ipv6 2A00:FACE:C001:1100::1/64
+ standby 2 priority 150
+ standby 2 preempt
+ ip ospf 1 area 10
+ ipv6 address FE80::13 link-local
+ ipv6 address 2A00:FACE:C001:1100::2/64
+ ipv6 ospf 1 area 10
+!
+interface Ethernet0/0.99
+ no shutdown
+ description Management
+ encapsulation dot1Q 99
+ ip address 10.1.99.13 255.255.255.0
+ ipv6 address FE80::13 link-local
+ ipv6 address 2A00:FACE:C001:99::13/64
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ description Moscow-R14
+ ip address 10.1.10.14 255.255.255.252
+ ip ospf 1 area 0
+ ipv6 address FE80::13 link-local
+ ipv6 address 2A00:FACE:C001:1200::14/64
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/3
+ no shutdown
+ description Moscow-R15
+ ip address 10.1.10.22 255.255.255.252
+ ip ospf 1 area 0
+ ipv6 address FE80::13 link-local
+ ipv6 address 2A00:FACE:C001:2000::22/64
+ ipv6 ospf 1 area 0
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 1.1.1.13
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router ospf 1
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 110A1016141D
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 01100F175804
+ login
+ transport input none
+!
+!
+end

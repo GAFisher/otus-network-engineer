@@ -9,117 +9,8 @@
 1. [Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#1-настроим-политику-маршрутизации-для-распределения-трафика-между-двумя-линками-с-провайдером)
 2. [Настроим отслеживание линков в сторону ISP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#2-настроим-отслеживание-линков-в-сторону-isp)
 3. [Настроим для офиса Лабытнанги маршрут по-умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#3-настроим-для-офиса-лабытнанги-маршрут-по-умолчанию)
-
-### 1. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
-Настроим правила для отбора трафика из каждого VLAN’а:
-```
-Chokurdah-R28#configure terminal 
-Chokurdah-R28(config)#ip access-list extended BUH-VPC30
-Chokurdah-R28(config-ext-nacl)#permit ip 10.3.30.0 0.0.0.255 any
-Chokurdah-R28(config-ext-nacl)#exit
-Chokurdah-R28(config)#ip access-list extended PR-VPC31
-Chokurdah-R28(config-ext-nacl)#permit ip 10.3.31.0 0.0.0.255 any
-Chokurdah-R28(config-ext-nacl)#exit
-```
-Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1, а трафик VLAN31 отправлялся через ISP2:
-```
-Chokurdah-R28(config)#route-map ISP2 permit 10
-Chokurdah-R28(config-route-map)#description Triad-R25 
-Chokurdah-R28(config-route-map)#match ip address PR-VPC31
-Chokurdah-R28(config-route-map)#set ip next-hop 95.165.130.5
-Chokurdah-R28(config-ext-nacl)#exit
-Chokurdah-R28(config)#interface Ethernet0/2.31
-Chokurdah-R28(config-subif)#ip policy route-map ISP2
-Chokurdah-R28(config-subif)#exit
-Chokurdah-R28(config)#route-map ISP1 permit 10
-Chokurdah-R28(config-route-map)#description Triad-R26 
-Chokurdah-R28(config-route-map)#match ip address BUH-VPC30
-Chokurdah-R28(config-route-map)#set ip next-hop 95.165.140.1
-Chokurdah-R28(config-route-map)#exit
-Chokurdah-R28(config)#interface Ethernet0/2.30
-Chokurdah-R28(config-subif)#ip policy route-map ISP1
-Chokurdah-R28(config-subif)#exit
-```
-Настроим NAT трансляцию:
-```
-Chokurdah-R28(config)#ip nat source list BUH-VPC30 interface Ethernet0/0 overload
-Chokurdah-R28(config)#ip nat source list PR-VPC31 interface Ethernet0/1 overload
-Chokurdah-R28(config)#interface range  Ethernet0/0-1, Ethernet0/2.30
-Chokurdah-R28(config-if-range)#ip nat enable
-Chokurdah-R28(config-if-range)#interface Ethernet0/2.31
-Chokurdah-R28(config)#interface Ethernet0/2.31
-Chokurdah-R28(config-subif)#ip nat enable
-```
-Проверим, что всё работает:
-```
-VPC30> show ip  
-
-NAME        : VPC30[1]
-IP/MASK     : 10.3.30.2/24
-GATEWAY     : 10.3.30.1
-DNS         : 
-DHCP SERVER : 10.3.30.1
-DHCP LEASE  : 86339, 86400/43200/75600
-DOMAIN NAME : otus-lab.ru
-MAC         : 00:50:79:66:68:1e
-LPORT       : 20000
-RHOST:PORT  : 127.0.0.1:30000
-MTU         : 1500
-
-VPC30> ping 95.165.140.1
-
-84 bytes from 95.165.140.1 icmp_seq=1 ttl=254 time=0.947 ms
-84 bytes from 95.165.140.1 icmp_seq=2 ttl=254 time=1.320 ms
-84 bytes from 95.165.140.1 icmp_seq=3 ttl=254 time=0.927 ms
-84 bytes from 95.165.140.1 icmp_seq=4 ttl=254 time=1.076 ms
-84 bytes from 95.165.140.1 icmp_seq=5 ttl=254 time=0.858 ms
-
-VPC30> ping 95.165.130.5
-
-95.165.130.5 icmp_seq=1 timeout
-95.165.130.5 icmp_seq=2 timeout
-95.165.130.5 icmp_seq=3 timeout
-95.165.130.5 icmp_seq=4 timeout
-95.165.130.5 icmp_seq=5 timeout
-
-VPC30>
-```
-```
-VPC31> show ip
-
-NAME        : VPC31[1]
-IP/MASK     : 10.3.31.2/24
-GATEWAY     : 10.3.31.1
-DNS         : 
-DHCP SERVER : 10.3.31.1
-DHCP LEASE  : 86315, 86400/43200/75600
-DOMAIN NAME : otus-lab.ru
-MAC         : 00:50:79:66:68:1f
-LPORT       : 20000
-RHOST:PORT  : 127.0.0.1:30000
-MTU         : 1500
-
-VPC31> ping 95.165.130.5
-
-84 bytes from 95.165.130.5 icmp_seq=1 ttl=254 time=0.915 ms
-84 bytes from 95.165.130.5 icmp_seq=2 ttl=254 time=1.156 ms
-84 bytes from 95.165.130.5 icmp_seq=3 ttl=254 time=0.986 ms
-84 bytes from 95.165.130.5 icmp_seq=4 ttl=254 time=0.988 ms
-84 bytes from 95.165.130.5 icmp_seq=5 ttl=254 time=1.284 ms
-
-VPC31> ping 95.165.140.1
-
-95.165.140.1 icmp_seq=1 timeout
-95.165.140.1 icmp_seq=2 timeout
-95.165.140.1 icmp_seq=3 timeout
-95.165.140.1 icmp_seq=4 timeout
-95.165.140.1 icmp_seq=5 timeout
-
-VPC31>
-```
-[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
-### 2. Настроим отслеживание линков в сторону ISP:
-Настроим IP SLA для проверки доступности провайдеров (icmp-echo):
+### 1. Настроим отслеживание линков в сторону ISP:
+Настроим IP SLA тесты для проверки доступности провайдеров (icmp-echo):
 ```
 Chokurdah-R28#configure terminal 
 Chokurdah-R28(config)#ip sla 1
@@ -132,8 +23,31 @@ Chokurdah-R28(config-ip-sla-echo)# frequency 5
 Chokurdah-R28(config-ip-sla-echo)#ip sla schedule 2 life forever start-time now        
 Chokurdah-R28(config)#
 ```
+Проверим состояние тестов и убедимся, что они работают:
+```
+Chokurdah-R28#sh ip sla summary 
+IPSLAs Latest Operation Summary
+Codes: * active, ^ inactive, ~ pending
+
+ID           Type        Destination       Stats       Return      Last
+                                           (ms)        Code        Run 
+-----------------------------------------------------------------------
+*1           icmp-echo   95.165.140.1      RTT=1       OK          4 seconds ago
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+*2           icmp-echo   95.165.130.5      RTT=1       OK          4 seconds ago
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+
+Chokurdah-R28#
+```
 Настроим track для отслеживания теста IP SLA:
 ```
+Chokurdah-R28#configure terminal
 Chokurdah-R28(config)#track 10 ip sla 1 reachability
 Chokurdah-R28(config-track)#delay down 10 up 5                     
 Chokurdah-R28(config-track)#exit
@@ -142,13 +56,67 @@ Chokurdah-R28(config-track)#delay down 10 up 5
 Chokurdah-R28(config-track)#exit
 Chokurdah-R28(config)#
 ```
-Добавим статические маршруты на провайдеров:
+Проверим работу track:
+```
+Chokurdah-R28#show track 
+Track 10
+  IP SLA 1 reachability
+  Reachability is Up
+    4 changes, last change 00:08:40
+  Delay up 5 secs, down 10 secs
+  Latest operation return code: OK
+  Latest RTT (millisecs) 1
+Track 20
+  IP SLA 2 reachability
+  Reachability is Up
+    8 changes, last change 00:08:05
+  Delay up 5 secs, down 10 secs
+  Latest operation return code: OK
+  Latest RTT (millisecs) 1
+Chokurdah-R28#
+```
+Добавим статические маршруты на провайдеров и 
 ```
 Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 10   
 Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 20
 Chokurdah-R28(config)#
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
+
+### 2. Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером
+Настроим правила для отбора трафика из каждого VLAN’а:
+```
+Chokurdah-R28#configure terminal 
+Chokurdah-R28(config)#ip access-list extended BUH-VPC30
+Chokurdah-R28(config-ext-nacl)#permit ip 10.3.30.0 0.0.0.255 any
+Chokurdah-R28(config-ext-nacl)#exit
+Chokurdah-R28(config)#ip access-list extended PR-VPC31
+Chokurdah-R28(config-ext-nacl)#permit ip 10.3.31.0 0.0.0.255 any
+Chokurdah-R28(config-ext-nacl)#exit
+```
+Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1, а трафик VLAN31 отправлялся через ISP2. Настроим отслеживание 
+```
+Chokurdah-R28(config)#route-map ISP2 permit 10
+Chokurdah-R28(config-route-map)#description Triad-R25 
+Chokurdah-R28(config-route-map)#match ip address PR-VPC31
+Chokurdah-R28(config-route-map)#set ip next-hop verify-availability 95.165.130.5 10 track 20
+Chokurdah-R28(config-route-map)#set ip next-hop verify-availability 95.165.140.1 20 track 10
+Chokurdah-R28(config-route-map)#exit
+Chokurdah-R28(config)#interface Ethernet0/2.31
+Chokurdah-R28(config-subif)#ip policy route-map ISP2
+Chokurdah-R28(config-subif)#exit
+Chokurdah-R28(config)#route-map ISP1 permit 10
+Chokurdah-R28(config-route-map)#description Triad-R26 
+Chokurdah-R28(config-route-map)#match ip address BUH-VPC30
+Chokurdah-R28(config-route-map)#set ip next-hop verify-availability 95.165.140.1 10 track 10 
+Chokurdah-R28(config-route-map)#set ip next-hop verify-availability 95.165.130.5 20 track 20
+Chokurdah-R28(config-route-map)#exit
+Chokurdah-R28(config)#interface Ethernet0/2.30
+Chokurdah-R28(config-subif)#ip policy route-map ISP1
+Chokurdah-R28(config-subif)#exit
+```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
+
 ### 3. Настроим для офиса Лабытнанги маршрут по-умолчанию
 ```
 Labytnangi-R27#configure terminal 

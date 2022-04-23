@@ -10,7 +10,7 @@
 2. [Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#2-настроим-политику-маршрутизации-для-распределения-трафика-между-двумя-линками-с-провайдером)
 3. [Настроим для офиса Лабытнанги маршрут по-умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#3-настроим-для-офиса-лабытнанги-маршрут-по-умолчанию)
 ### 1. Настроим отслеживание линков в сторону ISP:
-Настроим IP SLA тесты для проверки доступности провайдеров (icmp-echo):
+Настроим IP SLA тесты для проверки доступности линков провайдера (icmp-echo):
 ```
 Chokurdah-R28#configure terminal 
 Chokurdah-R28(config)#ip sla 1
@@ -74,7 +74,7 @@ Track 20
   Latest RTT (millisecs) 1
 Chokurdah-R28#
 ```
-Добавим статические маршруты на провайдеров и привяжем track:
+Добавим статические маршруты на провайдера и привяжем track:
 ```
 Chokurdah-R28#configure terminal
 Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 50 track 10   
@@ -114,6 +114,8 @@ Chokurdah-R28(config)#interface Ethernet0/2.30
 Chokurdah-R28(config-subif)#ip policy route-map ISP1
 Chokurdah-R28(config-subif)#exit
 ```
+#### Графическая схема PBR:
+![](chokurdah_pbr.PNG)
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
 
 ### 3. Настроим для офиса Лабытнанги маршрут по-умолчанию

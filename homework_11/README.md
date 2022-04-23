@@ -6,8 +6,8 @@
 4. Настроить для офиса Лабытнанги маршрут по-умолчанию
 5. План работы и изменения зафиксируем в документации
 ## Решение: 
-1. [Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#1-настроим-политику-маршрутизации-для-распределения-трафика-между-двумя-линками-с-провайдером)
-2. [Настроим отслеживание линков в сторону ISP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#2-настроим-отслеживание-линков-в-сторону-isp)
+1. [Настроим отслеживание линков в сторону ISP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#1-настроим-отслеживание-линков-в-сторону-isp)
+2. [Настроим политику маршрутизации для распределения трафика между двумя линками с провайдером](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#2-настроим-политику-маршрутизации-для-распределения-трафика-между-двумя-линками-с-провайдером)
 3. [Настроим для офиса Лабытнанги маршрут по-умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#3-настроим-для-офиса-лабытнанги-маршрут-по-умолчанию)
 ### 1. Настроим отслеживание линков в сторону ISP:
 Настроим IP SLA тесты для проверки доступности провайдеров (icmp-echo):
@@ -21,7 +21,7 @@ Chokurdah-R28(config)#ip sla 2
 Chokurdah-R28(config-ip-sla)# icmp-echo 95.165.130.5 source-ip 95.165.130.6
 Chokurdah-R28(config-ip-sla-echo)# frequency 5
 Chokurdah-R28(config-ip-sla-echo)#ip sla schedule 2 life forever start-time now        
-Chokurdah-R28(config)#
+Chokurdah-R28(config)#exit
 ```
 Проверим состояние тестов и убедимся, что они работают:
 ```
@@ -53,8 +53,7 @@ Chokurdah-R28(config-track)#delay down 10 up 5
 Chokurdah-R28(config-track)#exit
 Chokurdah-R28(config)#track 20  ip sla 2 reachability
 Chokurdah-R28(config-track)#delay down 10 up 5                     
-Chokurdah-R28(config-track)#exit
-Chokurdah-R28(config)#
+Chokurdah-R28(config-track)#end
 ```
 Проверим работу track:
 ```
@@ -75,11 +74,11 @@ Track 20
   Latest RTT (millisecs) 1
 Chokurdah-R28#
 ```
-Добавим статические маршруты на провайдеров и 
+Добавим статические маршруты на провайдеров и привяжем track:
 ```
-Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 track 10   
-Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 track 20
-Chokurdah-R28(config)#
+Chokurdah-R28#configure terminal
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.140.1 50 track 10   
+Chokurdah-R28(config)#ip route 0.0.0.0 0.0.0.0 95.165.130.5 100 track 20
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_11/README.md#маршрутизация-на-основе-политик-pbr)
 
@@ -94,7 +93,7 @@ Chokurdah-R28(config)#ip access-list extended PR-VPC31
 Chokurdah-R28(config-ext-nacl)#permit ip 10.3.31.0 0.0.0.255 any
 Chokurdah-R28(config-ext-nacl)#exit
 ```
-Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1, а трафик VLAN31 отправлялся через ISP2. Настроим отслеживание 
+Настроим политику маршрутизации так, чтобы трафик VLAN30 отправлялся через ISP1(Triad-R26), а трафик VLAN31 отправлялся через ISP2(Triad-R25). К каждой route-map привяжем track, чтобы маршрут выбирался динамически на основании мониторинга IP SLA.
 ```
 Chokurdah-R28(config)#route-map ISP2 permit 10
 Chokurdah-R28(config-route-map)#description Triad-R25 

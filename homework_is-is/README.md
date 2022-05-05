@@ -6,7 +6,7 @@
 1. [Настроим маршрутизаторы R23 и R25 в зоне 2222](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизаторы-r23-и-r25-в-зоне-2222)
 2. [Настроим маршрутизатор R24 в зоне 24](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизатор-r24-в-зоне-24)
 3. [Настроим маршрутизатор R26 в зоне 26](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизатор-r26-в-зоне-26) 
-4. Посмотрим соседей и таблицу маршрутизации на кажом роутере:
+4. [Посмотрим соседей и таблицу маршрутизации на кажом роутере](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#посмотрим-соседей-и-таблицу-маршрутизации)
 5. [Итоговая графическая схема](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#итоговая-графическая-схема)
 
 ### Настроим маршрутизаторы R23 и R25 в зоне 2222:
@@ -64,6 +64,7 @@ Triad-R26(config-if-range)#ipv6 router isis
 Triad-R26(config-if-range)#end
 Triad-R26#
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настройка-is-is-в-офисе-триада)
 ### Посмотрим соседей и таблицу маршрутизации:
 
 <details>
@@ -143,6 +144,11 @@ Triad-R26#
 <details>
   <summary>R26</summary>
   
+      Triad-R26#show isis neighbors
+
+      System Id      Type Interface   IP Address      State Holdtime Circuit Id
+      Triad-R24      L2   Et0/0       35.10.65.17     UP    28       Triad-R26.01       
+      Triad-R25      L2   Et0/2       35.10.65.49     UP    24       Triad-R26.02       
       Triad-R26#show ip route isis | begin Gateway
       Gateway of last resort is not set
 
@@ -156,9 +162,11 @@ Triad-R26#
       I2  2A00:BEDA:D005:2::/64 [115/20]
            via FE80::24, Ethernet0/0
       Triad-R26#
+
   
 </details> 
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настройка-is-is-в-офисе-триада)
 ### Итоговая графическая схема
 ![](topology_isis.PNG) 
 

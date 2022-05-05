@@ -168,6 +168,6 @@ Triad-R26#
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настройка-is-is-в-офисе-триада)
 ### Итоговая графическая схема
-![](topology_isis.PNG) 
+![](isis_topology.PNG) 
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настройка-is-is-в-офисе-триада)

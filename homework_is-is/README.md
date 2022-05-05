@@ -6,7 +6,7 @@
 1. [Настроим маршрутизаторы R23 и R25 в зоне 2222](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизаторы-r23-и-r25-в-зоне-2222)
 2. [Настроим маршрутизатор R24 в зоне 24](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизатор-r24-в-зоне-24)
 3. [Настроим маршрутизатор R26 в зоне 26](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#настроим-маршрутизатор-r26-в-зоне-26) 
-4. [Посмотрим соседей и таблицу маршрутизации на кажом роутере](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#посмотрим-соседей-и-таблицу-маршрутизации)
+4. [Посмотрим соседей и таблицу маршрутизации](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#посмотрим-соседей-и-таблицу-маршрутизации)
 5. [Итоговая графическая схема](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_is-is/README.md#итоговая-графическая-схема)
 
 ### Настроим маршрутизаторы R23 и R25 в зоне 2222:

@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 15:08:32 EET Thu May 5 2022
+! Last configuration change at 17:19:23 EET Thu May 5 2022
 !
 version 15.4
 service timestamps debug datetime msec
@@ -77,10 +77,8 @@ interface Ethernet0/0
  no shutdown
  description Kirton-R22
  ip address 95.165.110.1 255.255.255.252
- ip router isis 
  ipv6 address FE80::23 link-local
  ipv6 address 2001:20DA:EDA:1::1/64
- ipv6 router isis 
 !
 interface Ethernet0/1
  no shutdown

@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 15:12:06 EET Thu May 5 2022
+! Last configuration change at 17:21:30 EET Thu May 5 2022
 !
 version 15.4
 service timestamps debug datetime msec
@@ -77,10 +77,8 @@ interface Ethernet0/0
  no shutdown
  description Lamas-R21
  ip address 95.165.120.1 255.255.255.252
- ip router isis 
  ipv6 address FE80::24 link-local
  ipv6 address 2001:20DA:EDA:2::1/64
- ipv6 router isis 
 !
 interface Ethernet0/1
  no shutdown
@@ -104,10 +102,8 @@ interface Ethernet0/3
  no shutdown
  description St.Petersburg-R18
  ip address 95.165.120.5 255.255.255.252
- ip router isis 
  ipv6 address FE80::24 link-local
  ipv6 address 2001:20DA:EDA:3::5/64
- ipv6 router isis 
 !
 interface Ethernet1/0
  no shutdown

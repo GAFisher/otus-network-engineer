@@ -249,3 +249,5 @@ D   2A00:FACE:C002::/48 [90/1029120]
 St.Petersburg-R18#
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_eigrp/README.md#настройка-eigrp-в-офисе-с-петербург)
+
+![](eigrp_topology.PNG)

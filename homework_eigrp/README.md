@@ -2,9 +2,14 @@
 ## Задание:
 В офисе С.-Петербург настроить named EIGRP.
 ## Решение:
+1. Произведём настройку R18
+2. Произведём настройку R17 и R16
+3. Произведём настройку R32
+4. Проверим таблицы маршрутизации для IPv4 и IPv6 на маршрутизаторах
 
 
-Произведём настройку R18. Пропишем маршруты по умолчанию в ISP.
+### Произведём настройку R18
+R18 также подключён двумя линками к ISP. Пропишем и настроим распространение статических маршрутов по умолчанию. 
 ```
 St.Petersburg-R18#configure terminal
 St.Petersburg-R18(config)#ip route 0.0.0.0 0.0.0.0 95.165.120.5
@@ -26,7 +31,9 @@ St.Petersburg-R18(config-router-af-topology)#redistribute static
 St.Petersburg-R18(config-router-af-topology)#end
 St.Petersburg-R18#wr
 ```
-Произведём настройку R17 и R16. 
+### Произведём настройку R17 и R16
+R16-17 анонсируют только суммарные префиксы.
+#### R17
 ```
 St.Petersburg-R17#configure terminal 
 St.Petersburg-R17(config)#router eigrp SPB
@@ -51,7 +58,7 @@ St.Petersburg-R17(config-router-af-interface)#summary-address 2A00:FACE:C002::/4
 St.Petersburg-R17(config-router-af-interface)#end
 St.Petersburg-R17#wr
 ```
-
+#### R16
 ```
 St.Petersburg-R16#configure terminal 
 St.Petersburg-R16(config)#router eigrp SPB
@@ -76,10 +83,7 @@ St.Petersburg-R16(config-router-af-interface)#summary-address 2A00:FACE:C002::/4
 St.Petersburg-R16(config-router-af-interface)#end
 St.Petersburg-R16#wr
 ```
-
-
-R32 получает только маршрут по умолчанию.
-
+### Произведём настройку R32 
 ```
 St.Petersburg-R32#configure terminal 
 St.Petersburg-R32(config)#router eigrp SPB
@@ -92,7 +96,24 @@ St.Petersburg-R32(config-router-af)#eigrp router-id 10.0.0.32
 St.Petersburg-R32(config-router-af)#end
 St.Petersburg-R32#write 
 ```
-
+R32 должен получать только маршрут по умолчанию. 
+Настроим фильтрацию маршрутов с помощью списка префиксов. 
+```
+St.Petersburg-R16#configure terminal
+St.Petersburg-R32(config)#ip prefix-list acl-EIGRP-IN seq 10 permit 0.0.0.0/0
+St.Petersburg-R32(config)#ipv6 prefix-list acl-EIGRP-IN seq 10 permit ::/0
+St.Petersburg-R32(config)#router eigrp SPB
+St.Petersburg-R32(config-router)#address-family ipv4 unicast autonomous-system 1
+St.Petersburg-R32(config-router-af)#topology base
+St.Petersburg-R32(config-router-af-topology)#distribute-list prefix acl-EIGRP-IN in Ethernet0/0 
+St.Petersburg-R32(config-router-af-topology)#exit
+St.Petersburg-R32(config-router-af)#exit
+St.Petersburg-R32(config-router)#address-family ipv6 unicast autonomous-system 1 
+St.Petersburg-R32(config-router-af-topology)#distribute-list prefix-list acl-EIGRP-IN in Ethernet0/0 
+St.Petersburg-R32(config-router-af-topology)#end
+St.Petersburg-R32#write 
+```
+Таблица маршрутизации R32 до настройки distribute-list:
 ```
 St.Petersburg-R32#show ip route eigrp | begin Gateway
 Gateway of last resort is 10.2.10.2 to network 0.0.0.0
@@ -136,23 +157,7 @@ L   FF00::/8 [0/0]
      via Null0, receive
 St.Petersburg-R32# 
 ```
-
-```
-St.Petersburg-R16#configure terminal
-St.Petersburg-R32(config)#ip prefix-list acl-EIGRP-IN seq 10 permit 0.0.0.0/0
-St.Petersburg-R32(config)#ipv6 prefix-list acl-EIGRP-IN seq 10 permit ::/0
-St.Petersburg-R32(config)#router eigrp SPB
-St.Petersburg-R32(config-router)#address-family ipv4 unicast autonomous-system 1
-St.Petersburg-R32(config-router-af)#topology base
-St.Petersburg-R32(config-router-af-topology)#distribute-list prefix acl-EIGRP-IN in Ethernet0/0 
-St.Petersburg-R32(config-router-af-topology)#exit
-St.Petersburg-R32(config-router-af)#exit
-St.Petersburg-R32(config-router)#address-family ipv6 unicast autonomous-system 1 
-St.Petersburg-R32(config-router-af-topology)#distribute-list prefix-list acl-EIGRP-IN in Ethernet0/0 
-St.Petersburg-R32(config-router-af-topology)#end
-St.Petersburg-R32#write 
-```
-
+После настройки distribute-list:
 ```
 St.Petersburg-R32#show ip route eigrp | begin Gateway      
 Gateway of last resort is 10.2.10.2 to network 0.0.0.0
@@ -164,7 +169,9 @@ St.Petersburg-R32#show ipv6 route eigrp | begin Application
 
 St.Petersburg-R32#
 ```
-
+### Проверим таблицы маршрутизации для IPv4 и IPv6 на маршрутизаторах 
+и убедимся, что настройки произведены корректно, согласно заданию:
+#### R16
 ```
 St.Petersburg-R16#show ip route eigrp | begin Gateway
 Gateway of last resort is 10.2.10.6 to network 0.0.0.0
@@ -191,7 +198,7 @@ D   2A00:FACE:C002:80::/64 [90/1029120]
      via FE80::17, Vlan25
 St.Petersburg-R16#
 ```
-
+#### R17
 ```
 St.Petersburg-R17#show ip route eigrp | begin Gateway
 Gateway of last resort is 10.2.10.10 to network 0.0.0.0
@@ -223,7 +230,7 @@ D   2A00:FACE:C002:40::/64 [90/1029120]
      via FE80::16, Vlan25
 St.Petersburg-R17#
 ```
-
+#### R18
 ```
 St.Petersburg-R18#show ip route eigrp | begin Gateway
 Gateway of last resort is 95.165.140.5 to network 0.0.0.0
@@ -239,3 +246,4 @@ D   2A00:FACE:C002::/48 [90/1029120]
      via FE80::16, Ethernet0/0
 St.Petersburg-R18#
 ```
+

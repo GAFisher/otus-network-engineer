@@ -1,6 +1,8 @@
 # Настройка EIGRP в офисе С.-Петербург
 ## Задание:
 В офисе С.-Петербург настроить named EIGRP.
+## Топология
+![](eigrp_topology.PNG)
 ## Решение:
 1. [Произведём настройку R18](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_eigrp/README.md#произведём-настройку-r18)
 2. [Произведём настройку R17 и R16](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_eigrp/README.md#произведём-настройку-r17-и-r16)
@@ -250,4 +252,3 @@ St.Petersburg-R18#
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_eigrp/README.md#настройка-eigrp-в-офисе-с-петербург)
 
-![](eigrp_topology.PNG)

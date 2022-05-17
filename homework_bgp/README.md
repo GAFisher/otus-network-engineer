@@ -106,14 +106,59 @@ Moscow-R15(config-router)#end
   
 </details>
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 2. Настроим eBGP между провайдерами Киторн и Ламас
+```
+Kirton-R22#configure terminal
+Kirton-R22(config)#router bgp 101
+Kirton-R22(config-router)#neighbor 128.0.128.2 remote-as 301
+Kirton-R22(config-router)#end
+```
+```
+Lamas-R21#configure terminal 
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#neighbor 128.0.128.1 remote-as 101
+Lamas-R21(config-router)#end
+```
 
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 3. Настроим eBGP между Ламас и Триада
-
-
+```
+Lamas-R21#configure terminal
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#neighbor 95.165.120.1 remote-as 520
+Lamas-R21(config-router)#end
+```
+```
+Triad-R24#configure terminal
+Triad-R24(config)#router bgp 520
+Triad-R24(config-router)#neighbor 95.165.120.2 remote-as 301
+Triad-R24(config-router)#end
+```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 4. Настроим eBGP между офисом С.-Петербург и провайдером Триада
+```
+Triad-R24#configure terminal
+Triad-R24(config)#router bgp 520
+Triad-R24(config-router)#neighbor  95.165.120.6 remote-as 2042
+Triad-R24(config-router)#end
+```
+```
+Triad-R26#configure terminal 
+Triad-R26(config)#router bgp 520
+Triad-R26(config-router)#neighbor  95.165.140.6 remote-as 2042
+Triad-R26(config-router)#end
+```
+```
+St.Petersburg-R18#configure terminal 
+St.Petersburg-R18(config)#router bgp 2042
+St.Petersburg-R18(config-router)#neighbor  95.165.140.5 remote-as 520
+St.Petersburg-R18(config-router)#neighbor  95.165.120.5 remote-as 520
+St.Petersburg-R18(config-router)#end
+```
 
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 5. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

@@ -317,4 +317,50 @@ St.Petersburg-R18#wr
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 5. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
 
+```
+Kirton-R22#configure terminal
+Kirton-R22(config)#router bgp 101
+Kirton-R22(config-router)#address-family ipv4
+Kirton-R22(config-router-af)#network 84.52.118.224 mask 255.255.255.252
+Kirton-R22(config-router-af)#exit
+Kirton-R22(config-router)#address-family ipv6
+Kirton-R22(config-router-af)#network 2606:4700:D0:C009::/64 
+Kirton-R22(config-router-af)#end
+Kirton-R22#wr
+```
+```
+Lamas-R21# configure terminal
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#address-family ipv4
+Lamas-R21(config-router-af)#network 78.25.80.88 mask 255.255.255.252
+Lamas-R21(config-router-af)#exit
+Lamas-R21(config-router)#address-family ipv6
+Lamas-R21(config-router-af)#network 1A00:4700:D0:C005::/64
+Lamas-R21(config-router-af)#end                           
+Lamas-R21#wr
+```
+
+```
+Triad-R24#configure terminal 
+Triad-R24(config)#router bgp 520
+Triad-R24(config-router)#address-family ipv4          
+Triad-R24(config-router-af)#network 95.165.120.4 mask 255.255.255.252
+Triad-R24(config-router-af)#exit
+Triad-R24(config-router)#address-family ipv6
+Triad-R24(config-router-af)#network 2001:20DA:EDA:3::/64
+Triad-R24(config-router-af)#end                         
+Triad-R24#wr
+```
+```
+Triad-R26#configure terminal 
+Triad-R26(config)#router bgp 520
+Triad-R26(config-router)#address-family ipv4
+Triad-R26(config-router-af)#network 95.165.140.4 mask 255.255.255.252
+Triad-R26(config-router-af)#exit
+Triad-R26(config-router)#address-family ipv6
+Triad-R26(config-router-af)#network 2001:20DA:EDA:7::/64
+Triad-R26(config-router-af)#end                         
+Triad-R26#wr
+```
+
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

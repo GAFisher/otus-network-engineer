@@ -60,7 +60,98 @@ Moscow-R15(config-router-af)#neighbor 1A00:4700:D0:C005::89 activate
 Moscow-R15(config-router)#end
 Moscow-R15#wr
 ```
-Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами:
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
+### 2. Настроим eBGP между провайдерами Киторн и Ламас
+#### R22
+```
+Kirton-R22#configure terminal
+Kirton-R22(config)#router bgp 101
+Kirton-R22(config-router)#neighbor 128.0.128.2 remote-as 301
+Kirton-R22(config-router)#neighbor 64:FF9B:5276:1EB4::2 remote-as 301
+Kirton-R22(config-router)#address-family ipv6 
+Kirton-R22(config-router-af)#neighbor 64:FF9B:5276:1EB4::2 activate
+Kirton-R22(config-router)#end
+Kirton-R22#wr
+```
+#### R21
+```
+Lamas-R21#configure terminal 
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#neighbor 128.0.128.1 remote-as 101
+Lamas-R21(config-router)#neighbor 64:FF9B:5276:1EB4::1 remote-as 101
+Lamas-R21(config-router)#address-family ipv6
+Lamas-R21(config-router-af)#neighbor 64:FF9B:5276:1EB4::1 activate 
+Lamas-R21(config-router)#end
+Lamas-R21#wr
+```
+
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
+### 3. Настроим eBGP между Ламас и Триада
+#### R21
+```
+Lamas-R21#configure terminal
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#neighbor 95.165.120.1 remote-as 520
+Lamas-R21(config-router)#neighbor 2001:20DA:EDA:2::1 remote-as 520
+Lamas-R21(config-router)#address-family ipv6
+Lamas-R21(config-router-af)#neighbor 2001:20DA:EDA:2::1 activate
+Lamas-R21(config-router)#end
+```
+#### R24
+```
+Triad-R24#configure terminal
+Triad-R24(config)#router bgp 520
+Triad-R24(config-router)#bgp router-id 24.24.24.24
+Triad-R24(config-router)#neighbor 95.165.120.2 remote-as 301
+Triad-R24(config-router)#neighbor 2001:20DA:EDA:2::2 remote-as 301
+Triad-R24(config-router)#address-family ipv6 
+Triad-R24(config-router-af)#neighbor 2001:20DA:EDA:2::2 activate
+Triad-R24(config-router)#end
+Triad-R24#wr
+```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
+### 4. Настроим eBGP между офисом С.-Петербург и провайдером Триада
+#### R24
+```
+Triad-R24#configure terminal
+Triad-R24(config)#router bgp 520
+Triad-R24(config-router)#neighbor  95.165.120.6 remote-as 2042
+Triad-R24(config-router)#neighbor 2001:20DA:EDA:3::6 remote-as 2042
+Triad-R24(config-router)#address-family ipv6
+Triad-R24(config-router-af)#neighbor 2001:20DA:EDA:3::6 activate
+Triad-R24(config-router)#end
+Triad-R24#wr
+```
+#### R26
+```
+Triad-R26#configure terminal 
+Triad-R26(config)#router bgp 520
+Triad-R26(config-router)#bgp router-id 26.26.26.26
+Triad-R26(config-router)#neighbor  95.165.140.6 remote-as 2042
+Triad-R26(config-router)#neighbor 2001:20DA:EDA:7::6 remote-as 2042
+Triad-R26(config-router)#address-family ipv6 
+Triad-R26(config-router-af)#neighbor 2001:20DA:EDA:7::6 activate
+Triad-R26(config-router)#end
+Triad-R26#wr
+```
+#### R18
+```
+St.Petersburg-R18#configure terminal 
+St.Petersburg-R18(config)#router bgp 2042
+St.Petersburg-R18(config-router)#bgp router-id 18.18.18.18
+St.Petersburg-R18(config-router)#neighbor  95.165.140.5 remote-as 520
+St.Petersburg-R18(config-router)#neighbor  95.165.120.5 remote-as 520
+St.Petersburg-R18(config-router)#neighbor 2001:20DA:EDA:3::5 remote-as 520
+St.Petersburg-R18(config-router)#neighbor 2001:20DA:EDA:7::5 remote-as 520
+St.Petersburg-R18(config-router)#address-family ipv6 
+St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:3::5 activate
+St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:7::5 activate
+St.Petersburg-R18(config-router)#end
+St.Petersburg-R18#wr
+```
+### 5. Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами:
 
 <details>
   <summary>R22</summary>
@@ -224,98 +315,9 @@ Moscow-R15#wr
 
 </details>
 
-[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 2. Настроим eBGP между провайдерами Киторн и Ламас
-#### R22
-```
-Kirton-R22#configure terminal
-Kirton-R22(config)#router bgp 101
-Kirton-R22(config-router)#neighbor 128.0.128.2 remote-as 301
-Kirton-R22(config-router)#neighbor 64:FF9B:5276:1EB4::2 remote-as 301
-Kirton-R22(config-router)#address-family ipv6 
-Kirton-R22(config-router-af)#neighbor 64:FF9B:5276:1EB4::2 activate
-Kirton-R22(config-router)#end
-Kirton-R22#wr
-```
-#### R21
-```
-Lamas-R21#configure terminal 
-Lamas-R21(config)#router bgp 301
-Lamas-R21(config-router)#neighbor 128.0.128.1 remote-as 101
-Lamas-R21(config-router)#neighbor 64:FF9B:5276:1EB4::1 remote-as 101
-Lamas-R21(config-router)#address-family ipv6
-Lamas-R21(config-router-af)#neighbor 64:FF9B:5276:1EB4::1 activate 
-Lamas-R21(config-router)#end
-Lamas-R21#wr
-```
-
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 3. Настроим eBGP между Ламас и Триада
-```
-Lamas-R21#configure terminal
-Lamas-R21(config)#router bgp 301
-Lamas-R21(config-router)#neighbor 95.165.120.1 remote-as 520
-Lamas-R21(config-router)#neighbor 2001:20DA:EDA:2::1 remote-as 520
-Lamas-R21(config-router)#address-family ipv6
-Lamas-R21(config-router-af)#neighbor 2001:20DA:EDA:2::1 activate
-Lamas-R21(config-router)#end
-```
-```
-Triad-R24#configure terminal
-Triad-R24(config)#router bgp 520
-Triad-R24(config-router)#bgp router-id 24.24.24.24
-Triad-R24(config-router)#neighbor 95.165.120.2 remote-as 301
-Triad-R24(config-router)#neighbor 2001:20DA:EDA:2::2 remote-as 301
-Triad-R24(config-router)#address-family ipv6 
-Triad-R24(config-router-af)#neighbor 2001:20DA:EDA:2::2 activate
-Triad-R24(config-router)#end
-Triad-R24#wr
-```
-[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 4. Настроим eBGP между офисом С.-Петербург и провайдером Триада
-#### 
-```
-Triad-R24#configure terminal
-Triad-R24(config)#router bgp 520
-Triad-R24(config-router)#neighbor  95.165.120.6 remote-as 2042
-Triad-R24(config-router)#neighbor 2001:20DA:EDA:3::6 remote-as 2042
-Triad-R24(config-router)#address-family ipv6
-Triad-R24(config-router-af)#neighbor 2001:20DA:EDA:3::6 activate
-Triad-R24(config-router)#end
-Triad-R24#wr
-```
-#### R26
-```
-Triad-R26#configure terminal 
-Triad-R26(config)#router bgp 520
-Triad-R26(config-router)#bgp router-id 26.26.26.26
-Triad-R26(config-router)#neighbor  95.165.140.6 remote-as 2042
-Triad-R26(config-router)#neighbor 2001:20DA:EDA:7::6 remote-as 2042
-Triad-R26(config-router)#address-family ipv6 
-Triad-R26(config-router-af)#neighbor 2001:20DA:EDA:7::6 activate
-Triad-R26(config-router)#end
-Triad-R26#wr
-```
-####R18
-```
-St.Petersburg-R18#configure terminal 
-St.Petersburg-R18(config)#router bgp 2042
-St.Petersburg-R18(config-router)#bgp router-id 18.18.18.18
-St.Petersburg-R18(config-router)#neighbor  95.165.140.5 remote-as 520
-St.Petersburg-R18(config-router)#neighbor  95.165.120.5 remote-as 520
-St.Petersburg-R18(config-router)#neighbor 2001:20DA:EDA:3::5 remote-as 520
-St.Petersburg-R18(config-router)#neighbor 2001:20DA:EDA:7::5 remote-as 520
-St.Petersburg-R18(config-router)#address-family ipv6 
-St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:3::5 activate
-St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:7::5 activate
-St.Petersburg-R18(config-router)#end
-St.Petersburg-R18#wr
-```
-
-
-[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 5. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
+### 6. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
 
 ```
 Kirton-R22#configure terminal
@@ -339,7 +341,7 @@ Lamas-R21(config-router-af)#network 1A00:4700:D0:C005::/64
 Lamas-R21(config-router-af)#end                           
 Lamas-R21#wr
 ```
-
+#### R24
 ```
 Triad-R24#configure terminal 
 Triad-R24(config)#router bgp 520

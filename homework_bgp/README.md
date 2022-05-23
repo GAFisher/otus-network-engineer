@@ -2,13 +2,17 @@
 ## Задание:
 1. Настроить BGP между автономными системами
 2. Организовать доступность между офисами Москва и С.-Петербург
-
+### Топология:
+![](bgp_topology.PNG)
 ## Решение:
-1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас;
-2. Настроим eBGP между провайдерами Киторн и Ламас;
-3. Настроим eBGP между Ламас и Триада;
-4. Настроим eBGP между офисом С.-Петербург и провайдером Триада;
-5. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург.
+1. [Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#1-настроим-ebgp-между-офисом-москва-и-двумя-провайдерами---киторн-и-ламас)
+2. [Настроим eBGP между провайдерами Киторн и Ламас;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#2-настроим-ebgp-между-провайдерами-киторн-и-ламас)
+3. [Настроим eBGP между провайдерамиЛамас и Триада;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#3-настроим-ebgp-между-провайдерами-ламас-и-триада)
+4. [Настроим eBGP между офисом С.-Петербург и провайдером Триада;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#4-настроим-ebgp-между-офисом-с-петербург-и-провайдером-триада)
+5. [Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#5-проверим-и-убедимся-что-bgp-поднялся-между-настроенными-маршрутизаторами)
+6. [Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#6-организуем-ip-доступность-между-пограничным-роутерами-офисами-москва-и-с-петербург)
+7. [Проверим и убедимся, что IP доступность между офисами присутствует;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#7-проверим-и-убедимся-что-ip-доступность-между-офисами-присутствует)
+8. Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах.
 
 ### 1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас
 Запустим BGP процесс на R22 и поднимем пиринг с R14:
@@ -153,7 +157,7 @@ St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:7::5 activate
 St.Petersburg-R18(config-router)#end
 St.Petersburg-R18#wr
 ```
-### 5. Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами:
+### 5. Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами
 
 <details>
   <summary>R22</summary>
@@ -384,7 +388,7 @@ St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:7::/64
 St.Petersburg-R18(config-router-af)#end                         
 St.Petersburg-R18#wr
 ``` 
-### 7. Проверим и убедимся, что IP доступность между офисами присутствует:
+### 7. Проверим и убедимся, что IP доступность между офисами присутствует
 Москва -> С.-Петербург
 
 <details>
@@ -559,4 +563,201 @@ St.Petersburg-R18#wr
   
 </details>
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
+
+#### 8. Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах
+
+<details>
+  <summary>R14</summary>
+
+        Moscow-R14#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  78.25.80.88/30   84.52.118.225                          0 101 301 i
+       r>  84.52.118.224/30 84.52.118.225            0             0 101 i
+       *>  95.165.120.4/30  84.52.118.225                          0 101 301 520 i
+       *>  95.165.140.4/30  84.52.118.225                          0 101 301 520 2042 i
+      Moscow-R14#
+      Moscow-R14#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  1A00:4700:D0:C005::/64
+                             2606:4700:D0:C009::225
+                                                                    0 101 301 i
+       *>  2001:20DA:EDA:3::/64
+                             2606:4700:D0:C009::225
+                                                                    0 101 301 520 i
+       *>  2001:20DA:EDA:7::/64
+                             2606:4700:D0:C009::225
+                                                                    0 101 301 520 2042 i
+       r>  2606:4700:D0:C009::/64
+                             2606:4700:D0:C009::225
+                                                      0             0 101 i
+      Moscow-R14#
+  
+</details>
+
+<details>
+  <summary>R15</summary>
+  
+        Moscow-R15#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       r>  78.25.80.88/30   78.25.80.89              0             0 301 i
+       *>  84.52.118.224/30 78.25.80.89                            0 301 101 i
+       *>  95.165.120.4/30  78.25.80.89                            0 301 520 i
+       *>  95.165.140.4/30  78.25.80.89                            0 301 520 2042 i
+      Moscow-R15#
+      Moscow-R15#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       r>  1A00:4700:D0:C005::/64
+                             1A00:4700:D0:C005::89
+                                                      0             0 301 i
+       *>  2001:20DA:EDA:3::/64
+                             1A00:4700:D0:C005::89
+                                                                    0 301 520 i
+       *>  2001:20DA:EDA:7::/64
+                             1A00:4700:D0:C005::89
+                                                                    0 301 520 2042 i
+       *>  2606:4700:D0:C009::/64
+                             1A00:4700:D0:C005::89
+                                                                    0 301 101 i
+      Moscow-R15#
+
+</details>
+
+<details>
+  <summary>R22</summary>
+
+        Kirton-R22#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  78.25.80.88/30   128.0.128.2              0             0 301 i
+       *>  84.52.118.224/30 0.0.0.0                  0         32768 i
+       *>  95.165.120.4/30  128.0.128.2                            0 301 520 i
+       *>  95.165.140.4/30  128.0.128.2                            0 301 520 2042 i
+      Kirton-R22#
+      Kirton-R22#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  1A00:4700:D0:C005::/64
+                             64:FF9B:5276:1EB4::2
+                                                      0             0 301 i
+       *>  2001:20DA:EDA:3::/64
+                             64:FF9B:5276:1EB4::2
+                                                                    0 301 520 i
+       *>  2001:20DA:EDA:7::/64
+                             64:FF9B:5276:1EB4::2
+                                                                    0 301 520 2042 i
+       *>  2606:4700:D0:C009::/64
+                             ::                       0         32768 i
+      Kirton-R22#
+  
+</details>
+
+<details>
+  <summary>R21</summary>
+  
+        Lamas-R21#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  78.25.80.88/30   0.0.0.0                  0         32768 i
+       *>  84.52.118.224/30 128.0.128.1              0             0 101 i
+       *>  95.165.120.4/30  95.165.120.1             0             0 520 i
+       *>  95.165.140.4/30  95.165.120.1                           0 520 2042 i
+      Lamas-R21#
+      Lamas-R21#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  1A00:4700:D0:C005::/64
+                             ::                       0         32768 i
+       *>  2001:20DA:EDA:3::/64
+                             2001:20DA:EDA:2::1
+                                                      0             0 520 i
+       *>  2001:20DA:EDA:7::/64
+                             2001:20DA:EDA:2::1
+                                                                    0 520 2042 i
+       *>  2606:4700:D0:C009::/64
+                             64:FF9B:5276:1EB4::1
+                                                      0             0 101 i
+Lamas-R21#
+
+</details>
+
+<details>
+  <summary>R24</summary>
+  
+        Triad-R24#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  78.25.80.88/30   95.165.120.2             0             0 301 i
+       *>  84.52.118.224/30 95.165.120.2                           0 301 101 i
+       *   95.165.120.4/30  95.165.120.6             0             0 2042 i
+       *>                   0.0.0.0                  0         32768 i
+       *>  95.165.140.4/30  95.165.120.6             0             0 2042 i
+      Triad-R24#
+      Triad-R24#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  1A00:4700:D0:C005::/64
+                             2001:20DA:EDA:2::2
+                                                      0             0 301 i
+       *   2001:20DA:EDA:3::/64
+                             2001:20DA:EDA:3::6
+                                                      0             0 2042 i
+       *>                   ::                       0         32768 i
+       *>  2001:20DA:EDA:7::/64
+                             2001:20DA:EDA:3::6
+                                                      0             0 2042 i
+       *>  2606:4700:D0:C009::/64
+                             2001:20DA:EDA:2::2
+                                                                    0 301 101 i
+      Triad-R24#
+
+</details>
+
+<details>
+  <summary>R26</summary>
+  
+        Triad-R26#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  95.165.120.4/30  95.165.140.6             0             0 2042 i
+       *   95.165.140.4/30  95.165.140.6             0             0 2042 i
+       *>                   0.0.0.0                  0         32768 i
+      Triad-R26#
+      Triad-R26#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  2001:20DA:EDA:3::/64
+                             2001:20DA:EDA:7::6
+                                                      0             0 2042 i
+       *   2001:20DA:EDA:7::/64
+                             2001:20DA:EDA:7::6
+                                                      0             0 2042 i
+       *>                   ::                       0         32768 i
+      Triad-R26#
+
+</details>
+
+<details>
+  <summary>R18</summary>
+
+        St.Petersburg-R18#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  78.25.80.88/30   95.165.120.5                           0 520 301 i
+       *>  84.52.118.224/30 95.165.120.5                           0 520 301 101 i
+       *>  95.165.120.4/30  0.0.0.0                  0         32768 i
+       *                    95.165.120.5             0             0 520 i
+       *>  95.165.140.4/30  0.0.0.0                  0         32768 i
+       *                    95.165.140.5             0             0 520 i
+      St.Petersburg-R18#
+      St.Petersburg-R18#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  1A00:4700:D0:C005::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *>  2001:20DA:EDA:3::/64
+                             ::                       0         32768 i
+       *                    2001:20DA:EDA:3::5
+                                                      0             0 520 i
+       *>  2001:20DA:EDA:7::/64
+                             ::                       0         32768 i
+       *                    2001:20DA:EDA:7::5
+                                                      0             0 520 i
+       *>  2606:4700:D0:C009::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 101 i
+      St.Petersburg-R18#
+  
+</details>
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

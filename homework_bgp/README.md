@@ -364,5 +364,15 @@ Triad-R26(config-router-af)#network 2001:20DA:EDA:7::/64
 Triad-R26(config-router-af)#end                         
 Triad-R26#wr
 ```
+```
+St.Petersburg-R18#configure terminal
+St.Petersburg-R18(config)#router bgp 2042
+St.Petersburg-R18(config-router)# address-family ipv4
+St.Petersburg-R18(config-router-af)#network  95.165.140.4 mask 255.255.255.252
+St.Petersburg-R18(config-router-af)#network 95.165.120.4 mask 255.255.255.252
+St.Petersburg-R18(config-router-af)#exit
+St.Petersburg-R18(config-router)#address-family ipv6
+St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:3::/64
+St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:7::/64
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

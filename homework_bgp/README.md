@@ -12,6 +12,7 @@
 
 ### 1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас
 Запустим BGP процесс на R22 и поднимем пиринг с R14:
+#### R22 (Киртон)
 ```
 Kirton-R22#configure terminal
 Kirton-R22(config)#router bgp 101
@@ -24,6 +25,7 @@ Kirton-R22(config-router)#end
 Kirton-R22#wr
 ```
 Конфигурация с обратной стороны симметрична:
+#### R14 (Москва)
 ```
 Moscow-R14#configure terminal 
 Moscow-R14(config)#router bgp 1001
@@ -35,8 +37,8 @@ Moscow-R14(config-router-af)#neighbor 2606:4700:D0:C009::225 activate
 Moscow-R14(config-router)#end
 Moscow-R14#wr
 ```
-
 Запустим BGP процесс на R21 и поднимем пиринг с R15:
+#### R21 (Ламас)
 ```
 Lamas-R21#configure terminal 
 Lamas-R21(config)#router bgp 301
@@ -49,6 +51,7 @@ Lamas-R21(config-router)#end
 Lamas-R21#wr
 ```
 Конфигурация с обратной стороны симметрична:
+#### R15 (Москва)
 ```
 Moscow-R15#configure terminal
 Moscow-R15(config)#router bgp 1001
@@ -63,7 +66,7 @@ Moscow-R15#wr
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 2. Настроим eBGP между провайдерами Киторн и Ламас
-#### R22
+#### R22 (Киртон)
 ```
 Kirton-R22#configure terminal
 Kirton-R22(config)#router bgp 101
@@ -74,7 +77,7 @@ Kirton-R22(config-router-af)#neighbor 64:FF9B:5276:1EB4::2 activate
 Kirton-R22(config-router)#end
 Kirton-R22#wr
 ```
-#### R21
+#### R21 (Ламас)
 ```
 Lamas-R21#configure terminal 
 Lamas-R21(config)#router bgp 301
@@ -86,10 +89,9 @@ Lamas-R21(config-router)#end
 Lamas-R21#wr
 ```
 
-
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 3. Настроим eBGP между Ламас и Триада
-#### R21
+### 3. Настроим eBGP между провайдерами Ламас и Триада
+#### R21 (Ламас)
 ```
 Lamas-R21#configure terminal
 Lamas-R21(config)#router bgp 301
@@ -99,7 +101,7 @@ Lamas-R21(config-router)#address-family ipv6
 Lamas-R21(config-router-af)#neighbor 2001:20DA:EDA:2::1 activate
 Lamas-R21(config-router)#end
 ```
-#### R24
+#### R24 (Триада)
 ```
 Triad-R24#configure terminal
 Triad-R24(config)#router bgp 520
@@ -113,7 +115,7 @@ Triad-R24#wr
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 4. Настроим eBGP между офисом С.-Петербург и провайдером Триада
-#### R24
+#### R24 (Триада)
 ```
 Triad-R24#configure terminal
 Triad-R24(config)#router bgp 520
@@ -124,7 +126,7 @@ Triad-R24(config-router-af)#neighbor 2001:20DA:EDA:3::6 activate
 Triad-R24(config-router)#end
 Triad-R24#wr
 ```
-#### R26
+#### R26 (Триада)
 ```
 Triad-R26#configure terminal 
 Triad-R26(config)#router bgp 520
@@ -136,7 +138,7 @@ Triad-R26(config-router-af)#neighbor 2001:20DA:EDA:7::6 activate
 Triad-R26(config-router)#end
 Triad-R26#wr
 ```
-#### R18
+#### R18 (С.-Петербург)
 ```
 St.Petersburg-R18#configure terminal 
 St.Petersburg-R18(config)#router bgp 2042
@@ -319,6 +321,7 @@ St.Petersburg-R18#wr
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 6. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
 
+Провайдер Киртон должен анонсировать подсети с R14:
 ```
 Kirton-R22#configure terminal
 Kirton-R22(config)#router bgp 101
@@ -330,6 +333,7 @@ Kirton-R22(config-router-af)#network 2606:4700:D0:C009::/64
 Kirton-R22(config-router-af)#end
 Kirton-R22#wr
 ```
+Провайдер Ламас должен анонсировать подсети с R15:
 ```
 Lamas-R21# configure terminal
 Lamas-R21(config)#router bgp 301
@@ -341,6 +345,7 @@ Lamas-R21(config-router-af)#network 1A00:4700:D0:C005::/64
 Lamas-R21(config-router-af)#end                           
 Lamas-R21#wr
 ```
+Провайдер Триада должен анонсировать подсети с С.-Петербурга:
 #### R24
 ```
 Triad-R24#configure terminal 
@@ -353,6 +358,7 @@ Triad-R24(config-router-af)#network 2001:20DA:EDA:3::/64
 Triad-R24(config-router-af)#end                         
 Triad-R24#wr
 ```
+#### R26
 ```
 Triad-R26#configure terminal 
 Triad-R26(config)#router bgp 520
@@ -364,6 +370,7 @@ Triad-R26(config-router-af)#network 2001:20DA:EDA:7::/64
 Triad-R26(config-router-af)#end                         
 Triad-R26#wr
 ```
+С.-Петербург анонсирует свои стыковочные подсети в провайдера Триада: 
 ```
 St.Petersburg-R18#configure terminal
 St.Petersburg-R18(config)#router bgp 2042
@@ -374,5 +381,182 @@ St.Petersburg-R18(config-router-af)#exit
 St.Petersburg-R18(config-router)#address-family ipv6
 St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:3::/64
 St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:7::/64
+St.Petersburg-R18(config-router-af)#end                         
+St.Petersburg-R18#wr
+``` 
+### 7. Проверим и убедимся, что IP доступность между офисами присутствует:
+Москва -> С.-Петербург
+
+<details>
+  <summary>R14</summary>
+  
+        Moscow-R14#ping 95.165.120.6
+        Type escape sequence to abort.
+        Sending 5, 100-byte ICMP Echos to 95.165.120.6, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+        Moscow-R14#traceroute 95.165.120.6
+        Type escape sequence to abort.
+        Tracing the route to 95.165.120.6
+        VRF info: (vrf in name/id, vrf out name/id)
+          1 84.52.118.225 [AS 101] 0 msec 0 msec 1 msec
+          2 128.0.128.2 0 msec 1 msec 0 msec
+          3 95.165.120.1 1 msec 0 msec 1 msec
+          4 95.165.120.6 [AS 520] 0 msec *  1 msec
+        Moscow-R14#ping 2001:20DA:EDA:3::6
+        Type escape sequence to abort.
+        Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:3::6, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100 percent (5/5), round-trip min/avg/max = 1/4/17 ms
+        Moscow-R14#traceroute 2001:20DA:EDA:3::6
+        Type escape sequence to abort.
+        Tracing the route to 2001:20DA:EDA:3::6
+
+          1 2606:4700:D0:C009::225 [AS 101] 1 msec 0 msec 1 msec
+          2 64:FF9B:5276:1EB4::2 0 msec 0 msec 0 msec
+          3 2001:20DA:EDA:2::1 1 msec 1 msec 0 msec
+          4 2001:20DA:EDA:3::6 [AS 520] 0 msec 0 msec 1 msec
+        Moscow-R14#
+        Moscow-R14#ping 95.165.140.6
+        Type escape sequence to abort.
+        Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+    Moscow-R14#traceroute 95.165.140.6
+    Type escape sequence to abort.
+    Tracing the route to 95.165.140.6
+    VRF info: (vrf in name/id, vrf out name/id)
+      1 84.52.118.225 [AS 101] 1 msec 5 msec 0 msec
+      2 128.0.128.2 1 msec 0 msec 0 msec
+      3 95.165.120.1 0 msec 1 msec 0 msec
+      4 95.165.120.6 [AS 520] 0 msec *  1 msec
+    Moscow-R14#ping 2001:20DA:EDA:7::6
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:7::6, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+    Moscow-R14#traceroute 2001:20DA:EDA:7::6
+    Type escape sequence to abort.
+    Tracing the route to 2001:20DA:EDA:7::6
+
+      1 2606:4700:D0:C009::225 [AS 101] 1 msec 4 msec 1 msec
+      2 64:FF9B:5276:1EB4::2 0 msec 1 msec 0 msec
+      3 2001:20DA:EDA:2::1 1 msec 1 msec 0 msec
+      4 2001:20DA:EDA:3::6 [AS 520] 2 msec 1 msec 0 msec
+    Moscow-R14#
+
+</details>
+
+
+<details>
+  <summary>R15</summary>
+
+      Moscow-R15#traceroute 95.165.120.6
+      Type escape sequence to abort.
+      Tracing the route to 95.165.120.6
+      VRF info: (vrf in name/id, vrf out name/id)
+        1 78.25.80.89 [AS 301] 0 msec 0 msec 0 msec
+        2 95.165.120.1 1 msec 0 msec 0 msec
+        3 95.165.120.6 [AS 520] 1 msec *  1 msec
+      Moscow-R15#ping 2001:20DA:EDA:3::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:3::6, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Moscow-R15#traceroute 2001:20DA:EDA:3::6
+      Type escape sequence to abort.
+      Tracing the route to 2001:20DA:EDA:3::6
+
+        1 1A00:4700:D0:C005::89 [AS 301] 0 msec 1 msec 0 msec
+        2 2001:20DA:EDA:2::1 1 msec 0 msec 0 msec
+        3 2001:20DA:EDA:3::6 [AS 520] 0 msec 1 msec 0 msec
+      Moscow-R15#
+      Moscow-R15#ping 95.165.140.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Moscow-R15#traceroute 95.165.140.6
+      Type escape sequence to abort.
+      Tracing the route to 95.165.140.6
+      VRF info: (vrf in name/id, vrf out name/id)
+        1 78.25.80.89 [AS 301] 0 msec 0 msec 1 msec
+        2 95.165.120.1 0 msec 1 msec 0 msec
+        3 95.165.120.6 [AS 520] 1 msec *  1 msec
+      Moscow-R15#ping 2001:20DA:EDA:7::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:7::6, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Moscow-R15#traceroute 2001:20DA:EDA:7::6
+      Type escape sequence to abort.
+      Tracing the route to 2001:20DA:EDA:7::6
+
+        1 1A00:4700:D0:C005::89 [AS 301] 1 msec 0 msec 0 msec
+        2 2001:20DA:EDA:2::1 0 msec 1 msec 0 msec
+        3 2001:20DA:EDA:3::6 [AS 520] 1 msec 0 msec 1 msec
+      Moscow-R15#
+
+</details>
+
+С.-Петербург -> Москва 
+
+<details>
+  <summary>R18</summary>
+  
+      St.Petersburg-R18#ping 84.52.118.226
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 84.52.118.226, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#traceroute 84.52.118.226
+      Type escape sequence to abort.
+      Tracing the route to 84.52.118.226
+      VRF info: (vrf in name/id, vrf out name/id)
+        1 95.165.120.5 5 msec 1 msec 0 msec
+        2 95.165.120.2 1 msec 0 msec 2 msec
+        3 128.0.128.1 0 msec 0 msec 0 msec
+        4 84.52.118.226 [AS 101] 1 msec *  1 msec
+      St.Petersburg-R18#ping 2606:4700:D0:C009::226
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2606:4700:D0:C009::226, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#traceroute 2606:4700:D0:C009::226
+      Type escape sequence to abort.
+      Tracing the route to 2606:4700:D0:C009::226
+
+        1 2001:20DA:EDA:3::5 0 msec 0 msec 0 msec
+        2 2001:20DA:EDA:2::2 0 msec 1 msec 0 msec
+        3 64:FF9B:5276:1EB4::1 1 msec 0 msec 1 msec
+        4 2606:4700:D0:C009::226 [AS 101] 1 msec 1 msec 0 msec
+      St.Petersburg-R18#
+      St.Petersburg-R18#ping 78.25.80.90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 78.25.80.90, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#traceroute 78.25.80.90
+      Type escape sequence to abort.
+      Tracing the route to 78.25.80.90
+      VRF info: (vrf in name/id, vrf out name/id)
+        1 95.165.120.5 1 msec 0 msec 1 msec
+        2 95.165.120.2 0 msec 1 msec 0 msec
+        3 78.25.80.90 [AS 301] 2 msec *  1 msec
+      St.Petersburg-R18#ping 1A00:4700:D0:C005::90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 1A00:4700:D0:C005::90, timeout is 2 seconds:
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+      St.Petersburg-R18#traceroute 1A00:4700:D0:C005::90
+      Type escape sequence to abort.
+      Tracing the route to 1A00:4700:D0:C005::90
+
+        1 2001:20DA:EDA:3::5 1 msec 0 msec 0 msec
+        2 2001:20DA:EDA:2::2 1 msec 0 msec 1 msec
+        3 1A00:4700:D0:C005::90 [AS 301] 0 msec 1 msec 1 msec
+      St.Petersburg-R18#
+  
+</details>
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

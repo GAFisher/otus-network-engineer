@@ -12,7 +12,7 @@
 5. [Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#5-проверим-и-убедимся-что-bgp-поднялся-между-настроенными-маршрутизаторами)
 6. [Организуем IP доступность между пограничным роутерами офисов Москва и С.-Петербург;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#6-организуем-ip-доступность-между-пограничным-роутерами-офисов-москва-и-с-петербург)
 7. [Проверим и убедимся, что IP доступность между офисами присутствует;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#7-проверим-и-убедимся-что-ip-доступность-между-офисами-присутствует)
-8. [Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах.](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#8-итоговые-таблицы-маршрутизаци-ebgp-для-ipv4-и-ipv6-на-маршрутизаторах)
+8. [Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах.](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#8-итоговые-таблицы-bgp-для-ipv4-и-ipv6-на-маршрутизаторах)
 
 ### 1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас
 Запустим BGP процесс на R22 и поднимем пиринг с R14:

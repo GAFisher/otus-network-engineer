@@ -10,9 +10,9 @@
 3. [Настроим eBGP между провайдерамиЛамас и Триада;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#3-настроим-ebgp-между-провайдерами-ламас-и-триада)
 4. [Настроим eBGP между офисом С.-Петербург и провайдером Триада;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#4-настроим-ebgp-между-офисом-с-петербург-и-провайдером-триада)
 5. [Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#5-проверим-и-убедимся-что-bgp-поднялся-между-настроенными-маршрутизаторами)
-6. [Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#6-организуем-ip-доступность-между-пограничным-роутерами-офисами-москва-и-с-петербург)
+6. [Организуем IP доступность между пограничным роутерами офисов Москва и С.-Петербург;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#6-организуем-ip-доступность-между-пограничным-роутерами-офисов-москва-и-с-петербург)
 7. [Проверим и убедимся, что IP доступность между офисами присутствует;](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#7-проверим-и-убедимся-что-ip-доступность-между-офисами-присутствует)
-8. Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах.
+8. [Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах.](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#8-итоговые-таблицы-маршрутизаци-ebgp-для-ipv4-и-ipv6-на-маршрутизаторах)
 
 ### 1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас
 Запустим BGP процесс на R22 и поднимем пиринг с R14:
@@ -157,6 +157,7 @@ St.Petersburg-R18(config-router-af)#neighbor 2001:20DA:EDA:7::5 activate
 St.Petersburg-R18(config-router)#end
 St.Petersburg-R18#wr
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 5. Проверим и убедимся, что BGP поднялся между настроенными маршрутизаторами
 
 <details>
@@ -323,7 +324,7 @@ St.Petersburg-R18#wr
 
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-### 6. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург
+### 6. Организуем IP доступность между пограничным роутерами офисов Москва и С.-Петербург
 
 Провайдер Киртон должен анонсировать подсети с R14:
 ```
@@ -388,6 +389,7 @@ St.Petersburg-R18(config-router-af)#network 2001:20DA:EDA:7::/64
 St.Petersburg-R18(config-router-af)#end                         
 St.Petersburg-R18#wr
 ``` 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
 ### 7. Проверим и убедимся, что IP доступность между офисами присутствует
 Москва -> С.-Петербург
 
@@ -564,8 +566,7 @@ St.Petersburg-R18#wr
 </details>
 
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)
-
-#### 8. Итоговые таблицы маршрутизаци eBGP для IPv4 и IPv6 на маршрутизаторах
+### 8. Итоговые таблицы BGP для IPv4 и IPv6 на маршрутизаторах
 
 <details>
   <summary>R14</summary>
@@ -760,4 +761,5 @@ Lamas-R21#
       St.Petersburg-R18#
   
 </details>
+
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp/README.md#настройка-bgp-между-автономными-системами)

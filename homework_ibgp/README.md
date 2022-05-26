@@ -209,3 +209,31 @@ Triad-R26#wr
       Triad-R26#
 
 </details>
+
+Произведём настройку соседей. В качестве Route Reflectror настроим маршрутизатор R23. Объединим всех соседей в peer-group:
+#### R23
+```
+Triad-R23#configure terminal
+Triad-R23(config)#router bgp 520
+Triad-R23(config-router)#neighbor AS520 peer-group 
+Triad-R23(config-router)#neighbor AS520 remote-as 520
+Triad-R23(config-router)#neighbor AS520 update-source Loopback0
+Triad-R23(config-router)#neighbor AS520 route-reflector-client 
+Triad-R23(config-router)#neighbor AS520 next-hop-self
+Triad-R23(config-router)#neighbor 24.24.24.24 peer-group AS520
+Triad-R23(config-router)#neighbor 25.25.25.25 peer-group AS520
+Triad-R23(config-router)#neighbor 26.26.26.26 peer-group AS520
+Triad-R23(config-router)#end
+Triad-R23#wr
+```
+На маршрутизаторах R24-26 пропишем соседом только R23 (настройка идентична на всех маршрутизаторах):
+```
+Triad-R25#configure terminal
+Triad-R25(config)#router bgp 520
+Triad-R25(config-router)#neighbor 23.23.23.23 remote-as 520
+Triad-R25(config-router)#neighbor 23.23.23.23 update-source Loopback0
+Triad-R25(config-router)#neighbor 23.23.23.23 next-hop-self 
+Triad-R25(config-router)#end
+Triad-R25#wr
+```
+

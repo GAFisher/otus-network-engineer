@@ -6,9 +6,10 @@
 
 ## Решение:
 1. Настроим iBGP в офисе Москва между маршрутизаторами R14 и R15;
-2. Настройте офиса Москва так, чтобы приоритетным провайдером стал Ламас;
-3. Настроите iBGP в провайдере Триада.
-4. Настром офиса С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно.
+2. Настроим офис Москва так, чтобы приоритетным провайдером стал Ламас;
+3. Настроим iBGP в провайдере Триада;
+4. Настром офис С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно;
+5. Проверим, что все сети в лабораторной работе имеют IP связность.
 
 
 ### 1. Настроим iBGP в офисе Москва между маршрутизаторами R14 и R15
@@ -84,7 +85,7 @@ Moscow-R15(config-router-af)#network 1A00:4700:D0:C005::/64
 Moscow-R15(config-router-af)#exit
 Moscow-R15(config-router)#exit
 ```
-### 2. Настроим офис Москва так, чтобы приоритетным провайдером стал Ламас:
+### 2. Настроим офис Москва так, чтобы приоритетным провайдером стал Ламас
 Используем атрибут Local Preference. На маршрутизаторе R15 опишем route-map и привяжем к соседу R21:
 ```
 Moscow-R15(config)#route-map LP permit 10
@@ -99,7 +100,7 @@ Moscow-R15(config-router-af)#neighbor FC00::14 route-map LP in
 Moscow-R15(config-router-af)#end
 Moscow-R15#wr
 ```
-### Настроим iBGP в провайдере Триада
+### 3. Настроим iBGP в провайдере Триада
 Произведён настройку Loopback-интерфейсов. С помощью протокола внутренней маршрутизации IS-IS все маршрутизаторы должны узнать обо всех адресах Loopback-интерфейсов. 
 #### R23
 ```
@@ -178,6 +179,11 @@ Triad-R25(config)#router bgp 520
 Triad-R25(config-router)#neighbor 23.23.23.23 remote-as 520
 Triad-R25(config-router)#neighbor 23.23.23.23 update-source Loopback0
 Triad-R25(config-router)#neighbor 23.23.23.23 next-hop-self 
+Triad-R25(config-router)#neighbor FC00::23 remote-as 520
+Triad-R25(config-router)#neighbor FC00::23 update-source Loopback0
+Triad-R25(config-router)#address-family ipv6 
+Triad-R25(config-router-af)#neighbor FC00::23 next-hop-self 
+Triad-R25(config-router-af)#exit
 ```
 Проанонсируем стыковочные подсети до офисов Лабытнанги и Чокурдах и провайдера Киртон.
 #### Киртон
@@ -220,7 +226,7 @@ Triad-R26(config-router-af)#end
 Triad-R26#wr
 ```
 
-### 4. Настром офиса С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно.
+### 4. Настром офис С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно
 Таблицы маршрутизации и таблицы bgp до изменений:
 
 <details>
@@ -442,3 +448,85 @@ St.Petersburg-R18#wr
   
 </details>
 
+### 5. Проверим, что все сети в лабораторной работе имеют IP связность
+
+R14 -> R15
+```
+Moscow-R14#ping 78.25.80.90 source 84.52.118.226
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 78.25.80.90, timeout is 2 seconds:
+Packet sent with a source address of 84.52.118.226 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+Moscow-R14#
+```
+R14 -> R18
+R14 -> R27
+```
+Moscow-R14#ping 95.165.130.2 so
+Moscow-R14#ping 95.165.130.2 source 84.52.118.226
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+Packet sent with a source address of 84.52.118.226 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/3 ms
+Moscow-R14
+```
+R14 -> R28
+
+R15 -> R14
+```
+Moscow-R15#ping 84.52.118.226 source 78.25.80.90
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 84.52.118.226, timeout is 2 seconds:
+Packet sent with a source address of 78.25.80.90 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+Moscow-R15#
+```
+
+
+R27 -> R14
+```
+Labytnangi-R27#ping 84.52.118.226 so
+Labytnangi-R27#ping 84.52.118.226 source 95.165.130.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 84.52.118.226, timeout is 2 seconds:
+Packet sent with a source address of 95.165.130.2 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+Labytnangi-R27#
+```
+
+R18 -> R27
+St.Petersburg-R18#ping 95.165.130.2 source 95.165.120.6
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+Packet sent with a source address of 95.165.120.6 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+St.Petersburg-R18#ping 95.165.130.2 source 95.165.140.6
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+Packet sent with a source address of 95.165.140.6 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
+St.Petersburg-R18#
+
+
+R28 -> R27
+```
+Chokurdah-R28#ping 95.165.130.2 source 95.165.140.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+Packet sent with a source address of 95.165.140.2 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
+Chokurdah-R28#ping 95.165.130.2 source 95.165.130.6
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+Packet sent with a source address of 95.165.130.6 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+Chokurdah-R28#
+```

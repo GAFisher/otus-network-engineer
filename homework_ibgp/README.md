@@ -5,15 +5,15 @@
 3. Организовать полную IP связанность всех сетей 
 
 ## Решение:
-1. Настроим iBGP в офисом Москва между маршрутизаторами R14 и R15;
+1. Настроим iBGP в офисе Москва между маршрутизаторами R14 и R15;
 2. Настройте офиса Москва так, чтобы приоритетным провайдером стал Ламас;
 3. Настроите iBGP в провайдере Триада.
 4. Настройте офиса Москва так, чтобы приоритетным провайдером стал Ламас.
 5. Настройте офиса С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно.
 
 
-### 1. Настроим iBGP в офисом Москва между маршрутизаторами R14 и R15
-Поднимем Loopback-интерфейсы на маршрутизаторах R14 и R15, распространим их через протокол OSPF:
+### 1. Настроим iBGP в офисе Москва между маршрутизаторами R14 и R15
+Поднимем Loopback-интерфейсы на маршрутизаторах R14 и R15, распространим их адреса через протокол внутренней маршрутизации OSPF для связности:
 #### R14
 ```
 Moscow-R14#configure terminal
@@ -22,6 +22,7 @@ Moscow-R14(config-if)#ip address 14.14.14.14 255.255.255.255
 Moscow-R14(config-if)#ip ospf 1 area 0
 Moscow-R14(config-if)#ipv6 address FC00::14/128
 Moscow-R14(config-if)#ipv6 ospf 1 area 0
+Moscow-R14(config-if)#end
 ```
 #### R15
 ```
@@ -31,7 +32,30 @@ Moscow-R15(config-if)#ip address 15.15.15.15 255.255.255.255
 Moscow-R15(config-if)#ip ospf 1 area 0
 Moscow-R15(config-if)#ipv6 address FC00::15/128
 Moscow-R15(config-if)#ipv6 ospf 1 area 0
+Moscow-R15(config-if)#end
 ```
+Проверим связность:
+#### R14 -> R15
+```
+Moscow-R14#ping 15.15.15.15 source Loopback0
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 15.15.15.15, timeout is 2 seconds:
+Packet sent with a source address of 14.14.14.14 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+Moscow-R14#
+```
+#### R15 -> R14
+```
+Moscow-R15#ping 14.14.14.14 source Loopback0
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 14.14.14.14, timeout is 2 seconds:
+Packet sent with a source address of 15.15.15.15 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+Moscow-R15#
+```
+
 Настроим соседство между маршрутизаторами и проанонсируем стыковочные подсети:
 #### R14
 ```
@@ -44,6 +68,8 @@ Moscow-R14(config-router)# address-family ipv4
 Moscow-R14(config-router-af)#network 84.52.118.224 mask 255.255.255.252
 Moscow-R14(config-router)# address-family ipv6
 Moscow-R14(config-router-af)#network 2606:4700:D0:C009::/64 
+Moscow-R14(config-router-af)#end
+Moscow-R14#wr
 ```
 #### R15
 ```
@@ -56,6 +82,8 @@ Moscow-R15(config-router)# address-family ipv4
 Moscow-R15(config-router-af)#network 78.25.80.88 mask 255.255.255.252
 Moscow-R15(config-router)# address-family ipv6
 Moscow-R15(config-router-af)#network 1A00:4700:D0:C005::/64 
+Moscow-R15(config-router-af)#exit
+Moscow-R15(config-router)#exit
 ```
 ### 2. Настроим офис Москва так, чтобы приоритетным провайдером стал Ламас:
 Используем атрибут Local Preference. На маршрутизаторе R15 опишем route-map и привяжем к соседу R21:
@@ -69,8 +97,9 @@ Moscow-R15(config-router-af)#neighbor 78.25.80.89 route-map LP in
 Moscow-R15(config-router-af)#exit
 Moscow-R15(config-router)#address-family ipv6 
 Moscow-R15(config-router-af)#neighbor FC00::14 route-map LP in
+Moscow-R15(config-router-af)#end
+Moscow-R15#wr
 ```
-
 ### Настроим iBGP в провайдере Триада
 Произведён настройку Loopback-интерфейсов. С помощью протокола внутренней маршрутизации IS-IS все маршрутизаторы должны узнать обо всех адресах Loopback-интерфейсов. 
 #### R23
@@ -81,8 +110,7 @@ Triad-R23(config-if)#ip address 23.23.23.23 255.255.255.255
 Triad-R23(config-if)#ip router isis
 Triad-R23(config-if)#ipv6 address FC00::23/128
 Triad-R23(config-if)#ipv6 router isis
-Triad-R23(config-if)#end
-Triad-R23#wr
+Triad-R23(config-if)#exit
 ```
 #### R24
 ```
@@ -90,10 +118,9 @@ Triad-R24#configure terminal
 Triad-R24(config)#interface Loopback0
 Triad-R24(config-if)#ip address 24.24.24.24 255.255.255.255
 Triad-R24(config-if)#ip router isis
-Triad-R24(config-if)#ipv6 address FC00::23/128
+Triad-R24(config-if)#ipv6 address FC00::24/128
 Triad-R24(config-if)#ipv6 router isis 
-Triad-R24(config-if)#end
-Triad-R24#wr
+Triad-R24(config-if)#exit
 ```
 #### R25
 ```
@@ -103,8 +130,7 @@ Triad-R25(config-if)#ip address 25.25.25.25 255.255.255.255
 Triad-R25(config-if)#ip router isis
 Triad-R25(config-if)#ipv6 address FC00::25/128
 Triad-R25(config-if)#ipv6 router isis
-Triad-R25(config-if)#end
-Triad-R25#wr
+Triad-R25(config-if)#exit
 ```
 #### R26
 ```
@@ -114,14 +140,12 @@ Triad-R26(config-if)#ip address 26.26.26.26 255.255.255.255
 Triad-R26(config-if)#ip router isis
 Triad-R26(config-if)#ipv6 address FC00::26/128
 Triad-R26(config-if)#ipv6 router isis
-Triad-R26(config-if)#end
-Triad-R26#wr
+Triad-R26(config-if)#exit
 ```
 Произведём настройку соседей. В качестве Route Reflectror настроим маршрутизатор R23. 
-Для IPv4 объединим всех соседей в peer-group.
+Для IPv4 объединим всех соседей в peer-group. 
 #### R23
 ```
-Triad-R23#configure terminal
 Triad-R23(config)#router bgp 520
 Triad-R23(config-router)#neighbor AS520 peer-group 
 Triad-R23(config-router)#neighbor AS520 remote-as 520
@@ -147,17 +171,52 @@ Triad-R23(config-router-af)#neighbor FC00::25 next-hop-self
 Triad-R23(config-router-af)#neighbor FC00::26 activate
 Triad-R23(config-router-af)#neighbor FC00::26 route-reflector-client
 Triad-R23(config-router-af)#neighbor FC00::26 next-hop-self
-Triad-R23(config-router-af)#end
-Triad-R23#wr
+Triad-R23(config-router-af)#exit
 ```
-На маршрутизаторах R24-26 пропишем соседом только R23 (настройка идентична на всех маршрутизаторах):
+На маршрутизаторах R24-26 пропишем соседом только R23 (настройка идентична для всех маршрутизаторов Триады):
 ```
-Triad-R25#configure terminal
 Triad-R25(config)#router bgp 520
 Triad-R25(config-router)#neighbor 23.23.23.23 remote-as 520
 Triad-R25(config-router)#neighbor 23.23.23.23 update-source Loopback0
 Triad-R25(config-router)#neighbor 23.23.23.23 next-hop-self 
-Triad-R25(config-router)#end
+```
+Проанонсируем стыковочные подсети до офисов Лабытнанги и Чокурдах и провайдера Киртон.
+#### Киртон
+```
+Triad-R23(config-router)#address-family ipv4
+Triad-R23(config-router-af)#network 95.165.110.0 mask 255.255.255.252
+Triad-R23(config-router-af)#exit
+Triad-R23(config-router)#address-family ipv6
+Triad-R23(config-router-af)#network 2001:20DA:EDA:1::/64
+Triad-R23(config-router-af)#end
+Triad-R23#wr
+```
+#### Лабытнанги
+```
+Triad-R25(config-router)#address-family ipv4
+Triad-R25(config-router-af)#network 95.165.130.0 mask 255.255.255.252
+Triad-R25(config-router-af)#exit
+Triad-R25(config-router)#address-family ipv6
+Triad-R25(config-router-af)#network 2001:20DA:EDA:4::/64
+Triad-R25(config-router-af)#exit
+```
+#### Чокурдах
+```
+Triad-R25(config-router)#address-family ipv4
+Triad-R25(config-router-af)#network 95.165.130.4 mask 255.255.255.252
+Triad-R25(config-router-af)#exit
+Triad-R25(config-router)#address-family ipv6
+Triad-R25(config-router-af)#network 2001:20DA:EDA:5::/64
+Triad-R25(config-router-af)#end
 Triad-R25#wr
 ```
-
+```
+Triad-R25(config)#router bgp 520
+Triad-R26(config-router)#address-family ipv4
+Triad-R26(config-router-af)#network 95.165.140.0 mask 255.255.255.252
+Triad-R26(config-router-af)#exit
+Triad-R26(config-router)#address-family ipv6
+Triad-R26(config-router-af)#network 2001:20DA:EDA:6::/64
+Triad-R26(config-router-af)#end
+Triad-R26#wr
+```

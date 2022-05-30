@@ -750,6 +750,12 @@ St.Petersburg-R18#wr
     Packet sent with a source address of 84.52.118.226 
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+    Moscow-R14#ping 2001:20DA:EDA:4::2 source 2606:4700:D0:C009::226
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+    Packet sent with a source address of 2606:4700:D0:C009::226
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
     Moscow-R14#
 
 </details>
@@ -761,6 +767,12 @@ St.Petersburg-R18#wr
     Type escape sequence to abort.
     Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
     Packet sent with a source address of 78.25.80.90 
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+    Moscow-R15#ping 2001:20DA:EDA:4::2 source 1A00:4700:D0:C005::90
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+    Packet sent with a source address of 1A00:4700:D0:C005::90
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
     Moscow-R15#
@@ -776,6 +788,12 @@ St.Petersburg-R18#wr
     Packet sent with a source address of 95.165.130.2 
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+    Labytnangi-R27#ping 2606:4700:D0:C009::226 source 2001:20DA:EDA:4::2
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2606:4700:D0:C009::226, timeout is 2 seconds:
+    Packet sent with a source address of 2001:20DA:EDA:4::2
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
     Labytnangi-R27#
 
 </details>  
@@ -787,6 +805,12 @@ St.Petersburg-R18#wr
     Type escape sequence to abort.
     Sending 5, 100-byte ICMP Echos to 78.25.80.90, timeout is 2 seconds:
     Packet sent with a source address of 95.165.130.2 
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+    Labytnangi-R27#ping 1A00:4700:D0:C005::90 source 2001:20DA:EDA:4::2
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 1A00:4700:D0:C005::90, timeout is 2 seconds:
+    Packet sent with a source address of 2001:20DA:EDA:4::2
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
     Labytnangi-R27#
@@ -1062,6 +1086,18 @@ St.Petersburg-R18#wr
       Packet sent with a source address of 95.165.130.6 
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:4::2 source 2001:20DA:EDA:6::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:6::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:4::2 source 2001:20DA:EDA:5::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:5::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
       Chokurdah-R28#
   
 </details>  
@@ -1079,6 +1115,18 @@ St.Petersburg-R18#wr
       Type escape sequence to abort.
       Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
       Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 2001:20DA:EDA:6::2 source 2001:20DA:EDA:4::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:6::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:4::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 2001:20DA:EDA:5::6 source 2001:20DA:EDA:4::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:5::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:4::2
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       Labytnangi-R27#
@@ -1102,6 +1150,18 @@ St.Petersburg-R18#wr
       Packet sent with a source address of 95.165.140.6 
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:4::2 source 2001:20DA:EDA:3::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:3::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:4::2 source 2001:20DA:EDA:7::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:4::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:7::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       St.Petersburg-R18#
   
 </details>
@@ -1119,6 +1179,18 @@ St.Petersburg-R18#wr
       Type escape sequence to abort.
       Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
       Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 2001:20DA:EDA:3::6 source 2001:20DA:EDA:4::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:3::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:4::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 2001:20DA:EDA:7::6 source 2001:20DA:EDA:4::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:7::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:4::2
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       Labytnangi-R27#

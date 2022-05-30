@@ -232,99 +232,119 @@ Triad-R26#wr
 <details>
   <summary>R18</summary>
 
-    St.Petersburg-R18#show bgp ipv4 unicast | begin Network
-         Network          Next Hop            Metric LocPrf Weight Path
-     *   78.25.80.88/30   95.165.140.5                           0 520 301 i
-     *>                   95.165.120.5                           0 520 301 i
-     *   84.52.118.224/30 95.165.140.5                           0 520 301 101 i
-     *>                   95.165.120.5                           0 520 301 101 i
-     *   95.165.110.0/30  95.165.120.5                           0 520 i
-     *>                   95.165.140.5                           0 520 i
-     *   95.165.120.0/30  95.165.140.5                           0 520 i
-     *>                   95.165.120.5             0             0 520 i
-     *   95.165.120.4/30  95.165.140.5                           0 520 i
-     *                    95.165.120.5             0             0 520 i
-     *>                   0.0.0.0                  0         32768 i
-     *   95.165.130.0/30  95.165.120.5                           0 520 i
-     *>                   95.165.140.5                           0 520 i
-     *   95.165.130.4/30  95.165.120.5                           0 520 i
-     *>                   95.165.140.5                           0 520 i
-     *   95.165.140.0/30  95.165.120.5                           0 520 i
-     *>                   95.165.140.5             0             0 520 i
-     *   95.165.140.4/30  95.165.120.5                           0 520 i
-     *                    95.165.140.5             0             0 520 i
-     *>                   0.0.0.0                  0         32768 i
-     *   128.0.128.0/30   95.165.140.5                           0 520 301 i
-     *>                   95.165.120.5                           0 520 301 i                                       
-    St.Petersburg-R18#show ip route bgp | begin Gateway
-    Gateway of last resort is 95.165.140.5 to network 0.0.0.0
+          St.Petersburg-R18#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *   78.25.80.88/30   95.165.140.5                           0 520 301 i
+       *>                   95.165.120.5                           0 520 301 i
+       *   84.52.118.224/30 95.165.140.5                           0 520 301 101 i
+       *>                   95.165.120.5                           0 520 301 101 i
+       *   95.165.110.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *   95.165.120.0/30  95.165.140.5                           0 520 i
+       *>                   95.165.120.5             0             0 520 i
+       *   95.165.120.4/30  95.165.140.5                           0 520 i
+       *                    95.165.120.5             0             0 520 i
+       *>                   0.0.0.0                  0         32768 i
+       *   95.165.130.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *   95.165.130.4/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *   95.165.140.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5             0             0 520 i
+       *   95.165.140.4/30  95.165.120.5                           0 520 i
+       *                    95.165.140.5             0             0 520 i
+       *>                   0.0.0.0                  0         32768 i
+       *   128.0.128.0/30   95.165.140.5                           0 520 301 i
+       *>                   95.165.120.5                           0 520 301 i
+      St.Petersburg-R18#show ip route bgp | begin Gateway
+      Gateway of last resort is 95.165.140.5 to network 0.0.0.0
 
-          78.0.0.0/30 is subnetted, 1 subnets
-    B        78.25.80.88 [20/0] via 95.165.120.5, 00:06:28
-          84.0.0.0/30 is subnetted, 1 subnets
-    B        84.52.118.224 [20/0] via 95.165.120.5, 00:06:28
-          95.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
-    B        95.165.110.0/30 [20/0] via 95.165.140.5, 00:07:32
-    B        95.165.120.0/30 [20/0] via 95.165.120.5, 00:06:28
-    B        95.165.130.0/30 [20/0] via 95.165.140.5, 00:07:32
-    B        95.165.130.4/30 [20/0] via 95.165.140.5, 00:07:32
-    B        95.165.140.0/30 [20/0] via 95.165.140.5, 00:07:32
-          128.0.0.0/30 is subnetted, 1 subnets
-    B        128.0.128.0 [20/0] via 95.165.120.5, 00:06:28
-    St.Petersburg-R18#show bgp ipv6 unicast | begin Network  
-         Network          Next Hop            Metric LocPrf Weight Path
-     *>  64:FF9B:5276:1EB4::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 i
-     *>  1A00:4700:D0:C005::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 i
-     *>  2001:20DA:EDA:1::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>  2001:20DA:EDA:2::/64
-                           2001:20DA:EDA:3::5
-                                                    0             0 520 i
-     *   2001:20DA:EDA:3::/64
-                           2001:20DA:EDA:3::5
-                                                    0             0 520 i
-     *>                   ::                       0         32768 i
-     *>  2001:20DA:EDA:4::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>  2001:20DA:EDA:5::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-         Network          Next Hop            Metric LocPrf Weight Path
-     *>  2001:20DA:EDA:6::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *   2001:20DA:EDA:7::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>                   ::                       0         32768 i
-     *>  2606:4700:D0:C009::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 101 i
-    St.Petersburg-R18#show ipv6 route bgp | begin Application
-           lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
-    B   64:FF9B:5276:1EB4::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   1A00:4700:D0:C005::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:1::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:2::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:4::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:5::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:6::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2606:4700:D0:C009::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    St.Petersburg-R18#
+            78.0.0.0/30 is subnetted, 1 subnets
+      B        78.25.80.88 [20/0] via 95.165.120.5, 00:00:30
+            84.0.0.0/30 is subnetted, 1 subnets
+      B        84.52.118.224 [20/0] via 95.165.120.5, 00:00:30
+            95.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+      B        95.165.110.0/30 [20/0] via 95.165.140.5, 00:00:30
+      B        95.165.120.0/30 [20/0] via 95.165.120.5, 00:00:30
+      B        95.165.130.0/30 [20/0] via 95.165.140.5, 00:00:30
+      B        95.165.130.4/30 [20/0] via 95.165.140.5, 00:00:30
+      B        95.165.140.0/30 [20/0] via 95.165.140.5, 00:00:30
+            128.0.0.0/30 is subnetted, 1 subnets
+      B        128.0.128.0 [20/0] via 95.165.120.5, 00:00:30
+      St.Petersburg-R18#show bgp ipv6 unicast | begin Network 
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  64:FF9B:5276:1EB4::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *>  1A00:4700:D0:C005::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *   2001:20DA:EDA:1::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *>  2001:20DA:EDA:2::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *   2001:20DA:EDA:3::/64
+                             2001:20DA:EDA:3::5
+                                                      0             0 520 i
+       *>                   ::                       0         32768 i
+       *                    2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *   2001:20DA:EDA:4::/64
+                             2001:20DA:EDA:3::5
+           Network          Next Hop            Metric LocPrf Weight Path
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *   2001:20DA:EDA:5::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *   2001:20DA:EDA:6::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                      0             0 520 i
+       *   2001:20DA:EDA:7::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   ::                       0         32768 i
+       *                    2001:20DA:EDA:7::5
+                                                      0             0 520 i
+       *>  2606:4700:D0:C009::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 101 i
+           Network          Next Hop            Metric LocPrf Weight Path
+       *   2A00:BEDA:D005:2::/64
+                             2001:20DA:EDA:3::5
+                                                      0             0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+      St.Petersburg-R18#show ipv6 route bgp | begin Application
+             lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
+      B   64:FF9B:5276:1EB4::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   1A00:4700:D0:C005::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:1::/64 [20/0]
+           via FE80::26, Ethernet0/3
+      B   2001:20DA:EDA:2::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:4::/64 [20/0]
+           via FE80::26, Ethernet0/3
+      B   2001:20DA:EDA:5::/64 [20/0]
+           via FE80::26, Ethernet0/3
+      B   2001:20DA:EDA:6::/64 [20/0]
+           via FE80::26, Ethernet0/3
+      B   2606:4700:D0:C009::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2A00:BEDA:D005:2::/64 [20/0]
+           via FE80::26, Ethernet0/3
+      St.Petersburg-R18#
   
 </details>
 
@@ -336,6 +356,7 @@ St.Petersburg-R18(config-router)#address-family ipv4
 St.Petersburg-R18(config-router-af)#maximum-paths 2
 St.Petersburg-R18(config-router-af)#exit          
 St.Petersburg-R18(config-router)#address-family ipv6
+St.Petersburg-R18(config-router-af)#maximum-paths 2
 St.Petersburg-R18(config-router-af)#end
 St.Petersburg-R18#wr
 ```
@@ -344,189 +365,139 @@ St.Petersburg-R18#wr
 <details>
   <summary>R18</summary>
   
-    St.Petersburg-R18#show bgp ipv4 unicast | begin Network
-         Network          Next Hop            Metric LocPrf Weight Path
-     *m  78.25.80.88/30   95.165.140.5                           0 520 301 i
-     *>                   95.165.120.5                           0 520 301 i
-     *m  84.52.118.224/30 95.165.140.5                           0 520 301 101 i
-     *>                   95.165.120.5                           0 520 301 101 i
-     *m  95.165.110.0/30  95.165.140.5                           0 520 i
-     *>                   95.165.120.5                           0 520 i
-     *m  95.165.120.0/30  95.165.140.5                           0 520 i
-     *>                   95.165.120.5             0             0 520 i
-     *   95.165.120.4/30  95.165.140.5                           0 520 i
-     *                    95.165.120.5             0             0 520 i
-     *>                   0.0.0.0                  0         32768 i
-     *m  95.165.130.0/30  95.165.140.5                           0 520 i
-     *>                   95.165.120.5                           0 520 i
-     *m  95.165.130.4/30  95.165.140.5                           0 520 i
-     *>                   95.165.120.5                           0 520 i
-     *m  95.165.140.0/30  95.165.140.5             0             0 520 i
-     *>                   95.165.120.5                           0 520 i
-     *   95.165.140.4/30  95.165.140.5             0             0 520 i
-     *                    95.165.120.5                           0 520 i
-     *>                   0.0.0.0                  0         32768 i
-     *m  128.0.128.0/30   95.165.140.5                           0 520 301 i
-     *>                   95.165.120.5                           0 520 301 i
-    St.Petersburg-R18#show ip route bgp | begin Gateway
-    Gateway of last resort is 95.165.140.5 to network 0.0.0.0
+      St.Petersburg-R18#show bgp ipv4 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *m  78.25.80.88/30   95.165.140.5                           0 520 301 i
+       *>                   95.165.120.5                           0 520 301 i
+       *m  84.52.118.224/30 95.165.140.5                           0 520 301 101 i
+       *>                   95.165.120.5                           0 520 301 101 i
+       *m  95.165.110.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *m  95.165.120.0/30  95.165.140.5                           0 520 i
+       *>                   95.165.120.5             0             0 520 i
+       *   95.165.120.4/30  95.165.140.5                           0 520 i
+       *                    95.165.120.5             0             0 520 i
+       *>                   0.0.0.0                  0         32768 i
+       *m  95.165.130.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *m  95.165.130.4/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5                           0 520 i
+       *m  95.165.140.0/30  95.165.120.5                           0 520 i
+       *>                   95.165.140.5             0             0 520 i
+       *   95.165.140.4/30  95.165.120.5                           0 520 i
+       *                    95.165.140.5             0             0 520 i
+       *>                   0.0.0.0                  0         32768 i
+       *m  128.0.128.0/30   95.165.140.5                           0 520 301 i
+       *>                   95.165.120.5                           0 520 301 i
+      St.Petersburg-R18#show ip route bgp | begin Gateway
+      Gateway of last resort is 95.165.140.5 to network 0.0.0.0
 
-          78.0.0.0/30 is subnetted, 1 subnets
-    B        78.25.80.88 [20/0] via 95.165.140.5, 00:13:30
-                         [20/0] via 95.165.120.5, 00:13:30
-          84.0.0.0/30 is subnetted, 1 subnets
-    B        84.52.118.224 [20/0] via 95.165.140.5, 00:13:30
-                           [20/0] via 95.165.120.5, 00:13:30
-          95.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
-    B        95.165.110.0/30 [20/0] via 95.165.140.5, 00:13:30
-                             [20/0] via 95.165.120.5, 00:13:30
-    B        95.165.120.0/30 [20/0] via 95.165.140.5, 00:13:30
-                             [20/0] via 95.165.120.5, 00:13:30
-    B        95.165.130.0/30 [20/0] via 95.165.140.5, 00:13:30
-                             [20/0] via 95.165.120.5, 00:13:30
-    B        95.165.130.4/30 [20/0] via 95.165.140.5, 00:13:30
-                             [20/0] via 95.165.120.5, 00:13:30
-    B        95.165.140.0/30 [20/0] via 95.165.140.5, 00:13:30
-                             [20/0] via 95.165.120.5, 00:13:30
-          128.0.0.0/30 is subnetted, 1 subnets
-    B        128.0.128.0 [20/0] via 95.165.140.5, 00:13:30
-                         [20/0] via 95.165.120.5, 00:13:30
-    St.Petersburg-R18#show bgp ipv6 unicast | begin Network
-         Network          Next Hop            Metric LocPrf Weight Path
-     *>  64:FF9B:5276:1EB4::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 i
-     *>  1A00:4700:D0:C005::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 i
-     *>  2001:20DA:EDA:1::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>  2001:20DA:EDA:2::/64
-                           2001:20DA:EDA:3::5
-                                                    0             0 520 i
-     *   2001:20DA:EDA:3::/64
-                           2001:20DA:EDA:3::5
-                                                    0             0 520 i
-     *>                   ::                       0         32768 i
-     *>  2001:20DA:EDA:4::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>  2001:20DA:EDA:5::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-         Network          Next Hop            Metric LocPrf Weight Path
-     *>  2001:20DA:EDA:6::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *   2001:20DA:EDA:7::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 i
-     *>                   ::                       0         32768 i
-     *>  2606:4700:D0:C009::/64
-                           2001:20DA:EDA:3::5
-                                                                  0 520 301 101 i
-    St.Petersburg-R18#show ipv6 route bgp | begin Application
-           lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
-    B   64:FF9B:5276:1EB4::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   1A00:4700:D0:C005::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:1::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:2::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:4::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:5::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2001:20DA:EDA:6::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    B   2606:4700:D0:C009::/64 [20/0]
-         via FE80::24, Ethernet0/2
-    St.Petersburg-R18#
+            78.0.0.0/30 is subnetted, 1 subnets
+      B        78.25.80.88 [20/0] via 95.165.140.5, 00:00:31
+                           [20/0] via 95.165.120.5, 00:00:31
+            84.0.0.0/30 is subnetted, 1 subnets
+      B        84.52.118.224 [20/0] via 95.165.140.5, 00:00:31
+                             [20/0] via 95.165.120.5, 00:00:31
+            95.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+      B        95.165.110.0/30 [20/0] via 95.165.140.5, 00:00:31
+                               [20/0] via 95.165.120.5, 00:00:31
+      B        95.165.120.0/30 [20/0] via 95.165.140.5, 00:00:31
+                               [20/0] via 95.165.120.5, 00:00:31
+      B        95.165.130.0/30 [20/0] via 95.165.140.5, 00:00:31
+                               [20/0] via 95.165.120.5, 00:00:31
+      B        95.165.130.4/30 [20/0] via 95.165.140.5, 00:00:31
+                               [20/0] via 95.165.120.5, 00:00:31
+      B        95.165.140.0/30 [20/0] via 95.165.140.5, 00:00:31
+                               [20/0] via 95.165.120.5, 00:00:31
+            128.0.0.0/30 is subnetted, 1 subnets
+      B        128.0.128.0 [20/0] via 95.165.140.5, 00:00:31
+                           [20/0] via 95.165.120.5, 00:00:31
+      St.Petersburg-R18#show bgp ipv6 unicast | begin Network
+           Network          Next Hop            Metric LocPrf Weight Path
+       *>  64:FF9B:5276:1EB4::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *>  1A00:4700:D0:C005::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *m  2001:20DA:EDA:1::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *>  2001:20DA:EDA:2::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 i
+       *   2001:20DA:EDA:3::/64
+                             2001:20DA:EDA:3::5
+                                                      0             0 520 i
+       *>                   ::                       0         32768 i
+       *                    2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *m  2001:20DA:EDA:4::/64
+                             2001:20DA:EDA:3::5
+           Network          Next Hop            Metric LocPrf Weight Path
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *m  2001:20DA:EDA:5::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+       *m  2001:20DA:EDA:6::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                      0             0 520 i
+       *   2001:20DA:EDA:7::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 i
+       *>                   ::                       0         32768 i
+       *                    2001:20DA:EDA:7::5
+                                                      0             0 520 i
+       *>  2606:4700:D0:C009::/64
+                             2001:20DA:EDA:3::5
+                                                                    0 520 301 101 i
+           Network          Next Hop            Metric LocPrf Weight Path
+       *m  2A00:BEDA:D005:2::/64
+                             2001:20DA:EDA:3::5
+                                                      0             0 520 i
+       *>                   2001:20DA:EDA:7::5
+                                                                    0 520 i
+      St.Petersburg-R18#show ipv6 route bgp | begin Application
+             lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
+      B   64:FF9B:5276:1EB4::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   1A00:4700:D0:C005::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:1::/64 [20/0]
+           via FE80::26, Ethernet0/3
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:2::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:4::/64 [20/0]
+           via FE80::26, Ethernet0/3
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:5::/64 [20/0]
+           via FE80::26, Ethernet0/3
+           via FE80::24, Ethernet0/2
+      B   2001:20DA:EDA:6::/64 [20/0]
+           via FE80::26, Ethernet0/3
+           via FE80::24, Ethernet0/2
+      B   2606:4700:D0:C009::/64 [20/0]
+           via FE80::24, Ethernet0/2
+      B   2A00:BEDA:D005:2::/64 [20/0]
+           via FE80::26, Ethernet0/3
+           via FE80::24, Ethernet0/2
+      St.Petersburg-R18#
   
 </details>
 
 ### 5. Проверим, что все сети в лабораторной работе имеют IP связность
 
-R14 -> R15
-```
-Moscow-R14#ping 78.25.80.90 source 84.52.118.226
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 78.25.80.90, timeout is 2 seconds:
-Packet sent with a source address of 84.52.118.226 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-Moscow-R14#
-```
-R14 -> R18
-R14 -> R27
-```
-Moscow-R14#ping 95.165.130.2 so
-Moscow-R14#ping 95.165.130.2 source 84.52.118.226
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
-Packet sent with a source address of 84.52.118.226 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/3 ms
-Moscow-R14
-```
-R14 -> R28
+#### Москва -> Лабытнанги
 
-R15 -> R14
-```
-Moscow-R15#ping 84.52.118.226 source 78.25.80.90
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 84.52.118.226, timeout is 2 seconds:
-Packet sent with a source address of 78.25.80.90 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-Moscow-R15#
-```
+#### Москва -> Чокурдах
 
-
-R27 -> R14
-```
-Labytnangi-R27#ping 84.52.118.226 so
-Labytnangi-R27#ping 84.52.118.226 source 95.165.130.2
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 84.52.118.226, timeout is 2 seconds:
-Packet sent with a source address of 95.165.130.2 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
-Labytnangi-R27#
-```
-
-R18 -> R27
-St.Petersburg-R18#ping 95.165.130.2 source 95.165.120.6
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
-Packet sent with a source address of 95.165.120.6 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-St.Petersburg-R18#ping 95.165.130.2 source 95.165.140.6
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
-Packet sent with a source address of 95.165.140.6 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
-St.Petersburg-R18#
-
-
-R28 -> R27
-```
-Chokurdah-R28#ping 95.165.130.2 source 95.165.140.2
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
-Packet sent with a source address of 95.165.140.2 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
-Chokurdah-R28#ping 95.165.130.2 source 95.165.130.6
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
-Packet sent with a source address of 95.165.130.6 
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
-Chokurdah-R28#
-```
+#### Москва -> С.-Петербург

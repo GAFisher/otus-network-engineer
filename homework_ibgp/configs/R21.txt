@@ -1,0 +1,183 @@
+
+!
+! Last configuration change at 16:50:28 EET Sun May 29 2022
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Lamas-R21
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$kjBl$KihmORkIbHn0DynJwr/C41
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ no shutdown
+ description Management 
+ ip address 10.6.99.21 255.255.255.0
+ ipv6 address FE80::21 link-local
+ ipv6 address 2A00:FACE:C006:99::21/64
+!
+interface Ethernet0/0
+ no shutdown
+ description Moscow-R15
+ ip address 78.25.80.89 255.255.255.252
+ ipv6 address FE80::21 link-local
+ ipv6 address 1A00:4700:D0:C005::89/64
+!
+interface Ethernet0/1
+ no shutdown
+ description Kirton-R22
+ ip address 128.0.128.2 255.255.255.252
+ ipv6 address FE80::21 link-local
+ ipv6 address 64:FF9B:5276:1EB4::2/64
+!
+interface Ethernet0/2
+ no shutdown
+ description Triad-R24
+ ip address 95.165.120.2 255.255.255.252
+ ipv6 address FE80::21 link-local
+ ipv6 address 2001:20DA:EDA:2::2/64
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router bgp 301
+ bgp router-id 21.21.21.21
+ bgp log-neighbor-changes
+ neighbor 64:FF9B:5276:1EB4::1 remote-as 101
+ neighbor 1A00:4700:D0:C005::90 remote-as 1001
+ neighbor 2001:20DA:EDA:2::1 remote-as 520
+ neighbor 78.25.80.90 remote-as 1001
+ neighbor 95.165.120.1 remote-as 520
+ neighbor 128.0.128.1 remote-as 101
+ !
+ address-family ipv4
+  network 78.25.80.88 mask 255.255.255.252
+  network 95.165.120.0 mask 255.255.255.252
+  network 128.0.128.0 mask 255.255.255.252
+  no neighbor 64:FF9B:5276:1EB4::1 activate
+  no neighbor 1A00:4700:D0:C005::90 activate
+  no neighbor 2001:20DA:EDA:2::1 activate
+  neighbor 78.25.80.90 activate
+  neighbor 95.165.120.1 activate
+  neighbor 128.0.128.1 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network 64:FF9B:5276:1EB4::/64
+  network 1A00:4700:D0:C005::/64
+  network 2001:20DA:EDA:2::/64
+  neighbor 64:FF9B:5276:1EB4::1 activate
+  neighbor 1A00:4700:D0:C005::90 activate
+  neighbor 2001:20DA:EDA:2::1 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 104D000A0618
+ login
+ transport input none
+!
+!
+end

@@ -1,0 +1,200 @@
+
+!
+! Last configuration change at 15:54:32 EET Mon May 30 2022
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Triad-R24
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$VvSF$e.4KqV3O6ypo7U8rXt5m5.
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 24.24.24.24 255.255.255.255
+ ip router isis 
+ ipv6 address FC00::24/128
+ ipv6 router isis 
+!
+interface Loopback1
+ no shutdown
+ description Management 
+ ip address 10.7.99.24 255.255.255.0
+ ipv6 address FE80::24 link-local
+ ipv6 address 2A00:FACE:C007:99::24/64
+!
+interface Ethernet0/0
+ no shutdown
+ description Lamas-R21
+ ip address 95.165.120.1 255.255.255.252
+ ipv6 address FE80::24 link-local
+ ipv6 address 2001:20DA:EDA:2::1/64
+!
+interface Ethernet0/1
+ no shutdown
+ description Triad-R26
+ ip address 35.10.65.17 255.255.255.240
+ ip router isis 
+ ipv6 address FE80::24 link-local
+ ipv6 address 2A00:BEDA:D005:3::17/64
+ ipv6 router isis 
+!
+interface Ethernet0/2
+ no shutdown
+ description Triad-R23
+ ip address 35.10.65.34 255.255.255.240
+ ip router isis 
+ ipv6 address FE80::24 link-local
+ ipv6 address 2A00:BEDA:D005:2::34/64
+ ipv6 router isis 
+!
+interface Ethernet0/3
+ no shutdown
+ description St.Petersburg-R18
+ ip address 95.165.120.5 255.255.255.252
+ ipv6 address FE80::24 link-local
+ ipv6 address 2001:20DA:EDA:3::5/64
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 49.0024.0000.0000.0024.00
+!
+router bgp 520
+ bgp router-id 24.24.24.24
+ bgp log-neighbor-changes
+ neighbor 23.23.23.23 remote-as 520
+ neighbor 23.23.23.23 update-source Loopback0
+ neighbor 2001:20DA:EDA:2::2 remote-as 301
+ neighbor 2001:20DA:EDA:3::6 remote-as 2042
+ neighbor 95.165.120.2 remote-as 301
+ neighbor 95.165.120.6 remote-as 2042
+ neighbor FC00::23 remote-as 520
+ neighbor FC00::23 update-source Loopback0
+ !
+ address-family ipv4
+  network 95.165.120.0 mask 255.255.255.252
+  network 95.165.120.4 mask 255.255.255.252
+  neighbor 23.23.23.23 activate
+  neighbor 23.23.23.23 next-hop-self
+  no neighbor 2001:20DA:EDA:2::2 activate
+  no neighbor 2001:20DA:EDA:3::6 activate
+  neighbor 95.165.120.2 activate
+  neighbor 95.165.120.6 activate
+  no neighbor FC00::23 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:20DA:EDA:2::/64
+  network 2001:20DA:EDA:3::/64
+  neighbor 2001:20DA:EDA:2::2 activate
+  neighbor 2001:20DA:EDA:3::6 activate
+  neighbor FC00::23 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 00071A150754
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 0822455D0A16
+ login
+ transport input none
+!
+!
+end

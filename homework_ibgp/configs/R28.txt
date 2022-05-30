@@ -1,0 +1,216 @@
+
+!
+! Last configuration change at 17:57:49 EET Sat May 28 2022
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Chokurdah-R28
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$vAQ9$lllV6YMBEZUNjo4hgBfw2.
+!
+no aaa new-model
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 10.3.30.1
+ip dhcp excluded-address 10.3.31.1
+!
+ip dhcp pool BUH-VPC30
+ network 10.3.30.0 255.255.255.0
+ domain-name otus-lab.ru
+ default-router 10.3.30.1 
+!
+ip dhcp pool PR-VPC31
+ network 10.3.31.0 255.255.255.0
+ domain-name otus-lab.ru
+ default-router 10.3.31.1 
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+track 10 ip sla 1 reachability
+ delay down 10 up 5
+!
+track 20 ip sla 2 reachability
+ delay down 10 up 5
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ description Triad-R26
+ ip address 95.165.140.2 255.255.255.252
+ ipv6 address FE80::28 link-local
+ ipv6 address 2001:20DA:EDA:6::2/64
+!
+interface Ethernet0/1
+ no shutdown
+ description Triad-R25
+ ip address 95.165.130.6 255.255.255.252
+ ipv6 address FE80::28 link-local
+ ipv6 address 2001:20DA:EDA:5::6/64
+!
+interface Ethernet0/2
+ no shutdown
+ description Chokurdah-SW29
+ no ip address
+!
+interface Ethernet0/2.30
+ no shutdown
+ description VPC30
+ encapsulation dot1Q 30
+ ip address 10.3.30.1 255.255.255.0
+ ip policy route-map ISP1
+ ipv6 address FE80::28 link-local
+ ipv6 address 2A00:FACE:C003:30::1/64
+!
+interface Ethernet0/2.31
+ no shutdown
+ description VPC31
+ encapsulation dot1Q 31
+ ip address 10.3.31.1 255.255.255.0
+ ip policy route-map ISP2
+ ipv6 address FE80::28 link-local
+ ipv6 address 2A00:FACE:C003:31::1/64
+!
+interface Ethernet0/2.99
+ no shutdown
+ description Management
+ encapsulation dot1Q 99
+ ip address 10.3.99.1 255.255.255.0
+ ipv6 address FE80::28 link-local
+ ipv6 address 2A00:FACE:C003:99::1/64
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 95.165.140.1 50 track 10
+ip route 0.0.0.0 0.0.0.0 95.165.130.5 100 track 20
+!
+ip access-list extended BUH-VPC30
+ permit ip 10.3.30.0 0.0.0.255 any
+ip access-list extended NO_NAT
+ip access-list extended PR-VPC31
+ permit ip 10.3.31.0 0.0.0.255 any
+!
+ip sla 1
+ icmp-echo 95.165.140.1 source-ip 95.165.140.2
+ frequency 5
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 95.165.130.5 source-ip 95.165.130.6
+ frequency 5
+ip sla schedule 2 life forever start-time now
+ipv6 route ::/0 2001:20DA:EDA:5::5
+ipv6 route ::/0 2001:20DA:EDA:6::1
+!
+route-map ISP2 permit 10
+ description Triad-R25
+ match ip address PR-VPC31
+ set ip next-hop verify-availability 95.165.130.5 10 track 20
+ set ip next-hop verify-availability 95.165.140.1 20 track 10
+!
+route-map ISP1 permit 10
+ match ip address BUH-VPC30
+ set ip next-hop verify-availability 95.165.140.1 10 track 10
+ set ip next-hop verify-availability 95.165.130.5 20 track 20
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Authorized Access Only!
+!
+line con 0
+ password 7 030752180500
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 104D000A0618
+ login
+ transport input none
+!
+!
+end

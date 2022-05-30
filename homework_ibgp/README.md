@@ -68,8 +68,8 @@ Moscow-R14(config-router)# address-family ipv4
 Moscow-R14(config-router-af)#network 84.52.118.224 mask 255.255.255.252
 Moscow-R14(config-router)# address-family ipv6
 Moscow-R14(config-router-af)#network 2606:4700:D0:C009::/64 
-Moscow-R14(config-router-af)#end
-Moscow-R14#wr
+Moscow-R14(config-router-af)#exit
+Moscow-R14(config-router)#exit
 ```
 #### R15
 ```
@@ -96,10 +96,246 @@ Moscow-R15(config-router)#address-family ipv4
 Moscow-R15(config-router-af)#neighbor 78.25.80.89 route-map LP in
 Moscow-R15(config-router-af)#exit
 Moscow-R15(config-router)#address-family ipv6 
-Moscow-R15(config-router-af)#neighbor FC00::14 route-map LP in
+Moscow-R15(config-router-af)#neighbor 1A00:4700:D0:C005::89 route-map LP in
 Moscow-R15(config-router-af)#end
 Moscow-R15#wr
 ```
+Локально на маршрутизаторе R14 изменим атрибут weight для соседа R22, чтобы сам марштутизатор имел выход через ISP, а не через R15. Опишем route-map и привяжем к соседу R22:
+```
+Moscow-R14(config)#route-map AS101 permit 10
+Moscow-R14(config-route-map)#set weight 200
+Moscow-R14(config-route-map)#exit
+Moscow-R14(config)#router bgp 1001
+Moscow-R14(config-router)#address-family ipv4
+Moscow-R14(config-router-af)#neighbor 84.52.118.225 route-map AS101 in
+Moscow-R14(config-router-af)#exit
+Moscow-R14(config-router)#address-family ipv6 
+Moscow-R14(config-router-af)#neighbor 2606:4700:D0:C009::225 route-map AS101 in
+Moscow-R14(config-router-af)#end
+Moscow-R14#wr
+```
+
+<details>
+  <summary>R14</summary>
+
+    Moscow-R14#show bgp ipv4 unicast | begin Network
+         Network          Next Hop            Metric LocPrf Weight Path
+     *>  78.25.80.88/30   84.52.118.225                        200 101 301 i
+     * i                  15.15.15.15              0    100      0 i
+     * i 84.52.118.224/30 78.25.80.89              0    150      0 301 101 i
+     *                    84.52.118.225            0           200 101 i
+     *>                   0.0.0.0                  0         32768 i
+     * i 95.165.110.0/30  78.25.80.89              0    150      0 301 101 i
+     *>                   84.52.118.225            0           200 101 i
+     * i 95.165.120.0/30  78.25.80.89              0    150      0 301 i
+     *>                   84.52.118.225                        200 101 301 i
+     * i 95.165.120.4/30  78.25.80.89              0    150      0 301 520 i
+     *>                   84.52.118.225                        200 101 301 520 i
+     * i 95.165.130.0/30  78.25.80.89              0    150      0 301 520 i
+     *>                   84.52.118.225                        200 101 301 520 i
+     * i 95.165.130.4/30  78.25.80.89              0    150      0 301 520 i
+     *>                   84.52.118.225                        200 101 301 520 i
+     * i 95.165.140.0/30  78.25.80.89              0    150      0 301 520 i
+     *>                   84.52.118.225                        200 101 301 520 i
+     * i 95.165.140.4/30  78.25.80.89              0    150      0 301 520 i
+     *>                   84.52.118.225                        200 101 301 520 i
+     * i 128.0.128.0/30   78.25.80.89              0    150      0 301 i
+     *>                   84.52.118.225            0           200 101 i
+    Moscow-R14#show ip route bgp | begin Gateway
+    Gateway of last resort is 84.52.118.225 to network 0.0.0.0
+
+          78.0.0.0/30 is subnetted, 1 subnets
+    B        78.25.80.88 [20/0] via 84.52.118.225, 16:43:50
+          95.0.0.0/30 is subnetted, 7 subnets
+    B        95.165.110.0 [20/0] via 84.52.118.225, 16:43:50
+    B        95.165.120.0 [20/0] via 84.52.118.225, 16:43:50
+    B        95.165.120.4 [20/0] via 84.52.118.225, 11:55:17
+    B        95.165.130.0 [20/0] via 84.52.118.225, 11:55:17
+    B        95.165.130.4 [20/0] via 84.52.118.225, 11:55:17
+    B        95.165.140.0 [20/0] via 84.52.118.225, 11:55:17
+    B        95.165.140.4 [20/0] via 84.52.118.225, 11:55:17
+          128.0.0.0/30 is subnetted, 1 subnets
+    B        128.0.128.0 [20/0] via 84.52.118.225, 16:43:50
+    Moscow-R14#show bgp ipv6 unicast | begin Network   
+         Network          Next Hop            Metric LocPrf Weight Path
+     * i 64:FF9B:5276:1EB4::/64
+                           1A00:4700:D0:C005::89
+                                                    0    100      0 301 i
+     *>                   2606:4700:D0:C009::225
+                                                    0             0 101 i
+     *>i 1A00:4700:D0:C005::/64
+                           FC00::15                 0    100      0 i
+     *                    2606:4700:D0:C009::225
+                                                                  0 101 301 i
+     *>  2001:20DA:EDA:1::/64
+                           2606:4700:D0:C009::225
+                                                    0             0 101 i
+     *>i 2001:20DA:EDA:2::/64
+                           1A00:4700:D0:C005::89
+                                                    0    100      0 301 i
+     *                    2606:4700:D0:C009::225
+                                                                  0 101 301 i
+     * i 2001:20DA:EDA:3::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+         Network          Next Hop            Metric LocPrf Weight Path
+     * i 2001:20DA:EDA:4::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+     * i 2001:20DA:EDA:5::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+     * i 2001:20DA:EDA:6::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+     * i 2001:20DA:EDA:7::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+     *   2606:4700:D0:C009::/64
+                           2606:4700:D0:C009::225
+         Network          Next Hop            Metric LocPrf Weight Path
+                                                    0             0 101 i
+     *>                   ::                       0         32768 i
+     * i 2A00:BEDA:D005:2::/64
+                           1A00:4700:D0:C005::89
+                                                    0    150      0 301 520 i
+     *>                   2606:4700:D0:C009::225
+                                                                200 101 301 520 i
+    Moscow-R14#show ipv6 route bgp | begin Application
+           lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
+    B   64:FF9B:5276:1EB4::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   1A00:4700:D0:C005::/64 [200/0]
+         via FC00::15
+    B   2001:20DA:EDA:1::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2001:20DA:EDA:2::/64 [200/0]
+         via 1A00:4700:D0:C005::89
+    B   2001:20DA:EDA:3::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2001:20DA:EDA:4::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2001:20DA:EDA:5::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2001:20DA:EDA:6::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2001:20DA:EDA:7::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    B   2A00:BEDA:D005:2::/64 [20/0]
+         via FE80::22, Ethernet0/2
+    Moscow-R14#
+
+</details>
+
+<details>
+  <summary>R15</summary>
+  
+      Moscow-R15#show ip route bgp | begin Gateway
+      Gateway of last resort is 78.25.80.89 to network 0.0.0.0
+
+            84.0.0.0/30 is subnetted, 1 subnets
+      B        84.52.118.224 [20/0] via 78.25.80.89, 16:42:03
+            95.0.0.0/30 is subnetted, 7 subnets
+      B        95.165.110.0 [20/0] via 78.25.80.89, 16:42:03
+      B        95.165.120.0 [20/0] via 78.25.80.89, 16:42:03
+      B        95.165.120.4 [20/0] via 78.25.80.89, 12:03:49
+      B        95.165.130.0 [20/0] via 78.25.80.89, 12:03:49
+      B        95.165.130.4 [20/0] via 78.25.80.89, 12:03:49
+      B        95.165.140.0 [20/0] via 78.25.80.89, 12:03:49
+      B        95.165.140.4 [20/0] via 78.25.80.89, 12:03:49
+            128.0.0.0/30 is subnetted, 1 subnets
+      B        128.0.128.0 [20/0] via 78.25.80.89, 16:42:03
+      Moscow-R15#show bgp ipv6 unicast | begin Network 
+           Network          Next Hop            Metric LocPrf Weight Path
+       * i 64:FF9B:5276:1EB4::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 i
+       *>                   1A00:4700:D0:C005::89
+                                                      0             0 301 i
+       *   1A00:4700:D0:C005::/64
+                             1A00:4700:D0:C005::89
+                                                      0             0 301 i
+       *>                   ::                       0         32768 i
+       *>i 2001:20DA:EDA:1::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 i
+       *                    1A00:4700:D0:C005::89
+                                                                    0 301 101 i
+       *>  2001:20DA:EDA:2::/64
+                             1A00:4700:D0:C005::89
+                                                      0             0 301 i
+       * i 2001:20DA:EDA:3::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+           Network          Next Hop            Metric LocPrf Weight Path
+       * i 2001:20DA:EDA:4::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+       * i 2001:20DA:EDA:5::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+       * i 2001:20DA:EDA:6::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+       * i 2001:20DA:EDA:7::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+       *>i 2606:4700:D0:C009::/64
+                             FC00::14                 0    100      0 i
+           Network          Next Hop            Metric LocPrf Weight Path
+       *                    1A00:4700:D0:C005::89
+                                                                    0 301 101 i
+       * i 2A00:BEDA:D005:2::/64
+                             2606:4700:D0:C009::225
+                                                      0    100      0 101 301 520 i
+       *>                   1A00:4700:D0:C005::89
+                                                           150      0 301 520 i
+      Moscow-R15#show ipv6 route bgp | begin Application
+             lr - LISP site-registrations, ld - LISP dyn-eid, a - Application
+      B   64:FF9B:5276:1EB4::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:1::/64 [200/0]
+           via 2606:4700:D0:C009::225
+      B   2001:20DA:EDA:2::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:3::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:4::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:5::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:6::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2001:20DA:EDA:7::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      B   2606:4700:D0:C009::/64 [200/0]
+           via FC00::14
+      B   2A00:BEDA:D005:2::/64 [20/0]
+           via FE80::21, Ethernet0/2
+      Moscow-R15#
+
+</details>
+
 ### 3. Настроим iBGP в провайдере Триада
 Произведён настройку Loopback-интерфейсов. С помощью протокола внутренней маршрутизации IS-IS все маршрутизаторы должны узнать обо всех адресах Loopback-интерфейсов. 
 #### R23

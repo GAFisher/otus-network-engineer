@@ -85,6 +85,8 @@ Moscow-R15(config-router-af)#network 1A00:4700:D0:C005::/64
 Moscow-R15(config-router-af)#exit
 Moscow-R15(config-router)#exit
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_ibgp/README.md#настройка-ibgp)
+
 ### 2. Настроим офис Москва так, чтобы приоритетным провайдером стал Ламас
 Используем атрибут Local Preference. На маршрутизаторе R15 опишем route-map и привяжем к соседу R21:
 ```
@@ -336,6 +338,8 @@ Moscow-R14#wr
 
 </details>
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_ibgp/README.md#настройка-ibgp)
+
 ### 3. Настроим iBGP в провайдере Триада
 Произведён настройку Loopback-интерфейсов. С помощью протокола внутренней маршрутизации IS-IS все маршрутизаторы должны узнать обо всех адресах Loopback-интерфейсов. 
 #### R23
@@ -461,6 +465,7 @@ Triad-R26(config-router-af)#network 2001:20DA:EDA:6::/64
 Triad-R26(config-router-af)#end
 Triad-R26#wr
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_ibgp/README.md#настройка-ibgp)
 
 ### 4. Настром офис С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно
 Таблицы маршрутизации и таблицы bgp до изменений:
@@ -730,6 +735,8 @@ St.Petersburg-R18#wr
   
 </details>
 
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_ibgp/README.md#настройка-ibgp)
+
 ### 5. Проверим, что все сети в лабораторной работе имеют IP связность
 
 #### Москва <-> Лабытнанги
@@ -803,6 +810,18 @@ St.Petersburg-R18#wr
     Packet sent with a source address of 84.52.118.226 
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+    Moscow-R14#ping 2001:20DA:EDA:5::6 source 2606:4700:D0:C009::226
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:5::6, timeout is 2 seconds:
+    Packet sent with a source address of 2606:4700:D0:C009::226
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+    Moscow-R14#ping 2001:20DA:EDA:6::2 source 2606:4700:D0:C009::226
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:6::2, timeout is 2 seconds:
+    Packet sent with a source address of 2606:4700:D0:C009::226
+    !!!!!
+    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
     Moscow-R14#
 
 </details>
@@ -810,19 +829,31 @@ St.Petersburg-R18#wr
 <details>
   <summary>R15 -> R28</summary>
 
-    Moscow-R15#ping 95.165.140.2 source 78.25.80.90
-    Type escape sequence to abort.
-    Sending 5, 100-byte ICMP Echos to 95.165.140.2, timeout is 2 seconds:
-    Packet sent with a source address of 78.25.80.90 
-    !!!!!
-    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
-    Moscow-R15#ping 95.165.130.6 source 78.25.80.90
-    Type escape sequence to abort.
-    Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
-    Packet sent with a source address of 78.25.80.90 
-    !!!!!
-    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/3 ms
-    Moscow-R15#
+      Moscow-R15#ping 95.165.140.2 source 78.25.80.90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.2, timeout is 2 seconds:
+      Packet sent with a source address of 78.25.80.90 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+      Moscow-R15#ping 95.165.130.6 source 78.25.80.90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
+      Packet sent with a source address of 78.25.80.90 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/3 ms
+      Moscow-R15#ping 2001:20DA:EDA:5::6 source 1A00:4700:D0:C005::90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:5::6, timeout is 2 seconds:
+      Packet sent with a source address of 1A00:4700:D0:C005::90
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/3/7 ms
+      Moscow-R15#ping 2001:20DA:EDA:6::2 source 1A00:4700:D0:C005::90
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:6::2, timeout is 2 seconds:
+      Packet sent with a source address of 1A00:4700:D0:C005::90
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Moscow-R15#
 
 </details>  
 
@@ -841,6 +872,18 @@ St.Petersburg-R18#wr
       Packet sent with a source address of 95.165.130.6 
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+      Chokurdah-R28#ping 2606:4700:D0:C009::226 source 2001:20DA:EDA:5::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2606:4700:D0:C009::226, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:5::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+      Chokurdah-R28#ping 2606:4700:D0:C009::226 source 2001:20DA:EDA:6::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2606:4700:D0:C009::226, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:6::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
       Chokurdah-R28#
 
 </details>
@@ -858,6 +901,18 @@ St.Petersburg-R18#wr
       Type escape sequence to abort.
       Sending 5, 100-byte ICMP Echos to 78.25.80.90, timeout is 2 seconds:
       Packet sent with a source address of 95.165.130.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 1A00:4700:D0:C005::90 source 2001:20DA:EDA:5::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 1A00:4700:D0:C005::90, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:5::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 1A00:4700:D0:C005::90 source 2001:20DA:EDA:6::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 1A00:4700:D0:C005::90, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:6::2
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       Chokurdah-R28#
@@ -1099,12 +1154,36 @@ St.Petersburg-R18#wr
       Packet sent with a source address of 95.165.140.6 
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:6::2 source 2001:20DA:EDA:3::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:6::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:3::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:6::2 source 2001:20DA:EDA:7::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:6::2, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:7::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:5::6 source 2001:20DA:EDA:3::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:5::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:3::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 2001:20DA:EDA:5::6 source 2001:20DA:EDA:7::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:5::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:7::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       St.Petersburg-R18#
   
 </details>
   
 <details>
-  <summary>R27 - > R18</summary>
+  <summary>R28 - > R18</summary>
   
       Chokurdah-R28#ping 95.165.120.6 source 95.165.140.2
       Type escape sequence to abort.
@@ -1130,6 +1209,32 @@ St.Petersburg-R18#wr
       Packet sent with a source address of 95.165.130.6 
       !!!!!
       Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:3::6 source 2001:20DA:EDA:6::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:3::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:6::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:3::6 source 2001:20DA:EDA:5::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:3::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:5::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:7::6 source 2001:20DA:EDA:6::2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:7::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:6::2
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 2001:20DA:EDA:7::6 source 2001:20DA:EDA:5::6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 2001:20DA:EDA:7::6, timeout is 2 seconds:
+      Packet sent with a source address of 2001:20DA:EDA:5::6
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
       Chokurdah-R28#
   
 </details>
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_ibgp/README.md#настройка-ibgp)

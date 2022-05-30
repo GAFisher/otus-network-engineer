@@ -941,3 +941,147 @@ St.Petersburg-R18#wr
       St.Petersburg-R18#
 
 </details>
+
+#### Чокурдах <-> Лабытнанги
+
+<details>
+  <summary>R28 - > R27</summary>
+
+      Chokurdah-R28#ping 95.165.130.2 source 95.165.140.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 95.165.130.2 source 95.165.130.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#
+  
+</details>  
+  
+<details>
+  <summary>R27 - > R28</summary>
+  
+      Labytnangi-R27#ping 95.165.140.2 source 95.165.130.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 95.165.130.6 source 95.165.130.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#
+  
+</details>
+
+#### С.-Петербург <-> Лабытнанги
+
+<details>
+  <summary>R18 - > R27</summary>
+
+      St.Petersburg-R18#ping 95.165.130.2 source 95.165.120.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.120.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 95.165.130.2 source 95.165.140.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#
+  
+</details>
+  
+<details>
+  <summary>R27 - > R18</summary>
+  
+      Labytnangi-R27#ping 95.165.120.6 source 95.165.130.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.120.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#ping 95.165.140.6 source 95.165.130.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Labytnangi-R27#
+  
+</details>  
+  
+#### С.-Петербург <-> Чокурдах
+
+<details>
+  <summary>R18 - > R28</summary>
+  
+      St.Petersburg-R18#ping 95.165.140.2 source 95.165.120.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.120.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 95.165.140.2 source 95.165.140.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.2, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#ping 95.165.130.6 source 95.165.120.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.120.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+      St.Petersburg-R18#ping 95.165.130.6 source 95.165.140.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.130.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      St.Petersburg-R18#
+  
+</details>
+  
+<details>
+  <summary>R27 - > R18</summary>
+  
+      Chokurdah-R28#ping 95.165.120.6 source 95.165.140.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.120.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 95.165.120.6 source 95.165.130.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.120.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+      Chokurdah-R28#ping 95.165.140.6 source 95.165.140.2
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.140.2 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+      Chokurdah-R28#ping 95.165.140.6 source 95.165.130.6
+      Type escape sequence to abort.
+      Sending 5, 100-byte ICMP Echos to 95.165.140.6, timeout is 2 seconds:
+      Packet sent with a source address of 95.165.130.6 
+      !!!!!
+      Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+      Chokurdah-R28#
+  
+</details>

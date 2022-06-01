@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 20:40:15 EET Sun May 29 2022
+! Last configuration change at 21:09:20 EET Wed Jun 1 2022
 !
 version 15.4
 service timestamps debug datetime msec
@@ -134,27 +134,32 @@ router isis
  net 49.2222.0000.0000.0023.00
 !
 router bgp 520
+ template peer-policy POLICY
+  route-reflector-client
+  next-hop-self
+ exit-peer-policy
+ !
+ template peer-session iBGP
+  remote-as 520
+  update-source Loopback0
+ exit-peer-session
+ !
  bgp log-neighbor-changes
- neighbor AS520 peer-group
- neighbor AS520 remote-as 520
- neighbor AS520 update-source Loopback0
- neighbor 24.24.24.24 peer-group AS520
- neighbor 25.25.25.25 peer-group AS520
- neighbor 26.26.26.26 peer-group AS520
- neighbor FC00::24 remote-as 520
- neighbor FC00::24 update-source Loopback0
- neighbor FC00::25 remote-as 520
- neighbor FC00::25 update-source Loopback0
- neighbor FC00::26 remote-as 520
- neighbor FC00::26 update-source Loopback0
+ neighbor 24.24.24.24 inherit peer-session iBGP
+ neighbor 25.25.25.25 inherit peer-session iBGP
+ neighbor 26.26.26.26 inherit peer-session iBGP
+ neighbor FC00::24 inherit peer-session iBGP
+ neighbor FC00::25 inherit peer-session iBGP
+ neighbor FC00::26 inherit peer-session iBGP
  !
  address-family ipv4
   network 95.165.110.0 mask 255.255.255.252
-  neighbor AS520 route-reflector-client
-  neighbor AS520 next-hop-self
   neighbor 24.24.24.24 activate
+  neighbor 24.24.24.24 inherit peer-policy POLICY
   neighbor 25.25.25.25 activate
+  neighbor 25.25.25.25 inherit peer-policy POLICY
   neighbor 26.26.26.26 activate
+  neighbor 26.26.26.26 inherit peer-policy POLICY
   no neighbor FC00::24 activate
   no neighbor FC00::25 activate
   no neighbor FC00::26 activate
@@ -163,14 +168,11 @@ router bgp 520
  address-family ipv6
   network 2001:20DA:EDA:1::/64
   neighbor FC00::24 activate
-  neighbor FC00::24 route-reflector-client
-  neighbor FC00::24 next-hop-self
+  neighbor FC00::24 inherit peer-policy POLICY
   neighbor FC00::25 activate
-  neighbor FC00::25 route-reflector-client
-  neighbor FC00::25 next-hop-self
+  neighbor FC00::25 inherit peer-policy POLICY
   neighbor FC00::26 activate
-  neighbor FC00::26 route-reflector-client
-  neighbor FC00::26 next-hop-self
+  neighbor FC00::26 inherit peer-policy POLICY
  exit-address-family
 !
 ip forward-protocol nd

@@ -384,35 +384,34 @@ Triad-R26(config-if)#ipv6 address FC00::26/128
 Triad-R26(config-if)#ipv6 router isis
 Triad-R26(config-if)#exit
 ```
-Произведём настройку соседей. В качестве Route Reflectror настроим маршрутизатор R23. 
-Для IPv4 объединим всех соседей в peer-group. 
+Произведём настройку соседей. В качестве Route Reflectror настроим маршрутизатор R23. Для упрощения настройки воспользуемся BGP templates.
 #### R23
 ```
 Triad-R23(config)#router bgp 520
-Triad-R23(config-router)#neighbor AS520 peer-group 
-Triad-R23(config-router)#neighbor AS520 remote-as 520
-Triad-R23(config-router)#neighbor AS520 update-source Loopback0
-Triad-R23(config-router)#neighbor AS520 route-reflector-client 
-Triad-R23(config-router)#neighbor AS520 next-hop-self
-Triad-R23(config-router)#neighbor 24.24.24.24 peer-group AS520
-Triad-R23(config-router)#neighbor 25.25.25.25 peer-group AS520
-Triad-R23(config-router)#neighbor 26.26.26.26 peer-group AS520
-Triad-R23(config-router)#neighbor FC00::24 remote-as 520
-Triad-R23(config-router)#neighbor FC00::24 update-source Loopback0
-Triad-R23(config-router)#neighbor FC00::25 remote-as 520
-Triad-R23(config-router)#neighbor FC00::25 update-source Loopback0
-Triad-R23(config-router)#neighbor FC00::26 remote-as 520
-Triad-R23(config-router)#neighbor FC00::26 update-source Loopback0
-Triad-R23(config-router)# address-family ipv6
+Triad-R23(config-router)#template peer-policy POLICY
+Triad-R23(config-router-ptmp)#route-reflector-client 
+Triad-R23(config-router-ptmp)#next-hop-self
+Triad-R23(config-router-ptmp)#exit
+Triad-R23(config-router)#template peer-session iBGP
+Triad-R23(config-router-stmp)#remote-as 520
+Triad-R23(config-router-stmp)#update-source Loopback0
+Triad-R23(config-router-stmp)#exit
+Triad-R23(config-router)#neighbor 24.24.24.24 inherit peer-session iBGP
+Triad-R23(config-router)#neighbor 24.24.24.24 inherit peer-policy POLICY
+Triad-R23(config-router)#neighbor 25.25.25.25 inherit peer-session iBGP
+Triad-R23(config-router)#neighbor 25.25.25.25 inherit peer-policy POLICY
+Triad-R23(config-router)#neighbor 26.26.26.26 inherit peer-session iBGP
+Triad-R23(config-router)#neighbor 26.26.26.26 inherit peer-policy POLICY
+Triad-R23(config-router)#neighbor FC00::24 inherit peer-session iBGP
+Triad-R23(config-router)#neighbor FC00::25 inherit peer-session iBGP
+Triad-R23(config-router)#neighbor FC00::26 inherit peer-session iBGP
+Triad-R23(config-router)#address-family ipv6
 Triad-R23(config-router-af)#neighbor FC00::24 activate
-Triad-R23(config-router-af)#neighbor FC00::24 next-hop-self
-Triad-R23(config-router-af)#neighbor FC00::24 route-reflector-client
+Triad-R23(config-router-af)#neighbor FC00::24 inherit peer-policy POLICY
 Triad-R23(config-router-af)#neighbor FC00::25 activate
-Triad-R23(config-router-af)#neighbor FC00::25 route-reflector-client
-Triad-R23(config-router-af)#neighbor FC00::25 next-hop-self
+Triad-R23(config-router-af)#neighbor FC00::25 inherit peer-policy POLICY
 Triad-R23(config-router-af)#neighbor FC00::26 activate
-Triad-R23(config-router-af)#neighbor FC00::26 route-reflector-client
-Triad-R23(config-router-af)#neighbor FC00::26 next-hop-self
+Triad-R23(config-router-af)#neighbor FC00::26 inherit peer-policy POLICY
 Triad-R23(config-router-af)#exit
 ```
 На маршрутизаторах R24-26 пропишем соседом только R23 (настройка идентична для всех маршрутизаторов Триады):

@@ -61,6 +61,42 @@ St.Petersburg-R18(config-router-af)#end
 St.Petersburg-R18#wr
 ```
 
+### 3. Настроим провайдера Киторн так, чтобы в офис Москва отдавался только маршрут по умолчанию
+Настроим передачу Default Route нижестоящему маршрутизатору (R14) и с помощью prefix-list укажем, чтобы R22 передавал только маршрут по умолчанию и ничего лишнего:
+```
+Kirton-R22#configure terminal
+Kirton-R22(config)#ip prefix-list DEFAULT seq 5 permit 0.0.0.0/0 
+Kirton-R22(config)#ipv6 prefix-list DEFAULT seq 5 permit ::/0 
+Kirton-R22(config)#router bgp 101
+Kirton-R22(config-router)#address-family ipv4 
+Kirton-R22(config-router-af)#neighbor 84.52.118.226 default-originate 
+Kirton-R22(config-router-af)#neighbor 84.52.118.226 prefix-list DEFAULT Out 
+Kirton-R22(config-router)#address-family ipv6
+Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 default-originate
+Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 prefix-list DEFAULT Out
+Kirton-R22(config-router-af)#end
+Kirton-R22#wr
+```
+
+### 4. Настроиим провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург
+```
+Lamas-R21#configure terminal
+Lamas-R21(config)#ip prefix-list DEFAULT seq 5 permit 95.165.120.4/30 
+Lamas-R21(config)#ip prefix-list DEFAULT seq 10 permit 95.165.140.4/30 
+Lamas-R21(config)#ip prefix-list DEFAULT seq 15 permit 0.0.0.0/0 
+Lamas-R21(config)#ipv6 prefix-list DEFAULT seq 5 permit 2001:20DA:EDA:3::/64
+Lamas-R21(config)#ipv6 prefix-list DEFAULT seq 10 permit 2001:20DA:EDA:7::/64
+Lamas-R21(config)#ipv6 prefix-list DEFAULT seq 15 permit ::/0
+Lamas-R21(config)#router bgp 301
+Lamas-R21(config-router)#address-family ipv4 
+Lamas-R21(config-router-af)#neighbor 78.25.80.90 default-originate 
+Lamas-R21(config-router-af)#neighbor 78.25.80.90 prefix-list DEFAULT Out
+Lamas-R21(config-router-af)#exit
+Lamas-R21(config-router)#address-family ipv6
+Lamas-R21(config-router-af)#neighbor 1A00:4700:D0:C005::90 default-originate 
+Lamas-R21(config-router-af)#neighbor 1A00:4700:D0:C005::90 prefix-list DEFAULT OutLamas-R21(config-router-af)#end
+Lamas-R21#wr
+```
 
 
 

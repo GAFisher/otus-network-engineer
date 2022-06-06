@@ -6,7 +6,7 @@
 1. [Настроить фильтрацию в офисе Москва так, чтобы не появилось транзитного трафика(As-path)](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#1-настроим-фильтрацию-в-офисе-москва-так-чтобы-не-появилось-транзитного-трафика);
 2. [Настроить фильтрацию в офисе С.-Петербург так, чтобы не появилось транзитного трафика(Prefix-list)](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#2-настроим-фильтрацию-в-офисе-с-петербург-так-чтобы-не-появилось-транзитного-трафика);
 3. [Настроить провайдера Киторн так, чтобы в офис Москва отдавался только маршрут по умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#3-настроим-провайдера-киторн-так-чтобы-в-офис-москва-отдавался-только-маршрут-по-умолчанию);
-4. [Настроить провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#4-настроиим-провайдера-ламас-так-чтобы-в-офис-москва-отдавался-только-маршрут-по-умолчанию-и-префикс-офиса-с-петербург);
+4. [Настроить провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#4-настроим-провайдера-ламас-так-чтобы-в-офис-москва-отдавался-только-маршрут-по-умолчанию-и-префикс-офиса-с-петербург);
 5. [Итоговые таблицы BGP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#5-итоговые-таблицы-bgp).
 
 
@@ -69,20 +69,28 @@ St.Petersburg-R18#wr
 Настроим передачу Default Route нижестоящему маршрутизатору (R14) и с помощью prefix-list укажем, чтобы R22 передавал только маршрут по умолчанию и ничего лишнего:
 ```
 Kirton-R22#configure terminal
-Kirton-R22(config)#ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0 
-Kirton-R22(config)#ipv6 prefix-list DEFAULTv6 seq 5 permit ::/0 
+Kirton-R22(config)#ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0           
+Kirton-R22(config)#ip prefix-list DEFAULTv4 seq 10 deny 0.0.0.0/0 le 32
+Kirton-R22(config)#ipv6 prefix-list DEFAULTv6 seq 5 permit ::/0
+Kirton-R22(config)#ipv6 prefix-list DEFAULTv6 seq 10 deny ::/0 le 128
+Kirton-R22(config)#route-map DEFAULTv4 permit 10 
+Kirton-R22(config-route-map)#match ip address prefix-list DEFAULTv4
+Kirton-R22(config-route-map)#exit
+Kirton-R22(config)#route-map DEFAULTv6 permit 10     
+Kirton-R22(config-route-map)#match ipv6 address prefix-list DEFAULTv6
+Kirton-R22(config-route-map)#exit
 Kirton-R22(config)#router bgp 101
 Kirton-R22(config-router)#address-family ipv4 
 Kirton-R22(config-router-af)#neighbor 84.52.118.226 default-originate 
-Kirton-R22(config-router-af)#neighbor 84.52.118.226 prefix-list DEFAULTv4 out 
+Kirton-R22(config-router-af)#neighbor 84.52.118.226 route-map DEFAULTv4 out 
 Kirton-R22(config-router)#address-family ipv6
 Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 default-originate
-Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 prefix-list DEFAULTv6 out
+Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 route-map DEFAULTv6 out
 Kirton-R22(config-router-af)#end
 Kirton-R22#wr
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
-### 4. Настроиим провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург
+### 4. Настроим провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург
 ```
 Lamas-R21#configure terminal
 Lamas-R21(config)#ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0

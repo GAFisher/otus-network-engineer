@@ -3,11 +3,11 @@
 1. Настроить фильтрацию для офиса Москва
 2. Настроить фильтрацию для офиса С.-Петербург
 ## Решение:
-1. Настроить фильтрацию в офисе Москва так, чтобы не появилось транзитного трафика(As-path);
-2. Настроить фильтрацию в офисе С.-Петербург так, чтобы не появилось транзитного трафика(Prefix-list);
-3. Настроить провайдера Киторн так, чтобы в офис Москва отдавался только маршрут по умолчанию;
-4. Настроить провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург.
-
+1. [Настроить фильтрацию в офисе Москва так, чтобы не появилось транзитного трафика(As-path)](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#1-настроим-фильтрацию-в-офисе-москва-так-чтобы-не-появилось-транзитного-трафика);
+2. [Настроить фильтрацию в офисе С.-Петербург так, чтобы не появилось транзитного трафика(Prefix-list)](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#2-настроим-фильтрацию-в-офисе-с-петербург-так-чтобы-не-появилось-транзитного-трафика);
+3. [Настроить провайдера Киторн так, чтобы в офис Москва отдавался только маршрут по умолчанию](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#3-настроим-провайдера-киторн-так-чтобы-в-офис-москва-отдавался-только-маршрут-по-умолчанию);
+4. [Настроить провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#4-настроиим-провайдера-ламас-так-чтобы-в-офис-москва-отдавался-только-маршрут-по-умолчанию-и-префикс-офиса-с-петербург);
+5. [Итоговые таблицы BGP](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#5-итоговые-таблицы-bgp).
 
 
 ### 1. Настроим фильтрацию в офисе Москва так, чтобы не появилось транзитного трафика 
@@ -40,6 +40,7 @@ Moscow-R15(config-router-af)#neighbor 1A00:4700:D0:C005::89 filter-list 1 out
 Moscow-R15(config-router-af)#end
 Moscow-R15#wr
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
 ### 2. Настроим фильтрацию в офисе С.-Петербург так, чтобы не появилось транзитного трафика
 С помощью prefix-list'ов запретим принимать анонсы любых подсетей и привяжем к Route Map:
 ```
@@ -80,7 +81,7 @@ Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 prefix-list DEFAULT
 Kirton-R22(config-router-af)#end
 Kirton-R22#wr
 ```
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
 ### 4. Настроиим провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург
 ```
 Lamas-R21#configure terminal
@@ -107,6 +108,7 @@ Lamas-R21(config-router-af)#neighbor 1A00:4700:D0:C005::90 route-map DEFAULTv6 o
 Lamas-R21(config-router-af)#end
 Lamas-R21#wr
 ```
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
 ### 5. Итоговые таблицы BGP
 
 <details>

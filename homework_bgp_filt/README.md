@@ -91,6 +91,29 @@ Kirton-R22(config-router-af)#neighbor 2606:4700:D0:C009::226 route-map DEFAULTv6
 Kirton-R22(config-router-af)#end
 Kirton-R22#wr
 ```
+Со стороны Москвы с помощью prefix-list укажем, чтобы R14 принимал только маршрут по умолчанию и ничего лишнего:
+```
+Moscow-R14#configure terminal
+Moscow-R14(config)#ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0
+Moscow-R14(config)#ip prefix-list DEFAULTv4 seq 10 deny 0.0.0.0/0 le 32
+Moscow-R14(config)#ipv6 prefix-list DEFAULTv6 seq 5 permit ::/0
+Moscow-R14(config)#ipv6 prefix-list DEFAULTv6 seq 10 deny ::/0 le 128
+Moscow-R14(config)#route-map DEFAULTv4 permit 10
+Moscow-R14(config-route-map)#match ip address prefix-list DEFAULTv4
+Moscow-R14(config-route-map)#exit
+Moscow-R14(config)#route-map DEFAULTv6 permit 10
+Moscow-R14(config-route-map)# match ipv6 address prefix-list DEFAULTv6
+Moscow-R14(config-route-map)#exit
+Moscow-R14(config)#router bgp 1001
+Moscow-R14(config-router)#address-family ipv4
+Moscow-R14(config-router-af)#neighbor 84.52.118.225 route-map DEFAULTv4 in
+Moscow-R14(config-router-af)#exit
+Moscow-R14(config-router)#address-family ipv6
+Moscow-R14(config-router-af)#neighbor 2606:4700:D0:C009::225 route-map DEFAULTv6 in 
+Moscow-R14(config-router-af)#end
+Moscow-R14#wr
+```
+
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
 ### 4. Настроим провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург
 ```
@@ -117,6 +140,32 @@ Lamas-R21(config-router-af)#neighbor 1A00:4700:D0:C005::90 default-originate
 Lamas-R21(config-router-af)#neighbor 1A00:4700:D0:C005::90 route-map DEFAULTv6 out
 Lamas-R21(config-router-af)#end
 Lamas-R21#wr
+```
+Со стороны Москвы с помощью prefix-list укажем, чтобы R15 принимал только маршрут по умолчанию и префикс офиса С.-Петербург:
+```
+Moscow-R15#configure terminal
+Moscow-R15(config)#ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0
+Moscow-R15(config)#ip prefix-list DEFAULTv4 seq 10 permit 95.165.120.4/30
+Moscow-R15(config)#ip prefix-list DEFAULTv4 seq 15 permit 95.165.140.4/30
+Moscow-R15(config)#ip prefix-list DEFAULTv4 seq 20 deny 0.0.0.0/0 le 32
+Moscow-R15(config)#ipv6 prefix-list DEFAULTv6 seq 5 permit ::/0
+Moscow-R15(config)#ipv6 prefix-list DEFAULTv6 seq 10 permit 2001:20DA:EDA:3::/64
+Moscow-R15(config)#ipv6 prefix-list DEFAULTv6 seq 15 permit 2001:20DA:EDA:7::/64
+Moscow-R15(config)#ipv6 prefix-list DEFAULTv6 seq 20 deny ::/0 le 128
+Moscow-R15(config)#route-map DEFAULTv4 permit 10
+Moscow-R15(config-route-map)#match ip address prefix-list DEFAULTv4
+Moscow-R15(config-route-map)#exit
+Moscow-R15(config)#route-map DEFAULTv6 permit 10
+Moscow-R15(config-route-map)#match ipv6 address prefix-list DEFAULTv6
+Moscow-R15(config-route-map)#exit
+Moscow-R15(config)#router bgp 1001
+Moscow-R15(config-router)#address-family ipv4
+Moscow-R15(config-router-af)#neighbor 78.25.80.89  route-map DEFAULTv4 in
+Moscow-R15(config-router-af)#exit
+Moscow-R15(config-router)#address-family ipv6
+Moscow-R15(config-router-af)#neighbor 1A00:4700:D0:C005::89 route-map DEFAULTv6 in  
+Moscow-R15(config-router-af)#end
+Moscow-R15#wr
 ```
 [[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_bgp_filt/README.md#bgp-фильтрация)
 ### 5. Итоговые таблицы BGP

@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 12:15:32 EET Sat Jun 4 2022
+! Last configuration change at 17:37:26 EET Wed Jun 8 2022
 !
 version 15.4
 service timestamps debug datetime msec
@@ -134,7 +134,7 @@ router bgp 1001
   neighbor 14.14.14.14 activate
   no neighbor 1A00:4700:D0:C005::89 activate
   neighbor 78.25.80.89 activate
-  neighbor 78.25.80.89 route-map LP in
+  neighbor 78.25.80.89 route-map DEFAULTv4 in
   neighbor 78.25.80.89 filter-list 1 out
   no neighbor FC00::14 activate
  exit-address-family
@@ -142,7 +142,7 @@ router bgp 1001
  address-family ipv6
   network 1A00:4700:D0:C005::/64
   neighbor 1A00:4700:D0:C005::89 activate
-  neighbor 1A00:4700:D0:C005::89 route-map LP in
+  neighbor 1A00:4700:D0:C005::89 route-map DEFAULTv6 in
   neighbor 1A00:4700:D0:C005::89 filter-list 1 out
   neighbor FC00::14 activate
  exit-address-family
@@ -159,6 +159,11 @@ ip route 0.0.0.0 0.0.0.0 78.25.80.89
 !
 ip prefix-list AREA101 seq 5 deny 10.1.10.0/30
 ip prefix-list AREA101 seq 10 permit 0.0.0.0/0 le 32
+!
+ip prefix-list DEFAULTv4 seq 5 permit 0.0.0.0/0
+ip prefix-list DEFAULTv4 seq 10 permit 95.165.120.4/30
+ip prefix-list DEFAULTv4 seq 15 permit 95.165.140.4/30
+ip prefix-list DEFAULTv4 seq 20 deny 0.0.0.0/0 le 32
 ipv6 route ::/0 1A00:4700:D0:C005::89
 ipv6 router ospf 1
  router-id 1.1.1.15
@@ -169,6 +174,17 @@ ipv6 router ospf 1
 !
 ipv6 prefix-list AREA101v6 seq 5 deny 2A00:FACE:C001:100::/64
 ipv6 prefix-list AREA101v6 seq 10 permit ::/0 le 128
+!
+ipv6 prefix-list DEFAULTv6 seq 5 permit ::/0
+ipv6 prefix-list DEFAULTv6 seq 10 permit 2001:20DA:EDA:3::/64
+ipv6 prefix-list DEFAULTv6 seq 15 permit 2001:20DA:EDA:7::/64
+ipv6 prefix-list DEFAULTv6 seq 20 deny ::/0 le 128
+route-map DEFAULTv4 permit 10
+ match ip address prefix-list DEFAULTv4
+!
+route-map DEFAULTv6 permit 10
+ match ipv6 address prefix-list DEFAULTv6
+!
 route-map LP permit 10
  set local-preference 150
 !

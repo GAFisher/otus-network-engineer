@@ -78,8 +78,19 @@ Moscow-R15#wr
 
 
 ### 3. Настроим статический NAT для R20
-
-
+Добавим на маршрутизатор R20 на интерфейс Loopback0 адрес из подсети офиса Москвы:
+```
+Moscow-R20#configure terminal 
+Moscow-R20(config)#interface Loopback0
+Moscow-R20(config-if)#ip address 10.1.200.1 255.255.255.255
+Moscow-R20(config-if)#ip ospf 1 area 102
+Moscow-R20(config-if)#end
+Moscow-R20#wr
+```
+На R15 cоздадим статическую NAT трансляицю:
+```
+Moscow-R15(config)#ip nat inside source static 10.1.200.1 213.140.240.2
+```
 
 ### 4. Настроим NAT так, чтобы R19 был доступен с любого узла для удаленного управления;
 Настроим доступ к марщрутизатору R19 по SSH. Добавим интерфейс Loopback1 в протокол внутренней маршрутизации. 
@@ -101,6 +112,7 @@ Moscow-R19(config-line)#login local
 Moscow-R19(config-line)#exit
 Moscow-R19(config)#ip ssh version 2
 Moscow-R19(config)#exit
+Moscow-R19#wr
 ```
 На маршрутизаторе R14 пропишем команду перенаправления портов:
 ```

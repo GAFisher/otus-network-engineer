@@ -77,6 +77,38 @@ Moscow-R15#wr
 
 
 
+### 3. Настроим статический NAT для R20
+
+
+
+### 4. Настроим NAT так, чтобы R19 был доступен с любого узла для удаленного управления;
+Настроим доступ к марщрутизатору R19 по SSH. Добавим интерфейс Loopback1 в протокол внутренней маршрутизации. 
+```
+Moscow-R19#configure terminal 
+Moscow-R19(config)#interface Loopback1          
+Moscow-R19(config-if)#ip ospf 1 area 101
+Moscow-R19(config-if)#exit
+Moscow-R19(config)#ip domain name otus-lab.ru
+Moscow-R19(config)#crypto key generate rsa 
+The name for the keys will be: Moscow-R19.otus-lab.ru
+...
+How many bits in the modulus [512]: 1024
+...
+Moscow-R19(config)#username admin secret otus
+Moscow-R19(config)#line vty 0 4
+Moscow-R19(config-line)#transport input ssh
+Moscow-R19(config-line)#login local 
+Moscow-R19(config-line)#exit
+Moscow-R19(config)#ip ssh version 2
+Moscow-R19(config)#exit
+```
+На маршрутизаторе R14 пропишем команду перенаправления портов:
+```
+Moscow-R14(config)#ip nat inside source static tcp 10.1.99.19 22 213.140.240.1 22 
+```
+
+
+
 5. Настроим статический NAT(PAT) для офиса Чокурдах
 
 На R28 пометим интерфейсы в сторону ISP как outside, а сабинтерфейсы в сторону ПК как inside:

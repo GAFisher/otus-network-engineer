@@ -75,8 +75,28 @@ Moscow-R15(config)#end
 Moscow-R15#wr
 ```
 
+### 2. Настроим NAT(PAT) на R18
+Трансляция должна осуществляться в пул из 5 адресов автономной системы AS2042. Для AS1001 выделим блок PI адресов 213.140.240.8/29.
+
+На интерфейс Loopback2 назначим белый IP из диапозона PI. Добавим развешающее правило для подсети в prefix-list и проанонсируем через BGP:
+```
+Moscow-R18#configure terminal 
+Moscow-R18(config)#interface Loopback2
+Moscow-R18(config-if)#ip address 213.140.240.9 255.255.255.248
+Moscow-R18(config-if)#exit
+St.Petersburg-R18(config)#ip prefix-list LIST_OUT1 seq 10 permit 213.140.240.8/29     
+St.Petersburg-R18(config)# router bgp 2042
+St.Petersburg-R18(config-router)#address-family ipv4
+St.Petersburg-R18(config-router-af)#network 213.140.240.8 mask 255.255.255.248
+St.Petersburg-R18(config-router-af)#exit
+St.Petersburg-R18(config-router)#exit
+```
 
 
+
+
+
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_nat/README.md#основные-протоколы-сети-интернет)
 ### 3. Настроим статический NAT для R20
 Добавим на маршрутизатор R20 на интерфейс Loopback0 адрес из подсети офиса Москвы:
 ```
@@ -91,7 +111,7 @@ Moscow-R20#wr
 ```
 Moscow-R15(config)#ip nat inside source static 10.1.200.1 213.140.240.2
 ```
-
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_nat/README.md#основные-протоколы-сети-интернет)
 ### 4. Настроим NAT так, чтобы R19 был доступен с любого узла для удаленного управления;
 Настроим доступ к марщрутизатору R19 по SSH. Добавим интерфейс Loopback1 в протокол внутренней маршрутизации. 
 ```
@@ -120,8 +140,8 @@ Moscow-R14(config)#ip nat inside source static tcp 10.1.99.19 22 213.140.240.1 2
 ```
 
 
-
-5. Настроим статический NAT(PAT) для офиса Чокурдах
+[[Наверх]](https://github.com/GAFisher/otus-network-engineer/blob/main/homework_nat/README.md#основные-протоколы-сети-интернет)
+### 5. Настроим статический NAT(PAT) для офиса Чокурдах
 
 На R28 пометим интерфейсы в сторону ISP как outside, а сабинтерфейсы в сторону ПК как inside:
 ```

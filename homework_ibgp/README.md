@@ -62,9 +62,9 @@ Moscow-R15#
 ```
 Moscow-R14(config)#router bgp 1001
 Moscow-R14(config-router)#neighbor 15.15.15.15 remote-as 1001
-Moscow-R14(config-router)#neighbor 15.15.15.15 update-source Loopback1
+Moscow-R14(config-router)#neighbor 15.15.15.15 update-source Loopback0
 Moscow-R14(config-router)#neighbor FC00::15 remote-as 1001
-Moscow-R14(config-router)#neighbor FC00::15 update-source Loopback1
+Moscow-R14(config-router)#neighbor FC00::15 update-source Loopback0
 Moscow-R14(config-router)# address-family ipv4
 Moscow-R14(config-router-af)#network 84.52.118.224 mask 255.255.255.252
 Moscow-R14(config-router)# address-family ipv6
@@ -76,9 +76,9 @@ Moscow-R14(config-router)#exit
 ```
 Moscow-R15(config)#router bgp 1001
 Moscow-R15(config-router)#neighbor 14.14.14.14 remote-as 1001
-Moscow-R15(config-router)#neighbor 14.14.14.14 update-source Loopback1
+Moscow-R15(config-router)#neighbor 14.14.14.14 update-source Loopback0
 Moscow-R15(config-router)#neighbor FC00::15 remote-as 1001
-Moscow-R15(config-router)#neighbor FC00::15 update-source Loopback1
+Moscow-R15(config-router)#neighbor FC00::15 update-source Loopback0
 Moscow-R15(config-router)# address-family ipv4
 Moscow-R15(config-router-af)#network 78.25.80.88 mask 255.255.255.252
 Moscow-R15(config-router)# address-family ipv6

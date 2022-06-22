@@ -219,6 +219,11 @@ Moscow-R12(config)#ip dhcp pool IT-VPC1
 Moscow-R12(dhcp-config)# network 10.1.100.0 255.255.255.0
 Moscow-R12(dhcp-config)# domain-name otus-lab.ru
 Moscow-R12(dhcp-config)# default-router 10.1.100.1 
+Moscow-R12(dhcp-config)#exit
+Moscow-R12(config)#ip dhcp pool DIR-VPC7
+Moscow-R12(dhcp-config)# network 10.1.110.0 255.255.255.0
+Moscow-R12(dhcp-config)# domain-name otus-lab.ru
+Moscow-R12(dhcp-config)# default-router 10.1.110.1
 Moscow-R12(dhcp-config)#end 
 Moscow-R12#wr
 ```
@@ -230,10 +235,27 @@ Moscow-R13(config)#ip dhcp pool DIR-VPC7
 Moscow-R13(dhcp-config)# network 10.1.110.0 255.255.255.0
 Moscow-R13(dhcp-config)# domain-name otus-lab.ru
 Moscow-R13(dhcp-config)# default-router 10.1.110.1 
+Moscow-R13(dhcp-config)#exit
+Moscow-R13(config)#ip dhcp pool IT-VPC1
+Moscow-R13(dhcp-config)# network 10.1.100.0 255.255.255.0
+Moscow-R13(dhcp-config)# domain-name otus-lab.ru
+Moscow-R13(dhcp-config)# default-router 10.1.100.1
 Moscow-R13(dhcp-config)#end 
 Moscow-R13#wr
 ```
+Проверим:
+```
+VPC1> ip dhcp -r
+DORA IP 10.1.100.4/24 GW 10.1.100.1
 
+VPC1>
+```
+```
+VPC7> ip dhcp -r     
+DORA IP 10.1.110.4/24 GW 10.1.110.1
+
+VPC7>
+```
 
 
 

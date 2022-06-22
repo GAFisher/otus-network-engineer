@@ -211,6 +211,7 @@ Chokurdah-R28(config-subif)#exit
 
 ### 6. Настроим для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13
 VPC1 и VPC7 должны получать сетевые настройки по DHCP.
+На маршрутизаторах R12 и R13 создадим пулы для подсетей IT и DIR:
 #### R12
 ```
 Moscow-R12#configure terminal 
@@ -243,7 +244,7 @@ Moscow-R13(dhcp-config)# default-router 10.1.100.1
 Moscow-R13(dhcp-config)#end 
 Moscow-R13#wr
 ```
-Проверим:
+Проверим и убедимся, что ПК автоматически получают IP-адрес:
 ```
 VPC1> ip dhcp -r
 DORA IP 10.1.100.4/24 GW 10.1.100.1

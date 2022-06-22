@@ -209,6 +209,40 @@ Chokurdah-R28(config-subif)#ip nat inside
 Chokurdah-R28(config-subif)#exit
 ```
 
+### 6. Настроим для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13
+VPC1 и VPC7 должны получать сетевые настройки по DHCP.
+#### R12
+```
+Moscow-R12#configure terminal 
+Moscow-R12(config)#ip dhcp excluded-address 10.1.100.1 10.1.100.3
+Moscow-R12(config)#ip dhcp pool IT-VPC1
+Moscow-R12(dhcp-config)# network 10.1.100.0 255.255.255.0
+Moscow-R12(dhcp-config)# domain-name otus-lab.ru
+Moscow-R12(dhcp-config)# default-router 10.1.100.1 
+Moscow-R12(dhcp-config)#end 
+Moscow-R12#wr
+```
+#### R12
+```
+Moscow-R13#configure terminal 
+Moscow-R13(config)#ip dhcp excluded-address 10.1.110.1 10.1.110.3
+Moscow-R13(config)#ip dhcp pool DIR-VPC7
+Moscow-R13(dhcp-config)# network 10.1.110.0 255.255.255.0
+Moscow-R13(dhcp-config)# domain-name otus-lab.ru
+Moscow-R13(dhcp-config)# default-router 10.1.110.1 
+Moscow-R13(dhcp-config)#end 
+Moscow-R13#wr
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
